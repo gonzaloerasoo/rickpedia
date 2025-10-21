@@ -8,19 +8,22 @@ import { CharactersComponent } from './characters/characters.component';
 import { EpisodesComponent } from './episodes/episodes.component';
 import { LocationsComponent } from './locations/locations.component';
 import { TeamComponent } from './team/team.component';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-
-// ✅ Angular Material modules
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+import { MatChipsModule } from '@angular/material/chips';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
+
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], 
+  
   declarations: [
     AppComponent,
     HomeComponent,
@@ -40,7 +43,9 @@ import { MatInputModule } from '@angular/material/input';
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatTableModule,
+    MatChipsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,11 +1,22 @@
-<mat-toolbar color="primary">
-  <span>Rick y Morty Pedia</span>
+<mat-toolbar color="primary" class="toolbar">
+  <span class="logo">RickPedia</span>
   <span class="spacer"></span>
-  <a mat-button routerLink="/">Inicio</a>
-  <a mat-button routerLink="/characters">Personajes</a>
-  <a mat-button routerLink="/episodes">Episodios</a>
-  <a mat-button routerLink="/locations">Localizaciones</a>
-  <a mat-button routerLink="/team">Equipo</a>
+
+  <ng-container *ngIf="currentRoute !== '/'">
+    <a mat-button routerLink="/">Inicio</a>
+  </ng-container>
+  <ng-container *ngIf="currentRoute !== '/characters'">
+    <a mat-button routerLink="/characters">Personajes</a>
+  </ng-container>
+  <ng-container *ngIf="currentRoute !== '/episodes'">
+    <a mat-button routerLink="/episodes">Episodios</a>
+  </ng-container>
+  <ng-container *ngIf="currentRoute !== '/locations'">
+    <a mat-button routerLink="/locations">Localizaciones</a>
+  </ng-container>
+  <ng-container *ngIf="currentRoute !== '/team'">
+    <a mat-button routerLink="/team">Tu equipo</a>
+  </ng-container>
 </mat-toolbar>
 
 <router-outlet></router-outlet>

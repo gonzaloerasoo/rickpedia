@@ -1,1 +1,23 @@
-<p>episodes works!</p>
+<mat-card>
+  <h2>Listado de Episodios</h2>
+  <table mat-table [dataSource]="episodes" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nombre </th>
+      <td mat-cell *matCellDef="let episode"> {{ episode.name }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="episode">
+      <th mat-header-cell *matHeaderCellDef> Código </th>
+      <td mat-cell *matCellDef="let episode"> {{ episode.episode }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="air_date">
+      <th mat-header-cell *matHeaderCellDef> Fecha </th>
+      <td mat-cell *matCellDef="let episode"> {{ episode.air_date }} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</mat-card>

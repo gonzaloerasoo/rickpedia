@@ -1,1 +1,17 @@
-<p>characters works!</p>
+<mat-card class="search-box">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Buscar personaje</mat-label>
+    <input matInput (input)="handleInput($event)">
+  </mat-form-field>
+</mat-card>
+
+<div class="grid">
+  <mat-card *ngFor="let character of characters" class="character-card">
+    <img mat-card-image [src]="character.image" alt="{{ character.name }}">
+    <mat-card-title>{{ character.name }}</mat-card-title>
+    <mat-chip-list>
+      <mat-chip color="primary">{{ character.species }}</mat-chip>
+      <mat-chip color="accent">{{ character.status }}</mat-chip>
+    </mat-chip-list>
+  </mat-card>
+</div>

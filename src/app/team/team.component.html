@@ -1,0 +1,17 @@
+<div class="section-header">
+  <h2>Equipo de Producción</h2>
+  <p>Conoce al equipo creativo detrás de la serie. Aprende sobre sus roles e historias.</p>
+</div>
+
+<div class="card-grid">
+  <mat-card class="info-card" *ngFor="let member of team">
+    <div class="card-image">
+      <img [src]="member.image" [alt]="member.name">
+    </div>
+    <mat-card-title>{{ member.name }}</mat-card-title>
+    <mat-card-content>
+      <p class="card-role">{{ member.role }}</p>
+      <p>{{ member.description }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,17 +1,17 @@
-<mat-card class="search-box">
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Buscar personaje</mat-label>
-    <input matInput (input)="handleInput($event)">
-  </mat-form-field>
-</mat-card>
+<div class="section-header">
+  <h2>Personajes</h2>
+  <p>Descubre a los personajes más icónicos y divertidos. Explora su historia, personalidad y evolución.</p>
+</div>
 
-<div class="grid">
-  <mat-card *ngFor="let character of characters" class="character-card">
-    <img mat-card-image [src]="character.image" alt="{{ character.name }}">
+<div class="card-grid">
+  <mat-card class="info-card" *ngFor="let character of characters">
+    <div class="card-image">
+      <img [src]="character.image" [alt]="character.name">
+    </div>
     <mat-card-title>{{ character.name }}</mat-card-title>
-    <mat-chip-list>
-      <mat-chip color="primary">{{ character.species }}</mat-chip>
-      <mat-chip color="accent">{{ character.status }}</mat-chip>
-    </mat-chip-list>
+    <mat-card-content>
+      <p class="card-role">{{ character.role }}</p>
+      <p>{{ character.description }}</p>
+    </mat-card-content>
   </mat-card>
 </div>

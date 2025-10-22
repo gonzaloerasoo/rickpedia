@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-characters',
@@ -9,28 +6,30 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
   styleUrls: ['./characters.component.scss']
 })
 export class CharactersComponent {
-  characters: any[] = [];
-  private searchTerm = new Subject<string>();
-
-  constructor(private http: HttpClient) {
-    this.searchTerm.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap(term =>
-        this.http.get<any>(`https://rickandmortyapi.com/api/character/?name=${term}`)
-      )
-    ).subscribe({
-      next: res => this.characters = res.results,
-      error: () => this.characters = []
-    });
-  }
-
-  onSearch(term: string) {
-    this.searchTerm.next(term.trim());
-  }
-
-  handleInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.onSearch(input.value);
-  }
+  characters = [
+    {
+      name: 'Rick Sanchez',
+      image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+      role: 'Científico loco',
+      description: 'Genio interdimensional y protagonista de la serie.'
+    },
+    {
+      name: 'Morty Smith',
+      image: 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
+      role: 'Nieto de Rick',
+      description: 'Inseguro pero valiente en sus aventuras.'
+    },
+    {
+      name: 'Summer Smith',
+      image: 'https://rickandmortyapi.com/api/character/avatar/3.jpeg',
+      role: 'Hermana de Morty',
+      description: 'Decidida, curiosa y siempre lista para la acción.'
+    },
+    {
+      name: 'Beth Smith',
+      image: 'https://rickandmortyapi.com/api/character/avatar/4.jpeg',
+      role: 'Madre de Morty',
+      description: 'Veterinaria especializada en caballos y con carácter fuerte.'
+    }
+  ];
 }

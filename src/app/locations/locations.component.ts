@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { LocationService } from './locations.service';
 
 @Component({
   selector: 'app-locations',
@@ -8,12 +8,12 @@ import { HttpClient } from '@angular/common/http';
 })
 export class LocationsComponent implements OnInit {
   locations: any[] = [];
-  displayedColumns: string[] = ['name', 'type', 'dimension'];
 
-  constructor(private http: HttpClient) {}
+  constructor(private locationService: LocationService) {}
 
   ngOnInit(): void {
-    this.http.get<any>('https://rickandmortyapi.com/api/location')
-      .subscribe(res => this.locations = res.results);
+    this.locationService.getAllLocations().subscribe(data => {
+      this.locations = data;
+    });
   }
 }

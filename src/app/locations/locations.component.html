@@ -1,0 +1,14 @@
+<div class="hero">
+    <h1>Localizaciones</h1>
+    <p>Descubre todos los planetas, dimensiones y lugares del universo Rick and Morty.</p>
+  </div>
+  
+  <div class="card-grid">
+    <div class="feature-card" *ngFor="let loc of locations">
+      <div class="card-content">
+        <h3 class="location-title">{{ loc.name }}</h3>
+        <p class="location-type">{{ loc.type }}</p>
+        <p class="location-dimension">{{ loc.dimension }}</p>
+      </div>
+    </div>
+  </div>  

@@ -1,17 +1,14 @@
 <div class="hero">
-    <h1>Episodios</h1>
-    <p>Explora las aventuras de Rick y Morty a través de una colección de episodios memorables.</p>
-  </div>
-  
-  <div class="card-grid">
-    <div class="feature-card" *ngFor="let ep of episodes">
-      <div class="card-image">
-        <img [src]="ep.image" [alt]="ep.title">
-      </div>
-      <div class="card-content">
-        <h3 class="episode-title">{{ ep.title }}</h3>
-        <p class="episode-number">{{ ep.number }}</p>
-        <p class="episode-description">{{ ep.description }}</p>
-      </div>
+  <h1>Episodios</h1>
+  <p>Explora las aventuras de Rick y Morty a través de una colección de episodios memorables.</p>
+</div>
+
+<div class="card-grid">
+  <div class="feature-card" *ngFor="let ep of episodes">
+    <div class="card-content">
+      <h3 class="episode-title">{{ ep.name }}</h3>
+      <p class="episode-code">{{ ep.episode }}</p>
+      <p class="episode-date">{{ ep.air_date }}</p>
     </div>
-  </div>  
+  </div>
+</div>

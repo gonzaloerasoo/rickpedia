@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LocationService } from './locations.service';
+import { RickpediaService } from '../services/rickpedia.service';
 
 @Component({
   selector: 'app-locations',
@@ -9,10 +9,10 @@ import { LocationService } from './locations.service';
 export class LocationsComponent implements OnInit {
   locations: any[] = [];
 
-  constructor(private locationService: LocationService) {}
+  constructor(private rickpedia: RickpediaService) {}
 
   ngOnInit(): void {
-    this.locationService.getAllLocations().subscribe(data => {
+    this.rickpedia.getAllLocations().subscribe(data => {
       this.locations = data;
     });
   }

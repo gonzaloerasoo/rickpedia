@@ -5,6 +5,12 @@
   min-height: 100vh;
   padding: 20px;
   font-family: 'Roboto', 'Segoe UI', sans-serif;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .hero {

@@ -1,10 +1,12 @@
 :host {
   display: block;
-  background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat, radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
-  color: #fff;
   min-height: 100vh;
+  overflow-y: auto;
   padding: 40px 20px;
+  background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat,
+              radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
   font-family: 'Roboto', 'Segoe UI', sans-serif;
+  color: #fff;
 }
 
 .section-header {
@@ -12,8 +14,9 @@
   margin-bottom: 40px;
 
   h2 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     color: #00e5ff;
+    font-weight: bold;
     margin-bottom: 10px;
   }
 
@@ -31,49 +34,58 @@
   gap: 30px;
 }
 
-.info-card {
+.character-card {
   background-color: #121212;
-  color: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-align: center;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(-6px);
     box-shadow: 0 6px 30px rgba(0, 255, 255, 0.2);
   }
 
   .card-image {
     width: 100%;
-    height: 450px;
-    overflow: hidden;
-    border-radius: 12px 12px 0 0;
+    height: 400px;
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
   }
 
-  mat-card-title {
-    font-size: 1.4rem;
-    margin-top: 10px;
-    color: #00e5ff;
-    font-weight: 600;
-  }
+  .card-content {
+    padding: 20px;
+    text-align: center;
 
-  .card-role {
-    font-size: 0.95rem;
-    color: #00e5ff;
-    margin-top: 4px;
-    font-weight: 500;
-  }
+    .name {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #00e5ff;
+      margin-bottom: 8px;
+    }
 
-  mat-card-content p {
-    font-size: 1rem;
-    color: #ccc;
-    padding: 0 10px;
+    .meta {
+      font-size: 1rem;
+      color: #ccc;
+      margin-bottom: 6px;
+    }
+
+    .origin {
+      font-size: 0.95rem;
+      color: #00bcd4;
+      margin-bottom: 4px;
+    }
+
+    .year {
+      font-size: 0.9rem;
+      color: #999;
+    }
   }
 }

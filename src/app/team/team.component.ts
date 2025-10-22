@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-team',
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss']
 })
-export class TeamComponent {
+export class TeamComponent implements OnInit, OnDestroy {
   team = [
     {
       name: 'Justin Roiland',
@@ -32,4 +32,12 @@ export class TeamComponent {
       description: 'Productor clave en la realización del show.'
     }
   ];
+
+  ngOnInit(): void {
+    document.body.style.overflow = 'hidden';
+  }
+
+  ngOnDestroy(): void {
+    document.body.style.overflow = 'auto';
+  }
 }

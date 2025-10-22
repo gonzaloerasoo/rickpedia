@@ -1,17 +1,18 @@
-<div class="section-header">
+<section class="section-header">
   <h2>Personajes</h2>
-  <p>Descubre a los personajes más icónicos y divertidos. Explora su historia, personalidad y evolución.</p>
-</div>
+  <p>Explora los personajes más icónicos del multiverso. Conoce su especie, estado y origen.</p>
+</section>
 
 <div class="card-grid">
-  <mat-card class="info-card" *ngFor="let character of characters">
+  <div class="character-card" *ngFor="let character of characters">
     <div class="card-image">
-      <img [src]="character.image" [alt]="character.name">
+      <img [src]="character.image" [alt]="character.name" />
     </div>
-    <mat-card-title>{{ character.name }}</mat-card-title>
-    <mat-card-content>
-      <p class="card-role">{{ character.role }}</p>
-      <p>{{ character.description }}</p>
-    </mat-card-content>
-  </mat-card>
+    <div class="card-content">
+      <h3 class="name">{{ character.name }}</h3>
+      <p class="meta">{{ character.species }} ({{ character.status }})</p>
+      <p class="origin">Origen: {{ character.origin.name }}</p>
+      <p class="year">Año: {{ character.created | date:'yyyy' }}</p>
+    </div>
+  </div>
 </div>

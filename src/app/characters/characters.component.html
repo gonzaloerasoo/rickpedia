@@ -4,36 +4,27 @@
 </section>
 
 <section class="filters">
-  <mat-form-field appearance="fill" color="accent" class="name-field"
-                  style="--mdc-filled-text-field-container-color: #121212; width: 100%;">
-    <mat-label>Nombre</mat-label>
-    <input matInput [formControl]="nameFilter"
-           (focus)="onNameFocus()" (blur)="onNameBlur()"
-           style="color: white; caret-color: white;" />
+  <mat-form-field appearance="fill" color="accent" class="name-field" style="--mdc-filled-text-field-container-color: #121212; width: 100%;">
+    <mat-label *ngIf="!showNameOverlay">Nombre</mat-label>
+    <input matInput [formControl]="nameFilter" (focus)="onNameFocus()" (blur)="onNameBlur()" style="color: white; caret-color: white;" />
     <div class="static-text" *ngIf="showNameOverlay">Nombre</div>
   </mat-form-field>
 
-  <mat-form-field appearance="fill" color="accent" class="status-field"
-                  style="--mdc-filled-text-field-container-color: #121212; width: 100%;">
-    <mat-label>Estado</mat-label>
-    <input matInput [formControl]="statusFilter"
-           (focus)="onStatusFocus()" (blur)="onStatusBlur()"
-           style="color: white; caret-color: white;" />
+  <mat-form-field appearance="fill" color="accent" class="status-field" style="--mdc-filled-text-field-container-color: #121212; width: 100%;">
+    <mat-label *ngIf="!showStatusOverlay">Estado</mat-label>
+    <input matInput [formControl]="statusFilter" (focus)="onStatusFocus()" (blur)="onStatusBlur()" style="color: white; caret-color: white;" />
     <div class="static-text" *ngIf="showStatusOverlay">Estado</div>
   </mat-form-field>
 
-  <mat-form-field appearance="fill" color="accent" class="species-field"
-                  style="--mdc-filled-text-field-container-color: #121212; width: 100%;">
-    <mat-label>Especie</mat-label>
-    <input matInput [formControl]="speciesFilter"
-           (focus)="onSpeciesFocus()" (blur)="onSpeciesBlur()"
-           style="color: white; caret-color: white;" />
+  <mat-form-field appearance="fill" color="accent" class="species-field" style="--mdc-filled-text-field-container-color: #121212; width: 100%;">
+    <mat-label *ngIf="!showSpeciesOverlay">Especie</mat-label>
+    <input matInput [formControl]="speciesFilter" (focus)="onSpeciesFocus()" (blur)="onSpeciesBlur()" style="color: white; caret-color: white;" />
     <div class="static-text" *ngIf="showSpeciesOverlay">Especie</div>
   </mat-form-field>
 </section>
 
 <div class="card-grid">
-  <div class="character-card" *ngFor="let character of filtered">
+  <div class="character-card" *ngFor="let character of paginated">
     <div class="card-image">
       <img [src]="character.image" [alt]="character.name" />
     </div>
@@ -44,4 +35,28 @@
       <p class="year">Año: {{ character.created | date:'yyyy' }}</p>
     </div>
   </div>
+</div>
+
+<div class="pagination-controls">
+  <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+
+  <button (click)="goToPage(1)" [class.active]="currentPage === 1">1</button>
+
+  <button *ngIf="showPrevEllipsis" (click)="handlePrevEllipsis()">...</button>
+
+  <ng-container *ngFor="let page of visiblePageNumbers">
+    <button
+      *ngIf="page !== 1 && page !== totalPages"
+      (click)="goToPage(page)"
+      [class.active]="page === currentPage"
+    >
+      {{ page }}
+    </button>
+  </ng-container>
+
+  <button *ngIf="showNextEllipsis" (click)="handleNextEllipsis()">...</button>
+
+  <button (click)="goToPage(totalPages)" [class.active]="currentPage === totalPages">{{ totalPages }}</button>
+
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
 </div>

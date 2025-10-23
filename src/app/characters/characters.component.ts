@@ -10,6 +10,7 @@ import { FormControl } from '@angular/forms';
 export class CharactersComponent implements OnInit {
   characters: any[] = [];
   filtered: any[] = [];
+  paginated: any[] = [];
 
   nameFilter = new FormControl('');
   statusFilter = new FormControl('');
@@ -23,12 +24,16 @@ export class CharactersComponent implements OnInit {
   statusFocused = false;
   speciesFocused = false;
 
+  currentPage = 1;
+  itemsPerPage = 20;
+
   constructor(private rickpedia: RickpediaService) {}
 
   ngOnInit(): void {
     this.rickpedia.getAllCharacters().subscribe(data => {
       this.characters = data;
       this.filtered = data;
+      this.updatePagination();
     });
 
     this.nameFilter.valueChanges.subscribe(() => this.applyFilters());
@@ -46,6 +51,73 @@ export class CharactersComponent implements OnInit {
       c.status.toLowerCase().includes(status) &&
       c.species.toLowerCase().includes(species)
     );
+
+    this.currentPage = 1;
+    this.updatePagination();
+  }
+
+  updatePagination(): void {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    this.paginated = this.filtered.slice(start, end);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filtered.length / this.itemsPerPage);
+  }
+
+  get visiblePageNumbers(): number[] {
+    const total = this.totalPages;
+    const current = this.currentPage;
+    const pages: number[] = [];
+
+    if (total <= 7) {
+      for (let i = 1; i <= total; i++) pages.push(i);
+      return pages;
+    }
+
+    if (current < 5) {
+      pages.push(1, 2, 3, 4, 5);
+    } else if (current >= total - 2) {
+      for (let i = total - 4; i <= total; i++) pages.push(i);
+    } else {
+      pages.push(current, current + 1, current + 2);
+    }
+
+    return pages;
+  }
+
+  get showPrevEllipsis(): boolean {
+    return this.totalPages > 7 && this.currentPage >= 5;
+  }
+
+  get showNextEllipsis(): boolean {
+    return this.totalPages > 7 && this.currentPage < this.totalPages - 2;
+  }
+
+  handlePrevEllipsis(): void {
+    const target = Math.max(2, this.currentPage - 3);
+    this.goToPage(target);
+  }
+
+  handleNextEllipsis(): void {
+    const target = Math.min(this.totalPages - 1, this.currentPage + 3);
+    this.goToPage(target);
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePagination();
+    }
+  }
+
+  nextPage(): void {
+    this.goToPage(this.currentPage + 1);
+  }
+
+  prevPage(): void {
+    this.goToPage(this.currentPage - 1);
   }
 
   onNameFocus(): void {
@@ -55,9 +127,7 @@ export class CharactersComponent implements OnInit {
 
   onNameBlur(): void {
     this.nameFocused = false;
-    if (!this.nameFilter.value) {
-      this.showNameOverlay = true;
-    }
+    if (!this.nameFilter.value) this.showNameOverlay = true;
   }
 
   onStatusFocus(): void {
@@ -67,9 +137,7 @@ export class CharactersComponent implements OnInit {
 
   onStatusBlur(): void {
     this.statusFocused = false;
-    if (!this.statusFilter.value) {
-      this.showStatusOverlay = true;
-    }
+    if (!this.statusFilter.value) this.showStatusOverlay = true;
   }
 
   onSpeciesFocus(): void {
@@ -79,8 +147,6 @@ export class CharactersComponent implements OnInit {
 
   onSpeciesBlur(): void {
     this.speciesFocused = false;
-    if (!this.speciesFilter.value) {
-      this.showSpeciesOverlay = true;
-    }
+    if (!this.speciesFilter.value) this.showSpeciesOverlay = true;
   }
 }

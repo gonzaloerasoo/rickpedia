@@ -3,8 +3,7 @@
   min-height: 100vh;
   overflow-y: auto;
   padding: 40px 20px;
-  background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat,
-              radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
+  background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat, radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
   font-family: 'Roboto', 'Segoe UI', sans-serif;
   color: #fff;
 }
@@ -54,16 +53,6 @@
       background-color: #00e5ff !important;
     }
   }
-}
-
-.input-centered::placeholder {
-  text-align: center;
-  color: #00e5ff;
-}
-
-.input-left::placeholder {
-  text-align: left;
-  color: #00e5ff;
 }
 
 .card-grid {
@@ -155,5 +144,50 @@
 
   .mat-form-field-label {
     color: #00e5ff;
+  }
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 50px;
+
+  button {
+    background-color: transparent;
+    border: 2px solid #00e5ff;
+    color: #00e5ff;
+    padding: 8px 14px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &.active {
+      background-color: #00e5ff;
+      color: #000;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+    }
+
+    &:disabled {
+      border-color: #444;
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled):not(.active) {
+      background-color: rgba(0, 229, 255, 0.1);
+      box-shadow: 0 0 6px rgba(0, 229, 255, 0.3);
+    }
+  }
+
+  span {
+    color: #00e5ff;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0 6px;
   }
 }

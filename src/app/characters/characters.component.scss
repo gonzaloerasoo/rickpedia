@@ -28,6 +28,44 @@
   }
 }
 
+.filters {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+
+  mat-form-field {
+    flex: 1 1 200px;
+
+    &.mat-form-field-appearance-fill .mat-form-field-flex {
+      background-color: #121212 !important;
+    }
+
+    .mat-label {
+      text-align: center;
+    }
+
+    .mat-input-element {
+      color: white !important;
+      caret-color: white !important;
+    }
+
+    .mat-form-field-ripple {
+      background-color: #00e5ff !important;
+    }
+  }
+}
+
+.input-centered::placeholder {
+  text-align: center;
+  color: #00e5ff;
+}
+
+.input-left::placeholder {
+  text-align: left;
+  color: #00e5ff;
+}
+
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -87,5 +125,35 @@
       font-size: 0.9rem;
       color: #999;
     }
+  }
+}
+
+.name-field,
+.status-field,
+.species-field {
+  position: relative;
+
+  .static-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00e5ff;
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  input {
+    position: relative;
+    z-index: 3;
+  }
+
+  .mat-form-field-label {
+    color: #00e5ff;
   }
 }

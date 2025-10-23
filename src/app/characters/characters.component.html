@@ -3,8 +3,37 @@
   <p>Explora los personajes más icónicos del multiverso. Conoce su especie, estado y origen.</p>
 </section>
 
+<section class="filters">
+  <mat-form-field appearance="fill" color="accent" class="name-field"
+                  style="--mdc-filled-text-field-container-color: #121212; width: 100%;">
+    <mat-label>Nombre</mat-label>
+    <input matInput [formControl]="nameFilter"
+           (focus)="onNameFocus()" (blur)="onNameBlur()"
+           style="color: white; caret-color: white;" />
+    <div class="static-text" *ngIf="showNameOverlay">Nombre</div>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" color="accent" class="status-field"
+                  style="--mdc-filled-text-field-container-color: #121212; width: 100%;">
+    <mat-label>Estado</mat-label>
+    <input matInput [formControl]="statusFilter"
+           (focus)="onStatusFocus()" (blur)="onStatusBlur()"
+           style="color: white; caret-color: white;" />
+    <div class="static-text" *ngIf="showStatusOverlay">Estado</div>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" color="accent" class="species-field"
+                  style="--mdc-filled-text-field-container-color: #121212; width: 100%;">
+    <mat-label>Especie</mat-label>
+    <input matInput [formControl]="speciesFilter"
+           (focus)="onSpeciesFocus()" (blur)="onSpeciesBlur()"
+           style="color: white; caret-color: white;" />
+    <div class="static-text" *ngIf="showSpeciesOverlay">Especie</div>
+  </mat-form-field>
+</section>
+
 <div class="card-grid">
-  <div class="character-card" *ngFor="let character of characters">
+  <div class="character-card" *ngFor="let character of filtered">
     <div class="card-image">
       <img [src]="character.image" [alt]="character.name" />
     </div>

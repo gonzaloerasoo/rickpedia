@@ -27,12 +27,20 @@ export class CharactersComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 20;
 
+  alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  selectedLetter: string | null = null;
+  selectedSpecies: string | null = null;
+  availableSpecies: string[] = [];
+
+  showFilterPanel = false;
+
   constructor(private rickpedia: RickpediaService) {}
 
   ngOnInit(): void {
     this.rickpedia.getAllCharacters().subscribe(data => {
       this.characters = data;
       this.filtered = data;
+      this.availableSpecies = [...new Set(data.map(c => c.species))].sort();
       this.updatePagination();
     });
 
@@ -52,8 +60,40 @@ export class CharactersComponent implements OnInit {
       c.species.toLowerCase().includes(species)
     );
 
+    if (this.selectedLetter) {
+      this.filtered = this.filtered.filter(c =>
+        c.name.charAt(0).toUpperCase() === this.selectedLetter
+      );
+    }
+
+    if (this.selectedSpecies) {
+      this.filtered = this.filtered.filter(c =>
+        c.species === this.selectedSpecies
+      );
+    }
+
     this.currentPage = 1;
     this.updatePagination();
+  }
+
+  selectLetter(letter: string): void {
+    this.selectedLetter = letter;
+    this.applyFilters();
+  }
+
+  clearLetter(): void {
+    this.selectedLetter = null;
+    this.applyFilters();
+  }
+
+  selectSpecies(species: string): void {
+    this.selectedSpecies = species;
+    this.applyFilters();
+  }
+
+  clearSpecies(): void {
+    this.selectedSpecies = null;
+    this.applyFilters();
   }
 
   updatePagination(): void {

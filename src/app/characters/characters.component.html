@@ -1,27 +1,118 @@
 <section class="section-header">
   <h2>Personajes</h2>
-  <p>Explora los personajes más icónicos del multiverso. Conoce su especie, estado y origen.</p>
+  <p>
+    Explora los personajes más icónicos del multiverso. Conoce su especie,
+    estado y origen.
+  </p>
 </section>
 
-<section class="filters">
-  <mat-form-field appearance="fill" color="accent" class="name-field" style="--mdc-filled-text-field-container-color: #121212; width: 100%;">
-    <mat-label *ngIf="!showNameOverlay">Nombre</mat-label>
-    <input matInput [formControl]="nameFilter" (focus)="onNameFocus()" (blur)="onNameBlur()" style="color: white; caret-color: white;" />
-    <div class="static-text" *ngIf="showNameOverlay">Nombre</div>
-  </mat-form-field>
+<div class="filter-toggle">
+  <button (click)="showFilterPanel = true">
+    <span class="material-icons">tune</span> Filtros
+  </button>
+</div>
 
-  <mat-form-field appearance="fill" color="accent" class="status-field" style="--mdc-filled-text-field-container-color: #121212; width: 100%;">
-    <mat-label *ngIf="!showStatusOverlay">Estado</mat-label>
-    <input matInput [formControl]="statusFilter" (focus)="onStatusFocus()" (blur)="onStatusBlur()" style="color: white; caret-color: white;" />
-    <div class="static-text" *ngIf="showStatusOverlay">Estado</div>
-  </mat-form-field>
+<div class="filter-panel" *ngIf="showFilterPanel">
+  <div class="panel-header">
+    <h3>Filtros</h3>
+    <button (click)="showFilterPanel = false">
+      <span class="material-icons">close</span> Cerrar
+    </button>
+  </div>
 
-  <mat-form-field appearance="fill" color="accent" class="species-field" style="--mdc-filled-text-field-container-color: #121212; width: 100%;">
-    <mat-label *ngIf="!showSpeciesOverlay">Especie</mat-label>
-    <input matInput [formControl]="speciesFilter" (focus)="onSpeciesFocus()" (blur)="onSpeciesBlur()" style="color: white; caret-color: white;" />
-    <div class="static-text" *ngIf="showSpeciesOverlay">Especie</div>
-  </mat-form-field>
-</section>
+  <div class="panel-body">
+    <mat-form-field
+      appearance="fill"
+      color="accent"
+      class="name-field"
+      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
+    >
+      <mat-label *ngIf="!showNameOverlay">Nombre</mat-label>
+      <input
+        matInput
+        [formControl]="nameFilter"
+        (focus)="onNameFocus()"
+        (blur)="onNameBlur()"
+        style="color: white; caret-color: white"
+      />
+      <div class="static-text" *ngIf="showNameOverlay">Nombre</div>
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="fill"
+      color="accent"
+      class="status-field"
+      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
+    >
+      <mat-label *ngIf="!showStatusOverlay">Estado</mat-label>
+      <input
+        matInput
+        [formControl]="statusFilter"
+        (focus)="onStatusFocus()"
+        (blur)="onStatusBlur()"
+        style="color: white; caret-color: white"
+      />
+      <div class="static-text" *ngIf="showStatusOverlay">Estado</div>
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="fill"
+      color="accent"
+      class="species-field"
+      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
+    >
+      <mat-label *ngIf="!showSpeciesOverlay">Especie</mat-label>
+      <input
+        matInput
+        [formControl]="speciesFilter"
+        (focus)="onSpeciesFocus()"
+        (blur)="onSpeciesBlur()"
+        style="color: white; caret-color: white"
+      />
+      <div class="static-text" *ngIf="showSpeciesOverlay">Especie</div>
+    </mat-form-field>
+
+    <div class="alphabet-index">
+      <span>Filtrar por letra:</span>
+      <div class="index-buttons">
+        <button
+          *ngFor="let letter of alphabet"
+          (click)="selectLetter(letter)"
+          [class.active]="selectedLetter === letter"
+        >
+          {{ letter }}
+        </button>
+      </div>
+      <button
+        *ngIf="selectedLetter"
+        class="clear-button"
+        (click)="clearLetter()"
+      >
+        <span class="material-icons">close</span> Quitar filtro de letra
+      </button>
+    </div>
+
+    <div class="species-index">
+      <span>Filtrar por especie:</span>
+      <div class="index-buttons">
+        <button
+          *ngFor="let specie of availableSpecies"
+          (click)="selectSpecies(specie)"
+          [class.active]="selectedSpecies === specie"
+        >
+          {{ specie }}
+        </button>
+      </div>
+      <button
+        *ngIf="selectedSpecies"
+        class="clear-button"
+        (click)="clearSpecies()"
+      >
+        <span class="material-icons">close</span> Quitar filtro de especie
+      </button>
+    </div>
+  </div>
+</div>
 
 <div class="card-grid">
   <div class="character-card" *ngFor="let character of paginated">
@@ -32,7 +123,7 @@
       <h3 class="name">{{ character.name }}</h3>
       <p class="meta">{{ character.species }} ({{ character.status }})</p>
       <p class="origin">Origen: {{ character.origin.name }}</p>
-      <p class="year">Año: {{ character.created | date:'yyyy' }}</p>
+      <p class="year">Año: {{ character.created | date : "yyyy" }}</p>
     </div>
   </div>
 </div>
@@ -56,7 +147,14 @@
 
   <button *ngIf="showNextEllipsis" (click)="handleNextEllipsis()">...</button>
 
-  <button (click)="goToPage(totalPages)" [class.active]="currentPage === totalPages">{{ totalPages }}</button>
+  <button
+    (click)="goToPage(totalPages)"
+    [class.active]="currentPage === totalPages"
+  >
+    {{ totalPages }}
+  </button>
 
-  <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+    Siguiente
+  </button>
 </div>

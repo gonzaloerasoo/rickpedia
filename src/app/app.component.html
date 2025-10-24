@@ -3,19 +3,19 @@
   <span class="spacer"></span>
 
   <ng-container *ngIf="currentRoute !== '/'">
-    <a mat-button routerLink="/">Inicio</a>
+    <a mat-button routerLink="/"><strong>Inicio</strong></a>
   </ng-container>
   <ng-container *ngIf="currentRoute !== '/characters'">
-    <a mat-button routerLink="/characters">Personajes</a>
+    <a mat-button routerLink="/characters"><strong>Personajes</strong></a>
   </ng-container>
   <ng-container *ngIf="currentRoute !== '/episodes'">
-    <a mat-button routerLink="/episodes">Episodios</a>
+    <a mat-button routerLink="/episodes"><strong>Episodios</strong></a>
   </ng-container>
   <ng-container *ngIf="currentRoute !== '/locations'">
-    <a mat-button routerLink="/locations">Localizaciones</a>
+    <a mat-button routerLink="/locations"><strong>Localizaciones</strong></a>
   </ng-container>
   <ng-container *ngIf="currentRoute !== '/team'">
-    <a mat-button routerLink="/team">Equipo</a>
+    <a mat-button routerLink="/team"><strong>Equipo</strong></a>
   </ng-container>
 </mat-toolbar>
 

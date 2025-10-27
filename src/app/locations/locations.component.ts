@@ -12,8 +12,14 @@ export class LocationsComponent implements OnInit {
   filteredLocations: any[] = [];
 
   locationName = new FormControl('');
+  characterName = new FormControl('');
+
   showNameOverlay = true;
   nameFocused = false;
+
+  showCharacterOverlay = true;
+  characterFocused = false;
+
   showFilterPanel = false;
 
   constructor(private rickpedia: RickpediaService) {}
@@ -25,11 +31,15 @@ export class LocationsComponent implements OnInit {
     });
 
     this.locationName.valueChanges.subscribe(() => {
-      this.filterLocations();
+      this.filterLocationsByName();
+    });
+
+    this.characterName.valueChanges.subscribe(() => {
+      this.filterLocationsByCharacter();
     });
   }
 
-  filterLocations(): void {
+  filterLocationsByName(): void {
     const name = this.locationName.value?.trim().toLowerCase();
     if (!name) {
       this.filteredLocations = this.locations;
@@ -41,6 +51,26 @@ export class LocationsComponent implements OnInit {
     );
   }
 
+  filterLocationsByCharacter(): void {
+    const name = this.characterName.value?.trim().toLowerCase();
+    if (!name) {
+      this.filteredLocations = this.locations;
+      return;
+    }
+
+    this.rickpedia.getAllCharacters().subscribe((characters: any[]) => {
+      const match = characters.find((c) => c.name.toLowerCase().includes(name));
+      if (!match || !match.location || !match.location.name) {
+        this.filteredLocations = [];
+        return;
+      }
+
+      this.filteredLocations = this.locations.filter(
+        (loc) => loc.name === match.location.name
+      );
+    });
+  }
+
   onNameFocus(): void {
     this.nameFocused = true;
     this.showNameOverlay = false;
@@ -49,5 +79,15 @@ export class LocationsComponent implements OnInit {
   onNameBlur(): void {
     this.nameFocused = false;
     if (!this.locationName.value) this.showNameOverlay = true;
+  }
+
+  onCharacterFocus(): void {
+    this.characterFocused = true;
+    this.showCharacterOverlay = false;
+  }
+
+  onCharacterBlur(): void {
+    this.characterFocused = false;
+    if (!this.characterName.value) this.showCharacterOverlay = true;
   }
 }

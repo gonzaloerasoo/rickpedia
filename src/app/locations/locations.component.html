@@ -30,21 +30,45 @@
         [formControl]="locationName"
         (focus)="onNameFocus()"
         (blur)="onNameBlur()"
-        (keyup.enter)="filterLocations()"
+        (keyup.enter)="filterLocationsByName()"
         style="color: white; caret-color: white"
       />
       <div class="static-text" *ngIf="showNameOverlay">
         Nombre de la localización
       </div>
     </mat-form-field>
+
+    <mat-form-field
+      appearance="fill"
+      color="accent"
+      class="name-field"
+      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
+    >
+      <mat-label *ngIf="!showCharacterOverlay">Nombre de personaje</mat-label>
+      <input
+        matInput
+        [formControl]="characterName"
+        (focus)="onCharacterFocus()"
+        (blur)="onCharacterBlur()"
+        (keyup.enter)="filterLocationsByCharacter()"
+        style="color: white; caret-color: white"
+      />
+      <div class="static-text" *ngIf="showCharacterOverlay">
+        Nombre de personaje
+      </div>
+    </mat-form-field>
   </div>
 </div>
 
 <div class="card-grid">
-  <div class="character-card" *ngFor="let loc of filteredLocations">
+  <a
+    class="character-card episode-link"
+    *ngFor="let loc of filteredLocations"
+    [routerLink]="['/locations', loc.id]"
+  >
     <div class="card-content">
       <h3 class="name">{{ loc.name }}</h3>
       <p class="meta">{{ loc.type }} — {{ loc.dimension }}</p>
     </div>
-  </div>
+  </a>
 </div>

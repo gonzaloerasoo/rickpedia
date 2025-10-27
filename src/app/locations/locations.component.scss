@@ -199,3 +199,10 @@
     }
   }
 }
+
+.episode-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}

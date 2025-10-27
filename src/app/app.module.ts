@@ -21,6 +21,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EpisodeDetailComponent } from './episode-detail/episode-detail.component';
+import { LocationDetailComponent } from './location-detail/location-detail.component';
 
 @NgModule({
 
@@ -34,7 +35,8 @@ import { EpisodeDetailComponent } from './episode-detail/episode-detail.componen
     EpisodesComponent,
     LocationsComponent,
     TeamComponent,
-    EpisodeDetailComponent
+    EpisodeDetailComponent,
+    LocationDetailComponent
   ],
   imports: [
     BrowserModule,

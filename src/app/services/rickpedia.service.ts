@@ -58,6 +58,10 @@ export class RickpediaService {
     );
   }
 
+  getEpisodeById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/episode/${id}`);
+  }
+
   getCharactersByIds(ids: string[]): Observable<any> {
     const joined = ids.join(',');
     return this.http.get<any>(`${this.baseUrl}/character/${joined}`);

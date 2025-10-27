@@ -2,8 +2,7 @@
   <h2>Episodios</h2>
   <p>
     Explora las aventuras de Rick y Morty a través de una colección de episodios
-    memorables. Busca por nombre o código (ej. "S02E") y descubre qué personajes
-    aparecen.
+    memorables.
   </p>
 </section>
 
@@ -43,16 +42,40 @@
         Nombre o código del episodio
       </div>
     </mat-form-field>
+
+    <mat-form-field
+      appearance="fill"
+      color="accent"
+      class="name-field"
+      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
+    >
+      <mat-label *ngIf="!showCharacterOverlay">Nombre de personaje</mat-label>
+      <input
+        matInput
+        [formControl]="characterName"
+        (focus)="onCharacterFocus()"
+        (blur)="onCharacterBlur()"
+        (keyup.enter)="searchEpisodesByCharacter()"
+        style="color: white; caret-color: white"
+      />
+      <div class="static-text" *ngIf="showCharacterOverlay">
+        Nombre de personaje
+      </div>
+    </mat-form-field>
   </div>
 </div>
 
 <div class="card-grid">
-  <div class="character-card" *ngFor="let ep of filteredEpisodes">
+  <a
+    class="character-card episode-link"
+    *ngFor="let ep of filteredEpisodes"
+    [routerLink]="['/episodes', ep.id]"
+  >
     <div class="card-content">
       <h3 class="name">{{ ep.name }}</h3>
       <p class="meta">{{ ep.episode }} — {{ ep.air_date }}</p>
     </div>
-  </div>
+  </a>
 </div>
 
 <div class="section-header" *ngIf="selectedEpisodeTitle">

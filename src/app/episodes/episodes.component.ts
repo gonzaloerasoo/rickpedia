@@ -16,8 +16,14 @@ export class EpisodesComponent implements OnInit {
   selectedEpisodeTitle = '';
 
   episodeName = new FormControl('');
+  characterName = new FormControl('');
+
   showNameOverlay = true;
   nameFocused = false;
+
+  showCharacterOverlay = true;
+  characterFocused = false;
+
   showFilterPanel = false;
 
   constructor(private rickpedia: RickpediaService) {}
@@ -31,6 +37,10 @@ export class EpisodesComponent implements OnInit {
     this.episodeName.valueChanges.subscribe(() => {
       this.filterEpisodes();
       this.searchCharactersByEpisode();
+    });
+
+    this.characterName.valueChanges.subscribe(() => {
+      this.searchEpisodesByCharacter();
     });
   }
 
@@ -87,6 +97,29 @@ export class EpisodesComponent implements OnInit {
       });
   }
 
+  searchEpisodesByCharacter(): void {
+    const name = this.characterName.value?.trim().toLowerCase();
+    if (!name) {
+      this.filteredEpisodes = this.episodes;
+      return;
+    }
+
+    this.rickpedia.getAllCharacters().subscribe((characters: any[]) => {
+      const match = characters.find((c) => c.name.toLowerCase().includes(name));
+      if (!match || !match.episode) {
+        this.filteredEpisodes = [];
+        return;
+      }
+
+      const episodeIds = match.episode.map((url: string) =>
+        url.split('/').pop()
+      );
+      this.filteredEpisodes = this.episodes.filter((ep) =>
+        episodeIds.includes(String(ep.id))
+      );
+    });
+  }
+
   onNameFocus(): void {
     this.nameFocused = true;
     this.showNameOverlay = false;
@@ -95,5 +128,15 @@ export class EpisodesComponent implements OnInit {
   onNameBlur(): void {
     this.nameFocused = false;
     if (!this.episodeName.value) this.showNameOverlay = true;
+  }
+
+  onCharacterFocus(): void {
+    this.characterFocused = true;
+    this.showCharacterOverlay = false;
+  }
+
+  onCharacterBlur(): void {
+    this.characterFocused = false;
+    if (!this.characterName.value) this.showCharacterOverlay = true;
   }
 }

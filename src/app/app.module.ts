@@ -20,6 +20,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { EpisodeDetailComponent } from './episode-detail/episode-detail.component';
 
 @NgModule({
 
@@ -32,7 +33,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CharactersComponent,
     EpisodesComponent,
     LocationsComponent,
-    TeamComponent
+    TeamComponent,
+    EpisodeDetailComponent
   ],
   imports: [
     BrowserModule,

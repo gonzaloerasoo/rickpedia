@@ -22,6 +22,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EpisodeDetailComponent } from './episode-detail/episode-detail.component';
 import { LocationDetailComponent } from './location-detail/location-detail.component';
+import { TeamDetailComponent } from './team-detail/team-detail.component';
 
 @NgModule({
 
@@ -36,7 +37,8 @@ import { LocationDetailComponent } from './location-detail/location-detail.compo
     LocationsComponent,
     TeamComponent,
     EpisodeDetailComponent,
-    LocationDetailComponent
+    LocationDetailComponent,
+    TeamDetailComponent
   ],
   imports: [
     BrowserModule,

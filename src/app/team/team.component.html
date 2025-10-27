@@ -1,17 +1,93 @@
-<div class="section-header">
+<section class="section-header">
   <h2>Equipo de Producción</h2>
-  <p>Conoce al equipo creativo detrás de la serie. Aprende sobre sus roles e historias.</p>
+  <p>
+    Conoce al equipo creativo detrás de la serie. Aprende sobre sus roles, notas
+    internas y prioridades.
+  </p>
+</section>
+
+<div class="filter-toggle">
+  <button (click)="showFilterPanel = true">
+    <span class="material-icons">tune</span> Filtros
+  </button>
+</div>
+
+<div class="filter-panel" *ngIf="showFilterPanel">
+  <div class="panel-header">
+    <h3>Filtrar equipo</h3>
+    <button (click)="showFilterPanel = false">
+      <span class="material-icons">close</span> Cerrar
+    </button>
+  </div>
+
+  <div class="panel-body">
+    <mat-form-field
+      appearance="fill"
+      color="accent"
+      class="name-field"
+      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
+    >
+      <mat-label *ngIf="!showAliasOverlay">Alias</mat-label>
+      <input
+        matInput
+        [formControl]="alias"
+        (focus)="onFocus('alias')"
+        (blur)="onBlur('alias')"
+        style="color: white; caret-color: white"
+      />
+      <div class="static-text" *ngIf="showAliasOverlay">Alias</div>
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="fill"
+      color="accent"
+      class="name-field"
+      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
+    >
+      <mat-label *ngIf="!showNoteOverlay">Nota</mat-label>
+      <input
+        matInput
+        [formControl]="note"
+        (focus)="onFocus('note')"
+        (blur)="onBlur('note')"
+        style="color: white; caret-color: white"
+      />
+      <div class="static-text" *ngIf="showNoteOverlay">Nota</div>
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="fill"
+      color="accent"
+      class="name-field"
+      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
+    >
+      <mat-label *ngIf="!showPriorityOverlay">Prioridad</mat-label>
+      <input
+        matInput
+        [formControl]="priority"
+        (focus)="onFocus('priority')"
+        (blur)="onBlur('priority')"
+        style="color: white; caret-color: white"
+      />
+      <div class="static-text" *ngIf="showPriorityOverlay">Prioridad</div>
+    </mat-form-field>
+  </div>
 </div>
 
 <div class="card-grid">
-  <mat-card class="info-card" *ngFor="let member of team">
+  <a
+    class="info-card episode-link"
+    *ngFor="let member of filteredTeam"
+    [routerLink]="['/team', member.alias]"
+  >
     <div class="card-image">
-      <img [src]="member.image" [alt]="member.name">
+      <img [src]="member.image" [alt]="member.name" />
     </div>
     <mat-card-title>{{ member.name }}</mat-card-title>
     <mat-card-content>
       <p class="card-role">{{ member.role }}</p>
       <p>{{ member.description }}</p>
+      <p class="card-priority">Prioridad: {{ member.priority }}</p>
     </mat-card-content>
-  </mat-card>
+  </a>
 </div>

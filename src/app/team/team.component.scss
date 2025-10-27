@@ -3,9 +3,10 @@
   min-height: 100vh;
   height: 100%;
   padding: 40px 20px;
-  background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat,
-              radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
-  font-family: 'Roboto', 'Segoe UI', sans-serif;
+  background: url("https://www.transparenttextures.com/patterns/stardust.png")
+      repeat,
+    radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
+  font-family: "Roboto", "Segoe UI", sans-serif;
   color: #fff;
   overflow: auto;
 }
@@ -27,6 +28,138 @@
     color: #ccc;
     max-width: 600px;
     margin: 0 auto;
+  }
+}
+
+.filter-toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+
+  button {
+    background-color: #00e5ff;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .material-icons {
+      font-size: 1.2rem;
+    }
+
+    &:hover {
+      background-color: #00bcd4;
+    }
+  }
+}
+
+.filter-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100%;
+  background-color: #121212;
+  box-shadow: -4px 0 12px rgba(0, 229, 255, 0.2);
+  z-index: 1000;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease forwards;
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h3 {
+      color: #00e5ff;
+      font-size: 1.4rem;
+      margin: 0;
+    }
+
+    button {
+      background: none;
+      border: none;
+      color: #00e5ff;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      .material-icons {
+        font-size: 1.2rem;
+      }
+
+      &:hover {
+        color: #00bcd4;
+      }
+    }
+  }
+
+  .panel-body {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.name-field {
+  position: relative;
+
+  .static-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00e5ff;
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  input {
+    position: relative;
+    z-index: 3;
+  }
+
+  .mat-form-field-label {
+    color: #00e5ff;
+  }
+
+  &.mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: #121212 !important;
+  }
+
+  .mat-input-element {
+    color: white !important;
+    caret-color: white !important;
+  }
+
+  .mat-form-field-ripple {
+    background-color: #00e5ff !important;
   }
 }
 
@@ -77,9 +210,23 @@
     font-weight: 500;
   }
 
+  .card-priority {
+    font-size: 0.95rem;
+    color: #00bcd4;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
   mat-card-content p {
     font-size: 1rem;
     color: #ccc;
     padding: 0 10px;
   }
+}
+
+.episode-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
 }

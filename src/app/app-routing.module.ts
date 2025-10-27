@@ -9,6 +9,7 @@ import { LocationsComponent } from './locations/locations.component';
 import { LocationDetailComponent } from './location-detail/location-detail.component';
 import { TeamComponent } from './team/team.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { TeamDetailComponent } from './team-detail/team-detail.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'locations/:id', component: LocationDetailComponent },
   { path: 'team', component: TeamComponent },
   { path: '**', component: NotFoundComponent },
+  { path: 'team/:name', component: TeamDetailComponent },
 ];
 
 @NgModule({

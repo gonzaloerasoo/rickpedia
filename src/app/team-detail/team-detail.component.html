@@ -1,0 +1,14 @@
+<section class="section-header" *ngIf="member">
+  <h2>{{ member.name }}</h2>
+  <p>{{ member.role }} — Prioridad: {{ member.priority }}</p>
+</section>
+
+<div class="detail-card" *ngIf="member">
+  <div class="image-wrapper">
+    <img [src]="member.image" [alt]="member.name" />
+  </div>
+  <div class="text-wrapper">
+    <p class="description">{{ member.description }}</p>
+    <a routerLink="/team" class="back-button"> ← Volver al equipo </a>
+  </div>
+</div>

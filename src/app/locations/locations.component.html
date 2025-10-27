@@ -1,14 +1,50 @@
-<div class="hero">
-    <h1>Localizaciones</h1>
-    <p>Descubre todos los planetas, dimensiones y lugares del universo Rick and Morty.</p>
+<section class="section-header">
+  <h2>Localizaciones</h2>
+  <p>Explora los mundos y dimensiones del universo de Rick y Morty.</p>
+</section>
+
+<div class="filter-toggle">
+  <button (click)="showFilterPanel = true">
+    <span class="material-icons">tune</span> Filtros
+  </button>
+</div>
+
+<div class="filter-panel" *ngIf="showFilterPanel">
+  <div class="panel-header">
+    <h3>Filtros</h3>
+    <button (click)="showFilterPanel = false">
+      <span class="material-icons">close</span> Cerrar
+    </button>
   </div>
-  
-  <div class="card-grid">
-    <div class="feature-card" *ngFor="let loc of locations">
-      <div class="card-content">
-        <h3 class="location-title">{{ loc.name }}</h3>
-        <p class="location-type">{{ loc.type }}</p>
-        <p class="location-dimension">{{ loc.dimension }}</p>
+
+  <div class="panel-body">
+    <mat-form-field
+      appearance="fill"
+      color="accent"
+      class="name-field"
+      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
+    >
+      <mat-label *ngIf="!showNameOverlay">Nombre de la localización</mat-label>
+      <input
+        matInput
+        [formControl]="locationName"
+        (focus)="onNameFocus()"
+        (blur)="onNameBlur()"
+        (keyup.enter)="filterLocations()"
+        style="color: white; caret-color: white"
+      />
+      <div class="static-text" *ngIf="showNameOverlay">
+        Nombre de la localización
       </div>
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="card-grid">
+  <div class="character-card" *ngFor="let loc of filteredLocations">
+    <div class="card-content">
+      <h3 class="name">{{ loc.name }}</h3>
+      <p class="meta">{{ loc.type }} — {{ loc.dimension }}</p>
     </div>
-  </div>  
+  </div>
+</div>

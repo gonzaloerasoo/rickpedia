@@ -1,73 +1,201 @@
 :host {
-    display: block;
-    background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat,
-                radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
-    color: #fff;
-    min-height: 100vh;
-    padding: 20px;
-    font-family: 'Roboto', 'Segoe UI', sans-serif;
+  display: block;
+  min-height: 100vh;
+  overflow-y: auto;
+  padding: 40px 20px;
+  background: url("https://www.transparenttextures.com/patterns/stardust.png")
+      repeat,
+    radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
+  font-family: "Roboto", "Segoe UI", sans-serif;
+  color: #fff;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 40px;
+
+  h2 {
+    font-size: 2.8rem;
+    color: #00e5ff;
+    font-weight: bold;
+    margin-bottom: 10px;
   }
-  
-  .hero {
-    text-align: center;
-    margin-bottom: 40px;
-  
-    h1 {
-      font-size: 3.2rem;
-      margin-bottom: 10px;
-      font-weight: 700;
+
+  p {
+    font-size: 1.2rem;
+    color: #ccc;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.filter-toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+
+  button {
+    background-color: #00e5ff;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .material-icons {
+      font-size: 1.2rem;
+    }
+
+    &:hover {
+      background-color: #00bcd4;
+    }
+  }
+}
+
+.filter-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100%;
+  background-color: #121212;
+  box-shadow: -4px 0 12px rgba(0, 229, 255, 0.2);
+  z-index: 1000;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease forwards;
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h3 {
       color: #00e5ff;
-      letter-spacing: 1px;
+      font-size: 1.4rem;
+      margin: 0;
     }
-  
-    p {
-      font-size: 1.3rem;
-      color: #ccc;
-      margin: 0 auto;
-      max-width: 600px;
+
+    button {
+      background: none;
+      border: none;
+      color: #00e5ff;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      .material-icons {
+        font-size: 1.2rem;
+      }
+
+      &:hover {
+        color: #00bcd4;
+      }
     }
   }
-  
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    padding: 0 20px;
-  }
-  
-  .feature-card {
-    background-color: #121212;
-    color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  .panel-body {
+    flex: 1;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.name-field {
+  position: relative;
+
+  .static-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
     align-items: center;
-    text-align: center;
+    justify-content: center;
+    color: #00e5ff;
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  input {
+    position: relative;
+    z-index: 3;
+  }
+
+  .mat-form-field-label {
+    color: #00e5ff;
+  }
+
+  &.mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: #121212 !important;
+  }
+
+  .mat-input-element {
+    color: white !important;
+    caret-color: white !important;
+  }
+
+  .mat-form-field-ripple {
+    background-color: #00e5ff !important;
+  }
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.character-card {
+  background-color: #121212;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 30px rgba(0, 255, 255, 0.2);
+  }
+
+  .card-content {
     padding: 20px;
-  
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 30px rgba(0, 255, 255, 0.2);
-    }
-  
-    .location-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #00e5ff;
-      margin-bottom: 10px;
-    }
-  
-    .location-type {
-      font-size: 1.1rem;
+    text-align: center;
+
+    .name {
+      font-size: 1.6rem;
       font-weight: 600;
-      color: #00bcd4;
-      margin-bottom: 6px;
+      color: #00e5ff;
+      margin-bottom: 8px;
     }
-  
-    .location-dimension {
+
+    .meta {
       font-size: 1rem;
       color: #ccc;
+      margin-bottom: 6px;
     }
-  }  
+  }
+}

@@ -1,14 +1,80 @@
-<div class="hero">
-  <h1>Episodios</h1>
-  <p>Explora las aventuras de Rick y Morty a través de una colección de episodios memorables.</p>
+<section class="section-header">
+  <h2>Episodios</h2>
+  <p>
+    Explora las aventuras de Rick y Morty a través de una colección de episodios
+    memorables. Busca por nombre o código (ej. "S02E") y descubre qué personajes
+    aparecen.
+  </p>
+</section>
+
+<div class="filter-toggle">
+  <button (click)="showFilterPanel = true">
+    <span class="material-icons">tune</span> Filtros
+  </button>
+</div>
+
+<div class="filter-panel" *ngIf="showFilterPanel">
+  <div class="panel-header">
+    <h3>Buscar episodio</h3>
+    <button (click)="showFilterPanel = false">
+      <span class="material-icons">close</span> Cerrar
+    </button>
+  </div>
+
+  <div class="panel-body">
+    <mat-form-field
+      appearance="fill"
+      color="accent"
+      class="name-field"
+      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
+    >
+      <mat-label *ngIf="!showNameOverlay"
+        >Nombre o código del episodio</mat-label
+      >
+      <input
+        matInput
+        [formControl]="episodeName"
+        (focus)="onNameFocus()"
+        (blur)="onNameBlur()"
+        (keyup.enter)="searchCharactersByEpisode()"
+        style="color: white; caret-color: white"
+      />
+      <div class="static-text" *ngIf="showNameOverlay">
+        Nombre o código del episodio
+      </div>
+    </mat-form-field>
+  </div>
 </div>
 
 <div class="card-grid">
-  <div class="feature-card" *ngFor="let ep of episodes">
+  <div class="character-card" *ngFor="let ep of filteredEpisodes">
     <div class="card-content">
-      <h3 class="episode-title">{{ ep.name }}</h3>
-      <p class="episode-code">{{ ep.episode }}</p>
-      <p class="episode-date">{{ ep.air_date }}</p>
+      <h3 class="name">{{ ep.name }}</h3>
+      <p class="meta">{{ ep.episode }} — {{ ep.air_date }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="section-header" *ngIf="selectedEpisodeTitle">
+  <h2>{{ selectedEpisodeTitle }}</h2>
+  <p *ngIf="charactersInEpisode.length > 0">
+    Personajes que aparecen en este episodio:
+  </p>
+  <p *ngIf="charactersInEpisode.length === 0">
+    No se encontraron personajes o el episodio no existe.
+  </p>
+</div>
+
+<div class="card-grid" *ngIf="charactersInEpisode.length > 0">
+  <div class="character-card" *ngFor="let character of charactersInEpisode">
+    <div class="card-image">
+      <img [src]="character.image" [alt]="character.name" />
+    </div>
+    <div class="card-content">
+      <h3 class="name">{{ character.name }}</h3>
+      <p class="meta">{{ character.species }} ({{ character.status }})</p>
+      <p class="origin">Origen: {{ character.origin.name }}</p>
+      <p class="year">Año: {{ character.created | date : "yyyy" }}</p>
     </div>
   </div>
 </div>

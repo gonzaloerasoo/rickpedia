@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { RickpediaService } from '../services/rickpedia.service';
 import { FormControl } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-characters',
   templateUrl: './characters.component.html',
-  styleUrls: ['./characters.component.scss']
+  styleUrls: ['./characters.component.scss'],
 })
 export class CharactersComponent implements OnInit {
   characters: any[] = [];
@@ -34,15 +35,32 @@ export class CharactersComponent implements OnInit {
 
   showFilterPanel = false;
 
-  constructor(private rickpedia: RickpediaService) {}
+  constructor(
+    private rickpedia: RickpediaService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.rickpedia.getAllCharacters().subscribe(data => {
-      this.characters = data;
-      this.filtered = data;
-      this.availableSpecies = [...new Set(data.map(c => c.species))].sort();
-      this.updatePagination();
-    });
+    const idsParam = this.route.snapshot.queryParamMap.get('ids');
+
+    if (idsParam) {
+      const ids = idsParam.split(',');
+      this.rickpedia.getCharactersByIds(ids).subscribe((data: any) => {
+        this.characters = Array.isArray(data) ? data : [data];
+        this.filtered = this.characters;
+        this.availableSpecies = [
+          ...new Set(this.characters.map((c) => c.species)),
+        ].sort();
+        this.updatePagination();
+      });
+    } else {
+      this.rickpedia.getAllCharacters().subscribe((data) => {
+        this.characters = data;
+        this.filtered = data;
+        this.availableSpecies = [...new Set(data.map((c) => c.species))].sort();
+        this.updatePagination();
+      });
+    }
 
     this.nameFilter.valueChanges.subscribe(() => this.applyFilters());
     this.statusFilter.valueChanges.subscribe(() => this.applyFilters());
@@ -54,21 +72,22 @@ export class CharactersComponent implements OnInit {
     const status = this.statusFilter.value?.toLowerCase() || '';
     const species = this.speciesFilter.value?.toLowerCase() || '';
 
-    this.filtered = this.characters.filter(c =>
-      c.name.toLowerCase().includes(name) &&
-      c.status.toLowerCase().includes(status) &&
-      c.species.toLowerCase().includes(species)
+    this.filtered = this.characters.filter(
+      (c) =>
+        c.name.toLowerCase().includes(name) &&
+        c.status.toLowerCase().includes(status) &&
+        c.species.toLowerCase().includes(species)
     );
 
     if (this.selectedLetter) {
-      this.filtered = this.filtered.filter(c =>
-        c.name.charAt(0).toUpperCase() === this.selectedLetter
+      this.filtered = this.filtered.filter(
+        (c) => c.name.charAt(0).toUpperCase() === this.selectedLetter
       );
     }
 
     if (this.selectedSpecies) {
-      this.filtered = this.filtered.filter(c =>
-        c.species === this.selectedSpecies
+      this.filtered = this.filtered.filter(
+        (c) => c.species === this.selectedSpecies
       );
     }
 

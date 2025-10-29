@@ -21,6 +21,7 @@
   </div>
 
   <div class="panel-body">
+    <!-- Alias -->
     <mat-form-field
       appearance="fill"
       color="accent"
@@ -38,6 +39,7 @@
       <div class="static-text" *ngIf="showAliasOverlay">Alias</div>
     </mat-form-field>
 
+    <!-- Nota -->
     <mat-form-field
       appearance="fill"
       color="accent"
@@ -55,6 +57,7 @@
       <div class="static-text" *ngIf="showNoteOverlay">Nota</div>
     </mat-form-field>
 
+    <!-- Prioridad -->
     <mat-form-field
       appearance="fill"
       color="accent"
@@ -75,11 +78,7 @@
 </div>
 
 <div class="card-grid">
-  <a
-    class="info-card episode-link"
-    *ngFor="let member of filteredTeam"
-    [routerLink]="['/team', member.alias]"
-  >
+  <div class="info-card episode-link" *ngFor="let member of filteredTeam">
     <div class="card-image">
       <img [src]="member.image" [alt]="member.name" />
     </div>
@@ -89,5 +88,5 @@
       <p>{{ member.description }}</p>
       <p class="card-priority">Prioridad: {{ member.priority }}</p>
     </mat-card-content>
-  </a>
+  </div>
 </div>

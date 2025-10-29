@@ -1,0 +1,107 @@
+[33mcommit 54388df09135504fa433581726d401ee5a348d87[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Mon Oct 27 14:39:41 2025 +0100
+
+    Filtros busqueda pero falta detalles de equipo.
+
+[33mcommit a0632c014d2b43abdc44450aedeb623e959fcc42[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Mon Oct 27 13:53:21 2025 +0100
+
+    Vista detalle de localización
+
+[33mcommit 1925225130f304715ee3c80601149526409c5f17[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Mon Oct 27 13:33:05 2025 +0100
+
+    Búsqueda por nombre en localizaciones
+
+[33mcommit 4925792c1b09c37268cf62713091bafac0b214db[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Mon Oct 27 13:24:14 2025 +0100
+
+    Episodes hecho, detalles, buscar, etc.
+
+[33mcommit 0eba9d326489b5cded48524108b7816bf70eb0a6[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Mon Oct 27 12:53:15 2025 +0100
+
+    Busqueda por código y nombre de episodios.
+
+[33mcommit 5ae687fa42cdeb217965e030756a0fcb885b3aa8[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Fri Oct 24 09:58:54 2025 +0200
+
+    Filtros en personaje bien hechos.
+
+[33mcommit e6785302a5e0dd0489a66039070b5540b9684c35[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Thu Oct 23 13:38:11 2025 +0200
+
+    Paginación en personajes hecha y arreglado un problema en el formulario.
+
+[33mcommit 615288a033ddd5e1b60af45e3bc49ad8a3a42cc8[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Thu Oct 23 11:31:03 2025 +0200
+
+    Filtros de Personaje completados.
+
+[33mcommit bb698db1de25b0ef6425517215e5e92ae9a3a314[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Wed Oct 22 14:34:43 2025 +0200
+
+    Proyecto hecho con api enlazada.
+
+[33mcommit a0327ee293c043f7c2479279fc32eca708c7aa46[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Wed Oct 22 12:53:47 2025 +0200
+
+    Locations hecho usando API.
+
+[33mcommit d8bb4081f741e6907fd2541332e78733e4b1cb92[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Wed Oct 22 12:05:00 2025 +0200
+
+    Pagina episodes hecha.
+
+[33mcommit a1e65a2f2b3a1be605297b86e261358621a2197c[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Wed Oct 22 11:26:33 2025 +0200
+
+    Proyecto con la pestaña equipo hecha.
+
+[33mcommit 42c82660d406646c9a397cb055c23e39ce010dc3[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Wed Oct 22 10:54:06 2025 +0200
+
+    Not-Found y Personajes hecho.
+
+[33mcommit 60b9de8718122521086e031e15dcc5fbe520fdb2[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Wed Oct 22 01:15:42 2025 +0200
+
+    Proyecto con "HOME" bastante bien y modulos probados.
+
+[33mcommit df0a894a3c0b4bb378da10affc36c86e97e75d6a[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Tue Oct 21 14:54:05 2025 +0200
+
+    Pasos hechos para que arranque
+
+[33mcommit fe970df9f4ed6227e9d5a083dee2e4266a99797c[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Tue Oct 21 14:48:07 2025 +0200
+
+    Commit rutas hechas
+
+[33mcommit c8c5fdca6420c826f7f04b7f08e458879e368a21[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Tue Oct 21 14:47:21 2025 +0200
+
+    Proyecto base sin codigos cambiados pero todo creado
+
+[33mcommit a85497d23d9f414b286f556a8939a8c94e3e642f[m
+Author: gonzaloeraso3 <Erasopedro0@gmail.com>
+Date:   Tue Oct 21 14:42:17 2025 +0200
+
+    initial commit

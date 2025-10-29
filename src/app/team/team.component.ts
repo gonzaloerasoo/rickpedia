@@ -1,16 +1,23 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
+interface TeamMember {
+  name: string;
+  image: string;
+  role: string;
+  description: string;
+  priority: string;
+}
+
 @Component({
   selector: 'app-team',
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss'],
 })
 export class TeamComponent implements OnInit, OnDestroy {
-  team = [
+  team: TeamMember[] = [
     {
       name: 'Justin Roiland',
-      alias: 'justin-roiland',
       image: 'assets/team/justin.jpg',
       role: 'Creador',
       description: 'Creador principal y voz de Rick y Morty.',
@@ -18,7 +25,6 @@ export class TeamComponent implements OnInit, OnDestroy {
     },
     {
       name: 'Dan Harmon',
-      alias: 'dan-harmon',
       image: 'assets/team/dan.jpg',
       role: 'Creador',
       description: 'Co-creador y principal guionista de la serie.',
@@ -26,7 +32,6 @@ export class TeamComponent implements OnInit, OnDestroy {
     },
     {
       name: 'Sarah Carbiener',
-      alias: 'sarah-carbiener',
       image: 'assets/team/sarah.jpg',
       role: 'Guionista',
       description: 'Guionista destacada con episodios notables.',
@@ -34,7 +39,6 @@ export class TeamComponent implements OnInit, OnDestroy {
     },
     {
       name: 'James McDermott',
-      alias: 'james-mcdermott',
       image: 'assets/team/james.jpg',
       role: 'Productor',
       description: 'Productor clave en la realización del show.',
@@ -42,7 +46,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     },
   ];
 
-  filteredTeam = [...this.team];
+  filteredTeam: TeamMember[] = [...this.team];
 
   alias = new FormControl('');
   note = new FormControl('');
@@ -51,7 +55,6 @@ export class TeamComponent implements OnInit, OnDestroy {
   showAliasOverlay = true;
   showNoteOverlay = true;
   showPriorityOverlay = true;
-
   showFilterPanel = false;
 
   ngOnInit(): void {

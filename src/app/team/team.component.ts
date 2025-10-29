@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 interface TeamMember {
@@ -14,7 +14,7 @@ interface TeamMember {
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss'],
 })
-export class TeamComponent implements OnInit, OnDestroy {
+export class TeamComponent implements OnInit {
   team: TeamMember[] = [
     {
       name: 'Justin Roiland',
@@ -44,9 +44,8 @@ export class TeamComponent implements OnInit, OnDestroy {
       description: 'Productor clave en la realización del show.',
       priority: 'Baja',
     },
+    // Podés agregar más miembros si querés probar la paginación
   ];
-
-  filteredTeam: TeamMember[] = [...this.team];
 
   alias = new FormControl('');
   note = new FormControl('');
@@ -57,16 +56,28 @@ export class TeamComponent implements OnInit, OnDestroy {
   showPriorityOverlay = true;
   showFilterPanel = false;
 
+  filteredTeam: TeamMember[] = [];
+  currentPage = 1;
+  pageSize = 2;
+  totalPages = 1;
+
   ngOnInit(): void {
-    document.body.style.overflow = 'hidden';
+    this.applyFilters();
 
-    this.alias.valueChanges.subscribe(() => this.applyFilters());
-    this.note.valueChanges.subscribe(() => this.applyFilters());
-    this.priority.valueChanges.subscribe(() => this.applyFilters());
-  }
+    this.alias.valueChanges.subscribe(() => {
+      this.currentPage = 1;
+      this.applyFilters();
+    });
 
-  ngOnDestroy(): void {
-    document.body.style.overflow = 'auto';
+    this.note.valueChanges.subscribe(() => {
+      this.currentPage = 1;
+      this.applyFilters();
+    });
+
+    this.priority.valueChanges.subscribe(() => {
+      this.currentPage = 1;
+      this.applyFilters();
+    });
   }
 
   applyFilters(): void {
@@ -74,12 +85,37 @@ export class TeamComponent implements OnInit, OnDestroy {
     const noteValue = this.note.value?.trim().toLowerCase() || '';
     const priorityValue = this.priority.value?.trim().toLowerCase() || '';
 
-    this.filteredTeam = this.team.filter(
+    const filtered = this.team.filter(
       (member) =>
         member.name.toLowerCase().includes(aliasValue) &&
         member.description.toLowerCase().includes(noteValue) &&
         member.priority.toLowerCase().includes(priorityValue)
     );
+
+    this.totalPages = Math.max(1, Math.ceil(filtered.length / this.pageSize));
+    const start = (this.currentPage - 1) * this.pageSize;
+    this.filteredTeam = filtered.slice(start, start + this.pageSize);
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.applyFilters();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.applyFilters();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.applyFilters();
+    }
   }
 
   onFocus(field: 'alias' | 'note' | 'priority'): void {

@@ -25,9 +25,8 @@ import { LocationDetailComponent } from './location-detail/location-detail.compo
 import { TeamDetailComponent } from './team-detail/team-detail.component';
 
 @NgModule({
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 
-  schemas: [CUSTOM_ELEMENTS_SCHEMA], 
-  
   declarations: [
     AppComponent,
     HomeComponent,
@@ -38,7 +37,7 @@ import { TeamDetailComponent } from './team-detail/team-detail.component';
     TeamComponent,
     EpisodeDetailComponent,
     LocationDetailComponent,
-    TeamDetailComponent
+    TeamDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,9 +52,9 @@ import { TeamDetailComponent } from './team-detail/team-detail.component';
     MatInputModule,
     MatTableModule,
     MatChipsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

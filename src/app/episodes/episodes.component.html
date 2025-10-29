@@ -68,7 +68,7 @@
 <div class="card-grid">
   <a
     class="character-card episode-link"
-    *ngFor="let ep of filteredEpisodes"
+    *ngFor="let ep of paginatedEpisodes"
     [routerLink]="['/episodes', ep.id]"
   >
     <div class="card-content">
@@ -76,6 +76,34 @@
       <p class="meta">{{ ep.episode }} — {{ ep.air_date }}</p>
     </div>
   </a>
+</div>
+
+<div class="pagination-controls">
+  <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+
+  <button (click)="goToPage(1)" [class.active]="currentPage === 1">1</button>
+
+  <button *ngIf="showPrevEllipsis" (click)="handlePrevEllipsis()">...</button>
+
+  <ng-container *ngFor="let page of visiblePageNumbers">
+    <button (click)="goToPage(page)" [class.active]="page === currentPage">
+      {{ page }}
+    </button>
+  </ng-container>
+
+  <button *ngIf="showNextEllipsis" (click)="handleNextEllipsis()">...</button>
+
+  <button
+    *ngIf="totalPages > 1"
+    (click)="goToPage(totalPages)"
+    [class.active]="currentPage === totalPages"
+  >
+    {{ totalPages }}
+  </button>
+
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+    Siguiente
+  </button>
 </div>
 
 <div class="section-header" *ngIf="selectedEpisodeTitle">

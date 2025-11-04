@@ -55,4 +55,8 @@ export class TeamService {
   getMemberByAlias(alias: string): TeamMember | undefined {
     return this.team.find((m) => m.alias.toLowerCase() === alias.toLowerCase());
   }
+
+  addMember(member: TeamMember): void {
+    this.team.push(member);
+  }
 }

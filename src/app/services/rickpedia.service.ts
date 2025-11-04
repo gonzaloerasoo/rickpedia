@@ -70,4 +70,13 @@ export class RickpediaService {
     const joined = ids.join(',');
     return this.http.get<any>(`${this.baseUrl}/character/${joined}`);
   }
+
+  getCharacterById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/character/${id}`);
+  }
+
+  addToTeam(characterId: string): Observable<any> {
+    const backendUrl = 'https://tu-backend.com/api/team';
+    return this.http.post<any>(backendUrl, { characterId });
+  }
 }

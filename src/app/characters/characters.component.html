@@ -21,53 +21,35 @@
   </div>
 
   <div class="panel-body">
-    <mat-form-field
-      appearance="fill"
-      color="accent"
-      class="name-field"
-      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
-    >
+    <mat-form-field appearance="fill" color="accent" class="name-field">
       <mat-label *ngIf="!showNameOverlay">Nombre</mat-label>
       <input
         matInput
         [formControl]="nameFilter"
         (focus)="onNameFocus()"
         (blur)="onNameBlur()"
-        style="color: white; caret-color: white"
       />
       <div class="static-text" *ngIf="showNameOverlay">Nombre</div>
     </mat-form-field>
 
-    <mat-form-field
-      appearance="fill"
-      color="accent"
-      class="status-field"
-      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
-    >
+    <mat-form-field appearance="fill" color="accent" class="status-field">
       <mat-label *ngIf="!showStatusOverlay">Estado</mat-label>
       <input
         matInput
         [formControl]="statusFilter"
         (focus)="onStatusFocus()"
         (blur)="onStatusBlur()"
-        style="color: white; caret-color: white"
       />
       <div class="static-text" *ngIf="showStatusOverlay">Estado</div>
     </mat-form-field>
 
-    <mat-form-field
-      appearance="fill"
-      color="accent"
-      class="species-field"
-      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
-    >
+    <mat-form-field appearance="fill" color="accent" class="species-field">
       <mat-label *ngIf="!showSpeciesOverlay">Especie</mat-label>
       <input
         matInput
         [formControl]="speciesFilter"
         (focus)="onSpeciesFocus()"
         (blur)="onSpeciesBlur()"
-        style="color: white; caret-color: white"
       />
       <div class="static-text" *ngIf="showSpeciesOverlay">Especie</div>
     </mat-form-field>
@@ -130,11 +112,8 @@
 
 <div class="pagination-controls">
   <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
-
   <button (click)="goToPage(1)" [class.active]="currentPage === 1">1</button>
-
   <button *ngIf="showPrevEllipsis" (click)="handlePrevEllipsis()">...</button>
-
   <ng-container *ngFor="let page of visiblePageNumbers">
     <button
       *ngIf="page !== 1 && page !== totalPages"
@@ -144,16 +123,13 @@
       {{ page }}
     </button>
   </ng-container>
-
   <button *ngIf="showNextEllipsis" (click)="handleNextEllipsis()">...</button>
-
   <button
     (click)="goToPage(totalPages)"
     [class.active]="currentPage === totalPages"
   >
     {{ totalPages }}
   </button>
-
   <button (click)="nextPage()" [disabled]="currentPage === totalPages">
     Siguiente
   </button>

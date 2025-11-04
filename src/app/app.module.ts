@@ -23,6 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EpisodeDetailComponent } from './episode-detail/episode-detail.component';
 import { LocationDetailComponent } from './location-detail/location-detail.component';
 import { TeamDetailComponent } from './team-detail/team-detail.component';
+import { CharacterDetailComponent } from './character-detail/character-detail.component';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -38,6 +39,7 @@ import { TeamDetailComponent } from './team-detail/team-detail.component';
     EpisodeDetailComponent,
     LocationDetailComponent,
     TeamDetailComponent,
+    CharacterDetailComponent,
   ],
   imports: [
     BrowserModule,

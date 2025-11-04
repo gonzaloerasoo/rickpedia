@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RickpediaService } from '../services/rickpedia.service';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-characters',
@@ -37,7 +37,8 @@ export class CharactersComponent implements OnInit {
 
   constructor(
     private rickpedia: RickpediaService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -207,5 +208,13 @@ export class CharactersComponent implements OnInit {
   onSpeciesBlur(): void {
     this.speciesFocused = false;
     if (!this.speciesFilter.value) this.showSpeciesOverlay = true;
+  }
+
+  viewCharacter(id: string): void {
+    this.router.navigate(['/characters', id]);
+  }
+
+  addToTeam(id: string): void {
+    this.rickpedia.addToTeam(id).subscribe();
   }
 }

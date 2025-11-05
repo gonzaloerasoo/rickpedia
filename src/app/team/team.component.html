@@ -8,7 +8,7 @@
 
 <div class="filter-toggle">
   <button (click)="showFilterPanel = true">
-    <span class="material-icons">tune</span> Filtros
+    <span class="material-icons">tune</span> Filtrar
   </button>
 </div>
 
@@ -33,7 +33,6 @@
         [formControl]="alias"
         (focus)="onFocus('alias')"
         (blur)="onBlur('alias')"
-        style="color: white; caret-color: white"
       />
       <div class="static-text" *ngIf="showAliasOverlay">Alias</div>
     </mat-form-field>
@@ -44,15 +43,14 @@
       class="name-field"
       style="--mdc-filled-text-field-container-color: #121212; width: 100%"
     >
-      <mat-label *ngIf="!showNoteOverlay">Nota</mat-label>
+      <mat-label *ngIf="!showNoteOverlay">Especie</mat-label>
       <input
         matInput
         [formControl]="note"
         (focus)="onFocus('note')"
         (blur)="onBlur('note')"
-        style="color: white; caret-color: white"
       />
-      <div class="static-text" *ngIf="showNoteOverlay">Nota</div>
+      <div class="static-text" *ngIf="showNoteOverlay">Especie</div>
     </mat-form-field>
 
     <mat-form-field
@@ -61,42 +59,40 @@
       class="name-field"
       style="--mdc-filled-text-field-container-color: #121212; width: 100%"
     >
-      <mat-label *ngIf="!showPriorityOverlay">Prioridad</mat-label>
+      <mat-label *ngIf="!showPriorityOverlay">Estado</mat-label>
       <input
         matInput
         [formControl]="priority"
         (focus)="onFocus('priority')"
         (blur)="onBlur('priority')"
-        style="color: white; caret-color: white"
       />
-      <div class="static-text" *ngIf="showPriorityOverlay">Prioridad</div>
+      <div class="static-text" *ngIf="showPriorityOverlay">Estado</div>
     </mat-form-field>
   </div>
 </div>
 
 <div class="card-grid">
-  <div class="info-card episode-link" *ngFor="let member of filteredTeam">
+  <div class="info-card" *ngFor="let member of filteredTeam">
     <div class="card-image">
       <img [src]="member.image" [alt]="member.name" />
     </div>
     <mat-card-title>{{ member.name }}</mat-card-title>
+    <div class="card-role">{{ member.species }} ({{ member.status }})</div>
+    <div class="card-priority">Origen: {{ member.origin?.name }}</div>
     <mat-card-content>
-      <p class="card-role">{{ member.role }}</p>
-      <p>{{ member.description }}</p>
-      <p class="card-priority">Prioridad: {{ member.priority }}</p>
+      <p>Año: {{ member.created | date : "yyyy" }}</p>
     </mat-card-content>
+    <button (click)="removeFromTeam(member.id)">Quitar del equipo</button>
   </div>
 </div>
 
 <div class="pagination-controls">
   <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
-
   <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
     <button (click)="goToPage(i + 1)" [class.active]="currentPage === i + 1">
       {{ i + 1 }}
     </button>
   </ng-container>
-
   <button (click)="nextPage()" [disabled]="currentPage === totalPages">
     Siguiente
   </button>

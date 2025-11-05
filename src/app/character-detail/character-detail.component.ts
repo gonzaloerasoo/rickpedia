@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RickpediaService } from '../services/rickpedia.service';
-import { TeamService, TeamMember } from '../services/team.service';
 
 @Component({
   selector: 'app-character-detail',
@@ -10,11 +9,11 @@ import { TeamService, TeamMember } from '../services/team.service';
 })
 export class CharacterDetailComponent implements OnInit {
   character: any;
+  isInTeam = false;
 
   constructor(
     private route: ActivatedRoute,
-    private rickpedia: RickpediaService,
-    private team: TeamService
+    private rickpedia: RickpediaService
   ) {}
 
   ngOnInit(): void {
@@ -22,19 +21,26 @@ export class CharacterDetailComponent implements OnInit {
     if (id) {
       this.rickpedia.getCharacterById(id).subscribe((data) => {
         this.character = data;
+        this.checkIfInTeam(data.id);
       });
     }
   }
 
+  checkIfInTeam(id: number): void {
+    this.rickpedia.getTeam().subscribe((team) => {
+      this.isInTeam = team.some((member) => member.id === id);
+    });
+  }
+
   addToTeam(): void {
-    const member: TeamMember = {
-      name: this.character.name,
-      alias: this.character.name.toLowerCase().replace(/\s+/g, '-'),
-      image: this.character.image,
-      role: 'Personaje',
-      description: `${this.character.species} (${this.character.status})`,
-      priority: 'Media',
-    };
-    this.team.addMember(member);
+    this.rickpedia.addToTeam(String(this.character.id)).subscribe(() => {
+      this.isInTeam = true;
+    });
+  }
+
+  removeFromTeam(): void {
+    this.rickpedia.removeFromTeam(String(this.character.id)).subscribe(() => {
+      this.isInTeam = false;
+    });
   }
 }

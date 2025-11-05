@@ -13,6 +13,10 @@
     <p>
       <strong>Año de creación:</strong> {{ character.created | date : "yyyy" }}
     </p>
-    <button (click)="addToTeam()">Añadir al equipo</button>
+
+    <button *ngIf="!isInTeam" (click)="addToTeam()">Añadir al equipo</button>
+    <button *ngIf="isInTeam" (click)="removeFromTeam()">
+      Quitar del equipo
+    </button>
   </div>
 </div>

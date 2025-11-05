@@ -1,13 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-
-interface TeamMember {
-  name: string;
-  image: string;
-  role: string;
-  description: string;
-  priority: string;
-}
+import { RickpediaService } from '../services/rickpedia.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-team',
@@ -15,37 +9,8 @@ interface TeamMember {
   styleUrls: ['./team.component.scss'],
 })
 export class TeamComponent implements OnInit {
-  team: TeamMember[] = [
-    {
-      name: 'Justin Roiland',
-      image: 'assets/team/justin.jpg',
-      role: 'Creador',
-      description: 'Creador principal y voz de Rick y Morty.',
-      priority: 'Alta',
-    },
-    {
-      name: 'Dan Harmon',
-      image: 'assets/team/dan.jpg',
-      role: 'Creador',
-      description: 'Co-creador y principal guionista de la serie.',
-      priority: 'Alta',
-    },
-    {
-      name: 'Sarah Carbiener',
-      image: 'assets/team/sarah.jpg',
-      role: 'Guionista',
-      description: 'Guionista destacada con episodios notables.',
-      priority: 'Media',
-    },
-    {
-      name: 'James McDermott',
-      image: 'assets/team/james.jpg',
-      role: 'Productor',
-      description: 'Productor clave en la realización del show.',
-      priority: 'Baja',
-    },
-    // Podés agregar más miembros si querés probar la paginación
-  ];
+  team: any[] = [];
+  filteredTeam: any[] = [];
 
   alias = new FormControl('');
   note = new FormControl('');
@@ -56,26 +21,23 @@ export class TeamComponent implements OnInit {
   showPriorityOverlay = true;
   showFilterPanel = false;
 
-  filteredTeam: TeamMember[] = [];
   currentPage = 1;
-  pageSize = 2;
+  pageSize = 20;
   totalPages = 1;
 
+  constructor(private rickpedia: RickpediaService, private router: Router) {}
+
   ngOnInit(): void {
-    this.applyFilters();
+    this.loadTeam();
 
-    this.alias.valueChanges.subscribe(() => {
-      this.currentPage = 1;
-      this.applyFilters();
-    });
+    this.alias.valueChanges.subscribe(() => this.applyFilters());
+    this.note.valueChanges.subscribe(() => this.applyFilters());
+    this.priority.valueChanges.subscribe(() => this.applyFilters());
+  }
 
-    this.note.valueChanges.subscribe(() => {
-      this.currentPage = 1;
-      this.applyFilters();
-    });
-
-    this.priority.valueChanges.subscribe(() => {
-      this.currentPage = 1;
+  loadTeam(): void {
+    this.rickpedia.getTeam().subscribe((data) => {
+      this.team = data;
       this.applyFilters();
     });
   }
@@ -88,8 +50,8 @@ export class TeamComponent implements OnInit {
     const filtered = this.team.filter(
       (member) =>
         member.name.toLowerCase().includes(aliasValue) &&
-        member.description.toLowerCase().includes(noteValue) &&
-        member.priority.toLowerCase().includes(priorityValue)
+        member.species.toLowerCase().includes(noteValue) &&
+        member.status.toLowerCase().includes(priorityValue)
     );
 
     this.totalPages = Math.max(1, Math.ceil(filtered.length / this.pageSize));
@@ -129,5 +91,16 @@ export class TeamComponent implements OnInit {
     if (field === 'note' && !this.note.value) this.showNoteOverlay = true;
     if (field === 'priority' && !this.priority.value)
       this.showPriorityOverlay = true;
+  }
+
+  goToDetail(id: number): void {
+    this.router.navigate(['/characters', id]);
+  }
+
+  removeFromTeam(id: number): void {
+    this.rickpedia.removeFromTeam(String(id)).subscribe(() => {
+      this.team = this.team.filter((member) => member.id !== id);
+      this.applyFilters();
+    });
   }
 }

@@ -23,18 +23,13 @@ export class RickpediaService {
     );
   }
 
-  getAllEpisodes(): Observable<any[]> {
-    return this.http.get<any>(`${this.baseUrl}/episode`).pipe(
-      switchMap((res) => {
-        const totalPages = res.info.pages;
-        const requests = Array.from({ length: totalPages }, (_, i) =>
-          this.http.get<any>(`${this.baseUrl}/episode?page=${i + 1}`)
-        );
-        return forkJoin(requests).pipe(
-          map((pages) => pages.flatMap((p) => p.results))
-        );
-      })
-    );
+  getCharacterById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/character/${id}`);
+  }
+
+  getCharactersByIds(ids: string[]): Observable<any[]> {
+    const joined = ids.join(',');
+    return this.http.get<any[]>(`${this.baseUrl}/character/${joined}`);
   }
 
   getAllLocations(): Observable<any[]> {
@@ -51,10 +46,21 @@ export class RickpediaService {
     );
   }
 
-  getEpisodeByName(name: string): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/episode/?name=${name}`).pipe(
-      map((res) => res.results?.[0] || null),
-      catchError(() => of(null))
+  getLocationById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/location/${id}`);
+  }
+
+  getAllEpisodes(): Observable<any[]> {
+    return this.http.get<any>(`${this.baseUrl}/episode`).pipe(
+      switchMap((res) => {
+        const totalPages = res.info.pages;
+        const requests = Array.from({ length: totalPages }, (_, i) =>
+          this.http.get<any>(`${this.baseUrl}/episode?page=${i + 1}`)
+        );
+        return forkJoin(requests).pipe(
+          map((pages) => pages.flatMap((p) => p.results))
+        );
+      })
     );
   }
 
@@ -62,21 +68,31 @@ export class RickpediaService {
     return this.http.get<any>(`${this.baseUrl}/episode/${id}`);
   }
 
-  getLocationById(id: string): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/location/${id}`);
+  getEpisodeByName(name: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/episode/?name=${name}`).pipe(
+      map((res) => res.results?.[0] || null),
+      catchError(() => of(null))
+    );
   }
 
-  getCharactersByIds(ids: string[]): Observable<any> {
-    const joined = ids.join(',');
-    return this.http.get<any>(`${this.baseUrl}/character/${joined}`);
-  }
-
-  getCharacterById(id: string): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/character/${id}`);
+  getTeam(): Observable<any[]> {
+    return this.http.get<string[]>('http://localhost:3000/api/team').pipe(
+      switchMap((ids) => {
+        if (!ids.length) return of([]);
+        return this.getCharactersByIds(ids);
+      })
+    );
   }
 
   addToTeam(characterId: string): Observable<any> {
-    const backendUrl = 'https://tu-backend.com/api/team';
-    return this.http.post<any>(backendUrl, { characterId });
+    return this.http.post<any>('http://localhost:3000/api/team', {
+      characterId,
+    });
+  }
+
+  removeFromTeam(characterId: string): Observable<any> {
+    return this.http.delete<any>(
+      `http://localhost:3000/api/team/${characterId}`
+    );
   }
 }

@@ -8,7 +8,8 @@
     radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
   font-family: "Roboto", "Segoe UI", sans-serif;
   color: #fff;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .section-header {
@@ -167,6 +168,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 30px;
+  overflow-x: hidden;
 }
 
 .info-card {
@@ -176,6 +178,8 @@
   box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-align: center;
+  overflow-x: hidden;
+  max-width: 100%;
 
   &:hover {
     transform: translateY(-5px);

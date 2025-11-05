@@ -210,7 +210,7 @@ export class CharactersComponent implements OnInit {
     if (!this.speciesFilter.value) this.showSpeciesOverlay = true;
   }
 
-  viewCharacter(id: string): void {
+  goToDetail(id: string): void {
     this.router.navigate(['/characters', id]);
   }
 

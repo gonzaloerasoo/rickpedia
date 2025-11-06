@@ -18,38 +18,26 @@
   </div>
 
   <div class="panel-body">
-    <mat-form-field
-      appearance="fill"
-      color="accent"
-      class="name-field"
-      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
-    >
+    <mat-form-field appearance="fill" color="accent" class="name-field">
       <mat-label *ngIf="!showNameOverlay">Nombre de la localización</mat-label>
       <input
         matInput
         [formControl]="locationName"
         (focus)="onNameFocus()"
         (blur)="onNameBlur()"
-        style="color: white; caret-color: white"
       />
       <div class="static-text" *ngIf="showNameOverlay">
         Nombre de la localización
       </div>
     </mat-form-field>
 
-    <mat-form-field
-      appearance="fill"
-      color="accent"
-      class="name-field"
-      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
-    >
+    <mat-form-field appearance="fill" color="accent" class="name-field">
       <mat-label *ngIf="!showCharacterOverlay">Nombre de personaje</mat-label>
       <input
         matInput
         [formControl]="characterName"
         (focus)="onCharacterFocus()"
         (blur)="onCharacterBlur()"
-        style="color: white; caret-color: white"
       />
       <div class="static-text" *ngIf="showCharacterOverlay">
         Nombre de personaje

@@ -22,8 +22,9 @@ export class TeamComponent implements OnInit {
   showFilterPanel = false;
 
   currentPage = 1;
-  pageSize = 20;
+  pageSize = 5;
   totalPages = 1;
+  pages: number[] = [];
 
   constructor(private rickpedia: RickpediaService, private router: Router) {}
 
@@ -42,6 +43,23 @@ export class TeamComponent implements OnInit {
     });
   }
 
+  addToTeam(character: any): void {
+    this.rickpedia.addToTeam(character).subscribe(() => {
+      this.team.push(character);
+      this.applyFilters();
+    });
+  }
+
+  removeFromTeam(id: number): void {
+    this.rickpedia.removeFromTeam(String(id)).subscribe(() => {
+      this.team = this.team.filter((member) => member.id !== id);
+      if (this.currentPage > Math.ceil(this.team.length / this.pageSize)) {
+        this.currentPage = Math.max(1, this.currentPage - 1);
+      }
+      this.applyFilters();
+    });
+  }
+
   applyFilters(): void {
     const aliasValue = this.alias.value?.trim().toLowerCase() || '';
     const noteValue = this.note.value?.trim().toLowerCase() || '';
@@ -55,6 +73,8 @@ export class TeamComponent implements OnInit {
     );
 
     this.totalPages = Math.max(1, Math.ceil(filtered.length / this.pageSize));
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+
     const start = (this.currentPage - 1) * this.pageSize;
     this.filteredTeam = filtered.slice(start, start + this.pageSize);
   }
@@ -95,12 +115,5 @@ export class TeamComponent implements OnInit {
 
   goToDetail(id: number): void {
     this.router.navigate(['/characters', id]);
-  }
-
-  removeFromTeam(id: number): void {
-    this.rickpedia.removeFromTeam(String(id)).subscribe(() => {
-      this.team = this.team.filter((member) => member.id !== id);
-      this.applyFilters();
-    });
   }
 }

@@ -125,26 +125,24 @@
 
   .static-text {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    top: 12px;
+    left: 16px;
+    font-size: 1rem;
     color: #00e5ff;
-    font-size: 1.2rem;
     pointer-events: none;
     z-index: 2;
+    transition: opacity 0.2s ease;
   }
 
   input {
     position: relative;
     z-index: 3;
+    color: white !important;
+    caret-color: white !important;
   }
 
   .mat-form-field-label {
-    color: #00e5ff;
+    color: #00e5ff !important;
   }
 
   &.mat-form-field-appearance-fill .mat-form-field-flex {

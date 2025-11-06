@@ -1,8 +1,7 @@
 <section class="section-header">
-  <h2>Equipo de Producción</h2>
+  <h2>Mi Equipo</h2>
   <p>
-    Conoce al equipo creativo detrás de la serie. Aprende sobre sus roles, notas
-    internas y prioridades.
+    Aquí puedes ver los personajes que has añadido a tu equipo. Puedes filtrarlos por alias, especie o estado, y quitarlos en cualquier momento.
   </p>
 </section>
 
@@ -21,12 +20,7 @@
   </div>
 
   <div class="panel-body">
-    <mat-form-field
-      appearance="fill"
-      color="accent"
-      class="name-field"
-      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
-    >
+    <mat-form-field appearance="fill" color="accent" class="name-field">
       <mat-label *ngIf="!showAliasOverlay">Alias</mat-label>
       <input
         matInput
@@ -37,12 +31,7 @@
       <div class="static-text" *ngIf="showAliasOverlay">Alias</div>
     </mat-form-field>
 
-    <mat-form-field
-      appearance="fill"
-      color="accent"
-      class="name-field"
-      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
-    >
+    <mat-form-field appearance="fill" color="accent" class="name-field">
       <mat-label *ngIf="!showNoteOverlay">Especie</mat-label>
       <input
         matInput
@@ -53,12 +42,7 @@
       <div class="static-text" *ngIf="showNoteOverlay">Especie</div>
     </mat-form-field>
 
-    <mat-form-field
-      appearance="fill"
-      color="accent"
-      class="name-field"
-      style="--mdc-filled-text-field-container-color: #121212; width: 100%"
-    >
+    <mat-form-field appearance="fill" color="accent" class="name-field">
       <mat-label *ngIf="!showPriorityOverlay">Estado</mat-label>
       <input
         matInput
@@ -80,20 +64,18 @@
     <div class="card-role">{{ member.species }} ({{ member.status }})</div>
     <div class="card-priority">Origen: {{ member.origin?.name }}</div>
     <mat-card-content>
-      <p>Año: {{ member.created | date : "yyyy" }}</p>
+      <p>Año: {{ member.created | date : 'yyyy' }}</p>
     </mat-card-content>
     <button (click)="removeFromTeam(member.id)">Quitar del equipo</button>
   </div>
 </div>
 
-<div class="pagination-controls">
+<div class="pagination-controls" *ngIf="totalPages > 1">
   <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
-  <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
-    <button (click)="goToPage(i + 1)" [class.active]="currentPage === i + 1">
-      {{ i + 1 }}
+  <ng-container *ngFor="let page of pages">
+    <button (click)="goToPage(page)" [class.active]="currentPage === page">
+      {{ page }}
     </button>
   </ng-container>
-  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
-    Siguiente
-  </button>
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
 </div>

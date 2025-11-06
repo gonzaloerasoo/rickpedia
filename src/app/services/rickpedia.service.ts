@@ -29,7 +29,9 @@ export class RickpediaService {
 
   getCharactersByIds(ids: string[]): Observable<any[]> {
     const joined = ids.join(',');
-    return this.http.get<any[]>(`${this.baseUrl}/character/${joined}`);
+    return this.http
+      .get<any>(`${this.baseUrl}/character/${joined}`)
+      .pipe(map((res) => (Array.isArray(res) ? res : [res])));
   }
 
   getAllLocations(): Observable<any[]> {
@@ -76,11 +78,13 @@ export class RickpediaService {
   }
 
   getTeam(): Observable<any[]> {
-    return this.http.get<string[]>('http://localhost:3000/api/team').pipe(
-      switchMap((ids) => {
+    return this.http.get<any>('http://localhost:3000/api/team').pipe(
+      switchMap((res) => {
+        const ids = Array.isArray(res) ? res : [];
         if (!ids.length) return of([]);
-        return this.getCharactersByIds(ids);
-      })
+        return this.getCharactersByIds(ids.map(String));
+      }),
+      catchError(() => of([]))
     );
   }
 

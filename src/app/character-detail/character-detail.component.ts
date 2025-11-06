@@ -21,14 +21,16 @@ export class CharacterDetailComponent implements OnInit {
     if (id) {
       this.rickpedia.getCharacterById(id).subscribe((data) => {
         this.character = data;
-        this.checkIfInTeam(data.id);
+        this.checkIfInTeam();
       });
     }
   }
 
-  checkIfInTeam(id: number): void {
+  checkIfInTeam(): void {
     this.rickpedia.getTeam().subscribe((team) => {
-      this.isInTeam = team.some((member) => member.id === id);
+      this.isInTeam = team.some(
+        (member) => String(member.id) === String(this.character.id)
+      );
     });
   }
 

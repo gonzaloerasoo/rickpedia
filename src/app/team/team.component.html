@@ -61,8 +61,9 @@
     <div class="card-content">
       <h3 class="name">{{ member.name }}</h3>
       <p class="meta">{{ member.species }} ({{ member.status }})</p>
-      <p class="origin">Origen: {{ member.origin?.name }}</p>
-      <p class="year">Año: {{ member.created | date : "yyyy" }}</p>
+      <p class="origin">Origen: {{ member.origin }}</p>
+      <p class="origin">Dimensión: {{ member.location }}</p>
+      <p class="year">Añadido: {{ member.created | date : "MMMM yyyy" }}</p>
       <div class="actions">
         <button (click)="removeFromTeam(member.id)">Quitar del equipo</button>
       </div>

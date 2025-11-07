@@ -196,6 +196,9 @@
   .card-content {
     padding: 20px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 
     .name {
       font-size: 1.6rem;
@@ -219,12 +222,14 @@
     .year {
       font-size: 0.9rem;
       color: #999;
+      margin-bottom: 24px;
     }
 
     .actions {
-      margin-top: 16px;
+      margin-top: auto;
       display: flex;
       justify-content: center;
+      padding-bottom: 10px;
 
       button {
         background-color: #00e5ff;

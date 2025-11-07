@@ -83,8 +83,16 @@ export class RickpediaService {
   }
 
   addToTeam(character: any): Observable<any> {
-    const { id, ...rest } = character;
-    return this.http.post<any>(this.teamUrl, rest);
+    const payload = {
+      name: character.name,
+      species: character.species,
+      status: character.status,
+      origin: character.origin?.name || 'Desconocido',
+      location: character.location?.name || 'Desconocido',
+      image: character.image,
+      created: new Date().toISOString(),
+    };
+    return this.http.post<any>(this.teamUrl, payload);
   }
 
   removeFromTeam(id: string): Observable<any> {

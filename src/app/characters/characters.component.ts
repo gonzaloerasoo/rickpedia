@@ -215,6 +215,9 @@ export class CharactersComponent implements OnInit {
   }
 
   addToTeam(id: string): void {
-    this.rickpedia.addToTeam(id).subscribe();
+    const character = this.characters.find((c) => String(c.id) === String(id));
+    if (character) {
+      this.rickpedia.addToTeam(character).subscribe();
+    }
   }
 }

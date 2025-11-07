@@ -29,20 +29,42 @@ export class CharacterDetailComponent implements OnInit {
   checkIfInTeam(): void {
     this.rickpedia.getTeam().subscribe((team) => {
       this.isInTeam = team.some(
-        (member) => String(member.id) === String(this.character.id)
+        (member) => member.name === this.character.name
       );
     });
   }
 
   addToTeam(): void {
-    this.rickpedia.addToTeam(String(this.character.id)).subscribe(() => {
-      this.isInTeam = true;
+    if (!this.character) return;
+
+    this.rickpedia.addToTeam(this.character).subscribe({
+      next: () => {
+        this.isInTeam = true;
+      },
+      error: (err) => {
+        console.error('Error al guardar personaje:', err);
+      },
     });
   }
 
   removeFromTeam(): void {
-    this.rickpedia.removeFromTeam(String(this.character.id)).subscribe(() => {
-      this.isInTeam = false;
+    if (!this.character) return;
+
+    this.rickpedia.getTeam().subscribe((team) => {
+      const match = team.find((member) => member.name === this.character.name);
+      if (!match) {
+        console.warn('Personaje no encontrado en el equipo');
+        return;
+      }
+
+      this.rickpedia.removeFromTeam(String(match.id)).subscribe({
+        next: () => {
+          this.isInTeam = false;
+        },
+        error: (err) => {
+          console.error('Error al eliminar personaje:', err);
+        },
+      });
     });
   }
 }

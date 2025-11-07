@@ -1,6 +1,6 @@
 :host {
   display: block;
-  min-height: 100vh;
+  min-height: 83.3vh;
   overflow-y: auto;
   padding: 40px 20px;
   background: url("https://www.transparenttextures.com/patterns/stardust.png")
@@ -120,7 +120,9 @@
   }
 }
 
-.name-field {
+.name-field,
+.status-field,
+.species-field {
   position: relative;
 
   .static-text {
@@ -141,19 +143,16 @@
   input {
     position: relative;
     z-index: 3;
+    color: white;
+    caret-color: white;
+  }
+
+  ::ng-deep .mat-mdc-form-field {
+    --mdc-filled-text-field-container-color: #121212;
   }
 
   .mat-form-field-label {
     color: #00e5ff;
-  }
-
-  &.mat-form-field-appearance-fill .mat-form-field-flex {
-    background-color: #121212 !important;
-  }
-
-  .mat-input-element {
-    color: white !important;
-    caret-color: white !important;
   }
 
   .mat-form-field-ripple {
@@ -167,7 +166,7 @@
   gap: 30px;
 }
 
-.info-card {
+.character-card {
   background-color: #121212;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
@@ -175,8 +174,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  text-align: center;
-  color: inherit;
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-6px);
@@ -186,8 +184,6 @@
   .card-image {
     width: 100%;
     height: 400px;
-    overflow: hidden;
-    border-radius: 12px 12px 0 0;
 
     img {
       width: 100%;
@@ -197,39 +193,53 @@
     }
   }
 
-  mat-card-title {
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: #00e5ff;
-    margin-top: 10px;
-  }
+  .card-content {
+    padding: 20px;
+    text-align: center;
 
-  .card-role,
-  .card-priority {
-    font-size: 1rem;
-    color: #ccc;
-    margin-top: 4px;
-  }
+    .name {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #00e5ff;
+      margin-bottom: 8px;
+    }
 
-  mat-card-content p {
-    font-size: 1rem;
-    color: #ccc;
-    margin: 10px 0;
-  }
+    .meta {
+      font-size: 1rem;
+      color: #ccc;
+      margin-bottom: 6px;
+    }
 
-  button {
-    margin: 10px auto 20px;
-    background-color: #00e5ff;
-    color: #000;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    .origin {
+      font-size: 0.95rem;
+      color: #00bcd4;
+      margin-bottom: 4px;
+    }
 
-    &:hover {
-      background-color: #00bcd4;
+    .year {
+      font-size: 0.9rem;
+      color: #999;
+    }
+
+    .actions {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+
+      button {
+        background-color: #00e5ff;
+        color: #000;
+        font-weight: bold;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #00bcd4;
+        }
+      }
     }
   }
 }
@@ -269,5 +279,12 @@
       background-color: rgba(0, 229, 255, 0.1);
       box-shadow: 0 0 6px rgba(0, 229, 255, 0.3);
     }
+  }
+
+  span {
+    color: #00e5ff;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0 6px;
   }
 }

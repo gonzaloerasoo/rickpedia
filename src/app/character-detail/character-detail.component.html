@@ -11,7 +11,8 @@
     <p><strong>Género:</strong> {{ character.gender }}</p>
     <p><strong>Tipo:</strong> {{ character.type || "Desconocido" }}</p>
     <p>
-      <strong>Año de creación:</strong> {{ character.created | date : "yyyy" }}
+      <strong>Año de creación:</strong>
+      {{ character.created | date : "yyyy" }}
     </p>
 
     <button *ngIf="!isInTeam" (click)="addToTeam()">Añadir al equipo</button>

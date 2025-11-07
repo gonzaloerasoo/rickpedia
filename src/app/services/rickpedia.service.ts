@@ -6,6 +6,7 @@ import { map, switchMap, catchError } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class RickpediaService {
   private baseUrl = 'https://rickandmortyapi.com/api';
+  private teamUrl = 'http://localhost:3000/team';
 
   constructor(private http: HttpClient) {}
 
@@ -78,25 +79,15 @@ export class RickpediaService {
   }
 
   getTeam(): Observable<any[]> {
-    return this.http.get<any>('http://localhost:3000/api/team').pipe(
-      switchMap((res) => {
-        const ids = Array.isArray(res) ? res : [];
-        if (!ids.length) return of([]);
-        return this.getCharactersByIds(ids.map(String));
-      }),
-      catchError(() => of([]))
-    );
+    return this.http.get<any[]>(this.teamUrl).pipe(catchError(() => of([])));
   }
 
-  addToTeam(characterId: string): Observable<any> {
-    return this.http.post<any>('http://localhost:3000/api/team', {
-      characterId,
-    });
+  addToTeam(character: any): Observable<any> {
+    const { id, ...rest } = character;
+    return this.http.post<any>(this.teamUrl, rest);
   }
 
-  removeFromTeam(characterId: string): Observable<any> {
-    return this.http.delete<any>(
-      `http://localhost:3000/api/team/${characterId}`
-    );
+  removeFromTeam(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.teamUrl}/${id}`);
   }
 }

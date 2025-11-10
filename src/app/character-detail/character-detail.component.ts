@@ -40,12 +40,8 @@ export class CharacterDetailComponent implements OnInit {
       name: this.character.name,
       species: this.character.species,
       status: this.character.status,
-      origin: {
-        name: this.character.origin?.name || 'Desconocido',
-      },
-      location: {
-        name: this.character.location?.name || 'Desconocido',
-      },
+      origin: this.character.origin?.name || 'Desconocido',
+      location: this.character.location?.name || 'Desconocido',
       gender: this.character.gender || 'Desconocido',
       type: this.character.type || 'Desconocido',
       image: this.character.image,

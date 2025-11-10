@@ -215,9 +215,22 @@ export class CharactersComponent implements OnInit {
   }
 
   addToTeam(id: string): void {
-    const character = this.characters.find((c) => String(c.id) === String(id));
-    if (character) {
-      this.rickpedia.addToTeam(character).subscribe();
-    }
+    const original = this.characters.find((c) => String(c.id) === String(id));
+    if (!original) return;
+
+    const character = {
+      id: original.id,
+      name: original.name,
+      species: original.species,
+      status: original.status,
+      origin: original.origin?.name || 'Desconocido',
+      location: original.location?.name || 'Desconocido',
+      gender: original.gender || 'Desconocido',
+      type: original.type || 'Desconocido',
+      image: original.image,
+      created: original.created || new Date().toISOString(),
+    };
+
+    this.rickpedia.addToTeam(character).subscribe();
   }
 }

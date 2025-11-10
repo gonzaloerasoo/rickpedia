@@ -43,15 +43,8 @@ export class TeamComponent implements OnInit {
     });
   }
 
-  addToTeam(character: any): void {
-    this.rickpedia.addToTeam(character).subscribe(() => {
-      this.team.push(character);
-      this.applyFilters();
-    });
-  }
-
   removeFromTeam(id: number): void {
-    this.rickpedia.removeFromTeam(String(id)).subscribe(() => {
+    this.rickpedia.removeFromTeam(id).subscribe(() => {
       this.team = this.team.filter((member) => member.id !== id);
       if (this.currentPage > Math.ceil(this.team.length / this.pageSize)) {
         this.currentPage = Math.max(1, this.currentPage - 1);
@@ -114,6 +107,6 @@ export class TeamComponent implements OnInit {
   }
 
   goToDetail(id: number): void {
-    this.router.navigate(['/characters', id]);
+    this.router.navigate(['/team-detail', id]);
   }
 }

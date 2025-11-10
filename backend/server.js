@@ -12,24 +12,37 @@ app.use(express.json());
 
 app.get("/api/team", (req, res) => {
   fs.readFile(DATA_PATH, "utf8", (err, data) => {
-    if (err) {
-      console.error("Error reading team file:", err);
-      return res.status(500).json([]);
-    }
+    if (err) return res.status(500).json({ error: "Error reading team file" });
     try {
       const team = JSON.parse(data);
       res.json(Array.isArray(team) ? team : []);
-    } catch (parseErr) {
-      console.error("Error parsing team file:", parseErr);
-      res.json([]);
+    } catch {
+      res.status(500).json({ error: "Invalid team data format" });
+    }
+  });
+});
+
+app.get("/api/team/:id", (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  fs.readFile(DATA_PATH, "utf8", (err, data) => {
+    if (err) return res.status(500).json({ error: "Error reading team file" });
+    try {
+      const team = JSON.parse(data);
+      if (!Array.isArray(team))
+        return res.status(500).json({ error: "Invalid team data format" });
+      const member = team.find((m) => m.id === id);
+      if (!member) return res.status(404).json({ error: "Member not found" });
+      res.json(member);
+    } catch {
+      res.status(500).json({ error: "Invalid team data format" });
     }
   });
 });
 
 app.post("/api/team", (req, res) => {
-  const { characterId } = req.body;
-  if (!characterId || typeof characterId !== "string") {
-    return res.status(400).json({ error: "Missing or invalid characterId" });
+  const member = req.body;
+  if (!member || typeof member.id !== "number") {
+    return res.status(400).json({ error: "Missing or invalid character data" });
   }
 
   fs.readFile(DATA_PATH, "utf8", (err, data) => {
@@ -43,23 +56,21 @@ app.post("/api/team", (req, res) => {
       }
     }
 
-    if (!team.includes(characterId)) {
-      team.push(characterId);
+    if (!team.some((m) => m.id === member.id)) {
+      team.push(member);
       fs.writeFile(DATA_PATH, JSON.stringify(team, null, 2), (err) => {
-        if (err) {
-          console.error("Error writing team file:", err);
+        if (err)
           return res.status(500).json({ error: "Error writing team file" });
-        }
-        res.json({ success: true });
+        res.status(201).json(member);
       });
     } else {
-      res.json({ success: true });
+      res.status(200).json({ message: "Already in team" });
     }
   });
 });
 
 app.delete("/api/team/:id", (req, res) => {
-  const id = req.params.id;
+  const id = parseInt(req.params.id, 10);
 
   fs.readFile(DATA_PATH, "utf8", (err, data) => {
     let team = [];
@@ -72,19 +83,15 @@ app.delete("/api/team/:id", (req, res) => {
       }
     }
 
-    const updatedTeam = team.filter(
-      (memberId) => String(memberId) !== String(id)
-    );
+    const updatedTeam = team.filter((m) => m.id !== id);
     fs.writeFile(DATA_PATH, JSON.stringify(updatedTeam, null, 2), (err) => {
-      if (err) {
-        console.error("Error writing team file:", err);
+      if (err)
         return res.status(500).json({ error: "Error writing team file" });
-      }
-      res.json({ success: true });
+      res.status(204).end();
     });
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

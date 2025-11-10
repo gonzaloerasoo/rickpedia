@@ -1,14 +1,23 @@
-<section class="section-header" *ngIf="member">
-  <h2>{{ member.name }}</h2>
-  <p>{{ member.role }} — Prioridad: {{ member.priority }}</p>
-</section>
-
-<div class="detail-card" *ngIf="member">
-  <div class="image-wrapper">
+<div class="character-detail">
+  <div class="image">
     <img [src]="member.image" [alt]="member.name" />
   </div>
-  <div class="text-wrapper">
-    <p class="description">{{ member.description }}</p>
-    <a routerLink="/team" class="back-button"> ← Volver al equipo </a>
+
+  <div class="info" *ngIf="member">
+    <h2>{{ member.name }}</h2>
+
+    <p><strong>ID:</strong> {{ member.id }}</p>
+    <p><strong>Especie:</strong> {{ member.species }}</p>
+    <p><strong>Estado:</strong> {{ member.status }}</p>
+    <p><strong>Género:</strong> {{ member.gender }}</p>
+    <p><strong>Tipo:</strong> {{ member.type }}</p>
+    <p><strong>Origen:</strong> {{ member.origin }}</p>
+    <p><strong>Dimensión:</strong> {{ member.location }}</p>
+    <p>
+      <strong>Fecha de creación:</strong>
+      {{ member.created | date : "fullDate" }}
+    </p>
+
+    <button type="button" (click)="goBack()">Volver al equipo</button>
   </div>
 </div>

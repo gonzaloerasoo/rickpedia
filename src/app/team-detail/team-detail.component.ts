@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RickpediaService } from '../services/rickpedia.service';
 
 @Component({
   selector: 'app-team-detail',
@@ -9,49 +10,34 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class TeamDetailComponent implements OnInit {
   member: any = null;
 
-  private team = [
-    {
-      name: 'Justin Roiland',
-      alias: 'justin-roiland',
-      image: 'assets/team/justin.jpg',
-      role: 'Creador',
-      description: 'Creador principal y voz de Rick y Morty.',
-      priority: 'Alta',
-    },
-    {
-      name: 'Dan Harmon',
-      alias: 'dan-harmon',
-      image: 'assets/team/dan.jpg',
-      role: 'Creador',
-      description: 'Co-creador y principal guionista de la serie.',
-      priority: 'Alta',
-    },
-    {
-      name: 'Sarah Carbiener',
-      alias: 'sarah-carbiener',
-      image: 'assets/team/sarah.jpg',
-      role: 'Guionista',
-      description: 'Guionista destacada con episodios notables.',
-      priority: 'Media',
-    },
-    {
-      name: 'James McDermott',
-      alias: 'james-mcdermott',
-      image: 'assets/team/james.jpg',
-      role: 'Productor',
-      description: 'Productor clave en la realización del show.',
-      priority: 'Baja',
-    },
-  ];
-
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private rickpedia: RickpediaService
+  ) {}
 
   ngOnInit(): void {
-    const aliasParam = this.route.snapshot.paramMap.get('name')?.toLowerCase();
-    this.member = this.team.find((m) => m.alias.toLowerCase() === aliasParam);
-
-    if (!this.member) {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (!idParam) {
       this.router.navigate(['/team']);
+      return;
     }
+
+    this.rickpedia.getTeamMemberById(+idParam).subscribe({
+      next: (data) => {
+        if (!data || !data.id) {
+          this.router.navigate(['/team']);
+        } else {
+          this.member = data;
+        }
+      },
+      error: () => {
+        this.router.navigate(['/team']);
+      },
+    });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/team']);
   }
 }

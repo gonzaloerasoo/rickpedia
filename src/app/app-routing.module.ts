@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: 'locations', component: LocationsComponent },
   { path: 'locations/:id', component: LocationDetailComponent },
   { path: 'team', component: TeamComponent },
-  { path: 'team/:name', component: TeamDetailComponent },
+  { path: 'team-detail/:id', component: TeamDetailComponent },
   { path: '**', component: NotFoundComponent },
 ];
 

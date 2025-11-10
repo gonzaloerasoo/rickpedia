@@ -28,16 +28,31 @@ export class CharacterDetailComponent implements OnInit {
 
   checkIfInTeam(): void {
     this.rickpedia.getTeam().subscribe((team) => {
-      this.isInTeam = team.some(
-        (member) => member.name === this.character.name
-      );
+      this.isInTeam = team.some((member) => member.id === this.character.id);
     });
   }
 
   addToTeam(): void {
     if (!this.character) return;
 
-    this.rickpedia.addToTeam(this.character).subscribe({
+    const payload = {
+      id: this.character.id,
+      name: this.character.name,
+      species: this.character.species,
+      status: this.character.status,
+      origin: {
+        name: this.character.origin?.name || 'Desconocido',
+      },
+      location: {
+        name: this.character.location?.name || 'Desconocido',
+      },
+      gender: this.character.gender || 'Desconocido',
+      type: this.character.type || 'Desconocido',
+      image: this.character.image,
+      created: this.character.created || new Date().toISOString(),
+    };
+
+    this.rickpedia.addToTeam(payload).subscribe({
       next: () => {
         this.isInTeam = true;
       },
@@ -50,21 +65,13 @@ export class CharacterDetailComponent implements OnInit {
   removeFromTeam(): void {
     if (!this.character) return;
 
-    this.rickpedia.getTeam().subscribe((team) => {
-      const match = team.find((member) => member.name === this.character.name);
-      if (!match) {
-        console.warn('Personaje no encontrado en el equipo');
-        return;
-      }
-
-      this.rickpedia.removeFromTeam(String(match.id)).subscribe({
-        next: () => {
-          this.isInTeam = false;
-        },
-        error: (err) => {
-          console.error('Error al eliminar personaje:', err);
-        },
-      });
+    this.rickpedia.removeFromTeam(this.character.id).subscribe({
+      next: () => {
+        this.isInTeam = false;
+      },
+      error: (err) => {
+        console.error('Error al eliminar personaje:', err);
+      },
     });
   }
 }

@@ -1,11 +1,10 @@
-<div class="character-detail">
+<div class="character-detail" *ngIf="member">
   <div class="image">
     <img [src]="member.image" [alt]="member.name" />
   </div>
 
-  <div class="info" *ngIf="member">
+  <div class="info">
     <h2>{{ member.name }}</h2>
-
     <p><strong>ID:</strong> {{ member.id }}</p>
     <p><strong>Especie:</strong> {{ member.species }}</p>
     <p><strong>Estado:</strong> {{ member.status }}</p>
@@ -17,7 +16,6 @@
       <strong>Fecha de creación:</strong>
       {{ member.created | date : "fullDate" }}
     </p>
-
     <button type="button" (click)="goBack()">Volver al equipo</button>
   </div>
 </div>

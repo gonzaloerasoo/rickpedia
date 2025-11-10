@@ -128,4 +128,18 @@ export class TeamComponent implements OnInit {
       }
     });
   }
+
+  openEditDialog(member: any): void {
+    const dialogRef = this.dialog.open(TeamCreateComponent, {
+      width: '500px',
+      disableClose: true,
+      data: member,
+    });
+
+    dialogRef.afterClosed().subscribe((updated) => {
+      if (updated) {
+        this.loadTeam();
+      }
+    });
+  }
 }

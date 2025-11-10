@@ -1,10 +1,10 @@
-<h2 mat-dialog-title>Nuevo personaje</h2>
+<h2 mat-dialog-title>{{ data ? "Editar personaje" : "Nuevo personaje" }}</h2>
 
 <form [formGroup]="form" (ngSubmit)="submit()">
   <mat-dialog-content>
     <mat-form-field appearance="fill">
       <mat-label>ID</mat-label>
-      <input matInput formControlName="id" type="number" />
+      <input matInput formControlName="id" type="number" [disabled]="data" />
       <mat-error *ngIf="form.get('id')?.hasError('required')">
         ID obligatorio
       </mat-error>

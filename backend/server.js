@@ -69,6 +69,43 @@ app.post("/api/team", (req, res) => {
   });
 });
 
+app.patch("/api/team/:id", (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const updates = { ...req.body };
+  delete updates.id;
+
+  if (updates.origin && typeof updates.origin === "object") {
+    updates.origin = updates.origin.name;
+  }
+  if (updates.location && typeof updates.location === "object") {
+    updates.location = updates.location.name;
+  }
+
+  fs.readFile(DATA_PATH, "utf8", (err, data) => {
+    if (err) return res.status(500).json({ error: "Error reading team file" });
+
+    let team = [];
+    try {
+      team = JSON.parse(data);
+      if (!Array.isArray(team)) team = [];
+    } catch {
+      return res.status(500).json({ error: "Invalid team data format" });
+    }
+
+    const index = team.findIndex((m) => m.id === id);
+    if (index === -1)
+      return res.status(404).json({ error: "Member not found" });
+
+    team[index] = { ...team[index], ...updates };
+
+    fs.writeFile(DATA_PATH, JSON.stringify(team, null, 2), (err) => {
+      if (err)
+        return res.status(500).json({ error: "Error writing team file" });
+      res.json(team[index]);
+    });
+  });
+});
+
 app.delete("/api/team/:id", (req, res) => {
   const id = parseInt(req.params.id, 10);
 

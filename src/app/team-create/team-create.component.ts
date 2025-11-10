@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, Inject } from '@angular/core';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { RickpediaService } from '../services/rickpedia.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-team-create',
@@ -9,7 +9,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./team-create.component.scss'],
 })
 export class TeamCreateComponent {
-  form = this.fb.group({
+  form: FormGroup = this.fb.group({
     id: [null, [Validators.required]],
     name: ['', [Validators.required, Validators.minLength(3)]],
     species: ['', Validators.required],
@@ -31,20 +31,52 @@ export class TeamCreateComponent {
   constructor(
     private fb: FormBuilder,
     private rickpedia: RickpediaService,
-    private dialogRef: MatDialogRef<TeamCreateComponent>
-  ) {}
+    private dialogRef: MatDialogRef<TeamCreateComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    if (data) {
+      this.form.patchValue({
+        id: data.id,
+        name: data.name,
+        species: data.species,
+        status: data.status,
+        origin: this.isNamedObject(data.origin)
+          ? data.origin.name
+          : data.origin,
+        location: this.isNamedObject(data.location)
+          ? data.location.name
+          : data.location,
+        gender: data.gender,
+        type: data.type,
+        image: data.image,
+        created: data.created,
+      });
+      this.form.get('id')?.disable();
+    }
+  }
 
   submit(): void {
     if (this.form.invalid) return;
 
+    const origin = this.form.value.origin;
+    const location = this.form.value.location;
+
     const payload = {
-      ...this.form.value,
-      origin: { name: this.form.value.origin },
-      location: { name: this.form.value.location },
+      ...this.form.getRawValue(),
+      origin: this.isNamedObject(origin) ? origin.name : origin,
+      location: this.isNamedObject(location) ? location.name : location,
     };
 
-    this.rickpedia.addToTeam(payload).subscribe(() => {
+    const request = this.data
+      ? this.rickpedia.updateTeamMember(Number(this.data.id), payload)
+      : this.rickpedia.addToTeam(payload);
+
+    request.subscribe(() => {
       this.dialogRef.close(true);
     });
+  }
+
+  private isNamedObject(value: any): value is { name: string } {
+    return value && typeof value === 'object' && 'name' in value;
   }
 }

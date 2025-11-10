@@ -102,7 +102,18 @@ export class RickpediaService {
     return this.http.post<any>(this.teamUrl, payload);
   }
 
+  updateTeamMember(id: number, changes: any): Observable<any> {
+    return this.http.patch<any>(`${this.teamUrl}/${id}`, changes);
+  }
+
   removeFromTeam(id: string | number): Observable<any> {
     return this.http.delete<any>(`${this.teamUrl}/${id}`);
+  }
+
+  isIdTaken(id: number): Observable<boolean> {
+    return this.getTeam().pipe(
+      map((team) => team.some((member) => member.id === id)),
+      catchError(() => of(false))
+    );
   }
 }

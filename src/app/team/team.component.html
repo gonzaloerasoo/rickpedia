@@ -93,6 +93,14 @@
         >
           Quitar del equipo
         </button>
+
+        <button
+          type="button"
+          (click)="openEditDialog(member); $event.stopPropagation()"
+          style="margin-left: 8px"
+        >
+          Editar
+        </button>
       </div>
     </div>
   </div>

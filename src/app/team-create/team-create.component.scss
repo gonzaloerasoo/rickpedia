@@ -1,21 +1,23 @@
 :host {
   display: block;
-  padding: 30px 20px;
+  padding: 32px 24px;
   background: url("https://www.transparenttextures.com/patterns/stardust.png")
       repeat,
-    radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
+    radial-gradient(circle at top, #121212 0%, #121212 100%);
   font-family: "Roboto", "Segoe UI", sans-serif;
   color: #fff;
   border-radius: 12px;
-  max-width: 500px;
+  max-width: 520px;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
 }
 
 h2 {
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 600;
   color: #00e5ff;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   text-align: center;
+  letter-spacing: 0.5px;
 }
 
 mat-form-field {
@@ -24,11 +26,13 @@ mat-form-field {
 
   .mat-form-field-label {
     color: #00e5ff !important;
+    font-weight: 500;
   }
 
   .mat-input-element {
     color: #fff;
     caret-color: #00e5ff;
+    font-size: 0.95rem;
   }
 
   .mat-form-field-underline {
@@ -41,24 +45,37 @@ mat-form-field {
 
   .mat-error {
     color: #f44336;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    margin-top: 4px;
   }
+}
+
+mat-dialog-content {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 mat-dialog-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 30px;
+  margin-top: 32px;
+  gap: 12px;
 
   button {
-    font-weight: bold;
-    border-radius: 30px;
-    padding: 8px 16px;
+    font-weight: 600;
+    border-radius: 24px;
+    padding: 8px 20px;
+    font-size: 0.9rem;
     transition: background-color 0.3s ease;
 
     &[mat-button] {
       background: none;
       color: #ccc;
+
+      &:hover {
+        color: #fff;
+      }
     }
 
     &[mat-raised-button] {

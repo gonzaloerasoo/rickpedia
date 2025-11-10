@@ -1,0 +1,78 @@
+:host {
+  display: block;
+  padding: 30px 20px;
+  background: url("https://www.transparenttextures.com/patterns/stardust.png")
+      repeat,
+    radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
+  font-family: "Roboto", "Segoe UI", sans-serif;
+  color: #fff;
+  border-radius: 12px;
+  max-width: 500px;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #00e5ff;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 20px;
+
+  .mat-form-field-label {
+    color: #00e5ff !important;
+  }
+
+  .mat-input-element {
+    color: #fff;
+    caret-color: #00e5ff;
+  }
+
+  .mat-form-field-underline {
+    background-color: #00e5ff;
+  }
+
+  .mat-form-field-ripple {
+    background-color: #00e5ff !important;
+  }
+
+  .mat-error {
+    color: #f44336;
+    font-size: 0.85rem;
+  }
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+
+  button {
+    font-weight: bold;
+    border-radius: 30px;
+    padding: 8px 16px;
+    transition: background-color 0.3s ease;
+
+    &[mat-button] {
+      background: none;
+      color: #ccc;
+    }
+
+    &[mat-raised-button] {
+      background-color: #00e5ff;
+      color: #000;
+
+      &:hover {
+        background-color: #00bcd4;
+      }
+
+      &:disabled {
+        background-color: #444;
+        color: #999;
+      }
+    }
+  }
+}

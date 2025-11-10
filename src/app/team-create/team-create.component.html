@@ -1,0 +1,92 @@
+<h2 mat-dialog-title>Nuevo personaje</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <mat-label>ID</mat-label>
+      <input matInput formControlName="id" type="number" />
+      <mat-error *ngIf="form.get('id')?.hasError('required')">
+        ID obligatorio
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" />
+      <mat-error *ngIf="form.get('name')?.hasError('required')">
+        Nombre obligatorio
+      </mat-error>
+      <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+        Mínimo 3 caracteres
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Especie</mat-label>
+      <input matInput formControlName="species" />
+      <mat-error *ngIf="form.get('species')?.hasError('required')">
+        Especie obligatoria
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Estado</mat-label>
+      <input matInput formControlName="status" />
+      <mat-error *ngIf="form.get('status')?.hasError('required')">
+        Estado obligatorio
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Origen</mat-label>
+      <input matInput formControlName="origin" />
+      <mat-error *ngIf="form.get('origin')?.hasError('required')">
+        Origen obligatorio
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Ubicación</mat-label>
+      <input matInput formControlName="location" />
+      <mat-error *ngIf="form.get('location')?.hasError('required')">
+        Ubicación obligatoria
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Género</mat-label>
+      <input matInput formControlName="gender" />
+      <mat-error *ngIf="form.get('gender')?.hasError('required')">
+        Género obligatorio
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Tipo</mat-label>
+      <input matInput formControlName="type" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Imagen (URL)</mat-label>
+      <input matInput formControlName="image" />
+      <mat-error *ngIf="form.get('image')?.hasError('required')">
+        Imagen obligatoria
+      </mat-error>
+      <mat-error *ngIf="form.get('image')?.hasError('pattern')">
+        Debe ser una URL válida de imagen
+      </mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      Guardar personaje
+    </button>
+  </mat-dialog-actions>
+</form>

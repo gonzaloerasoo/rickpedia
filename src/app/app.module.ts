@@ -8,9 +8,14 @@ import { CharactersComponent } from './characters/characters.component';
 import { EpisodesComponent } from './episodes/episodes.component';
 import { LocationsComponent } from './locations/locations.component';
 import { TeamComponent } from './team/team.component';
+import { EpisodeDetailComponent } from './episode-detail/episode-detail.component';
+import { LocationDetailComponent } from './location-detail/location-detail.component';
+import { TeamDetailComponent } from './team-detail/team-detail.component';
+import { CharacterDetailComponent } from './character-detail/character-detail.component';
+import { TeamCreateComponent } from './team-create/team-create.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -18,16 +23,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { EpisodeDetailComponent } from './episode-detail/episode-detail.component';
-import { LocationDetailComponent } from './location-detail/location-detail.component';
-import { TeamDetailComponent } from './team-detail/team-detail.component';
-import { CharacterDetailComponent } from './character-detail/character-detail.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-
   declarations: [
     AppComponent,
     HomeComponent,
@@ -40,6 +38,7 @@ import { CharacterDetailComponent } from './character-detail/character-detail.co
     LocationDetailComponent,
     TeamDetailComponent,
     CharacterDetailComponent,
+    TeamCreateComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +46,7 @@ import { CharacterDetailComponent } from './character-detail/character-detail.co
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     MatToolbarModule,
     MatButtonModule,
     MatCardModule,
@@ -54,7 +54,7 @@ import { CharacterDetailComponent } from './character-detail/character-detail.co
     MatInputModule,
     MatTableModule,
     MatChipsModule,
-    ReactiveFormsModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

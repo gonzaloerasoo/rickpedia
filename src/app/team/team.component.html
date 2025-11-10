@@ -4,8 +4,23 @@
 </section>
 
 <div class="filter-toggle">
-  <button type="button" (click)="showFilterPanel = true">
+  <button
+    type="button"
+    (click)="showFilterPanel = true"
+    mat-stroked-button
+    color="accent"
+  >
     <span class="material-icons">tune</span> Filtrar
+  </button>
+
+  <button
+    type="button"
+    (click)="openCreateDialog()"
+    mat-stroked-button
+    color="primary"
+    style="margin-left: 12px"
+  >
+    <span class="material-icons">add</span> Añadir personaje
   </button>
 </div>
 

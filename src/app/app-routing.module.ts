@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { HomeComponent } from './home/home.component';
 import { CharactersComponent } from './characters/characters.component';
 import { CharacterDetailComponent } from './character-detail/character-detail.component';
@@ -9,6 +10,7 @@ import { LocationsComponent } from './locations/locations.component';
 import { LocationDetailComponent } from './location-detail/location-detail.component';
 import { TeamComponent } from './team/team.component';
 import { TeamDetailComponent } from './team-detail/team-detail.component';
+import { TeamCreateComponent } from './team-create/team-create.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
@@ -21,6 +23,7 @@ const routes: Routes = [
   { path: 'locations/:id', component: LocationDetailComponent },
   { path: 'team', component: TeamComponent },
   { path: 'team-detail/:id', component: TeamDetailComponent },
+  { path: 'team-create', component: TeamCreateComponent },
   { path: '**', component: NotFoundComponent },
 ];
 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { RickpediaService } from '../services/rickpedia.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { TeamCreateComponent } from '../team-create/team-create.component';
 
 @Component({
   selector: 'app-team',
@@ -26,7 +28,11 @@ export class TeamComponent implements OnInit {
   totalPages = 1;
   pages: number[] = [];
 
-  constructor(private rickpedia: RickpediaService, private router: Router) {}
+  constructor(
+    private rickpedia: RickpediaService,
+    private router: Router,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.loadTeam();
@@ -108,5 +114,18 @@ export class TeamComponent implements OnInit {
 
   goToDetail(id: number): void {
     this.router.navigate(['/team-detail', id]);
+  }
+
+  openCreateDialog(): void {
+    const dialogRef = this.dialog.open(TeamCreateComponent, {
+      width: '500px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((created) => {
+      if (created) {
+        this.loadTeam();
+      }
+    });
   }
 }

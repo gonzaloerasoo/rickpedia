@@ -24,18 +24,6 @@
     "created": "2017-11-04T18:50:21.651Z"
   },
   {
-    "id": 3,
-    "name": "Summer Smith",
-    "species": "Human",
-    "status": "Alive",
-    "origin": "Desconocido",
-    "location": "Desconocido",
-    "gender": "Female",
-    "type": "Desconocido",
-    "image": "https://rickandmortyapi.com/api/character/avatar/3.jpeg",
-    "created": "2017-11-04T19:09:56.428Z"
-  },
-  {
     "id": 4,
     "name": "Beth Smith",
     "species": "Human",
@@ -58,5 +46,53 @@
     "type": "Desconocido",
     "image": "https://rickandmortyapi.com/api/character/avatar/5.jpeg",
     "created": "2017-11-04T19:26:56.301Z"
+  },
+  {
+    "id": 3,
+    "name": "Summer Smith",
+    "species": "Human",
+    "status": "Alive",
+    "origin": "Desconocido",
+    "location": "Desconocido",
+    "gender": "Female",
+    "type": "Desconocido",
+    "image": "https://rickandmortyapi.com/api/character/avatar/3.jpeg",
+    "created": "2017-11-04T19:09:56.428Z"
+  },
+  {
+    "id": 8,
+    "name": "Adjudicator Rick",
+    "species": "Human",
+    "status": "Dead",
+    "origin": "Desconocido",
+    "location": "Desconocido",
+    "gender": "Male",
+    "type": "Desconocido",
+    "image": "https://rickandmortyapi.com/api/character/avatar/8.jpeg",
+    "created": "2017-11-04T20:03:34.737Z"
+  },
+  {
+    "id": 9,
+    "name": "Agency Director",
+    "species": "Human",
+    "status": "Dead",
+    "origin": "Desconocido",
+    "location": "Desconocido",
+    "gender": "Male",
+    "type": "Desconocido",
+    "image": "https://rickandmortyapi.com/api/character/avatar/9.jpeg",
+    "created": "2017-11-04T20:06:54.976Z"
+  },
+  {
+    "id": 7,
+    "name": "Abradolf Lincler",
+    "species": "Human",
+    "status": "unknown",
+    "origin": "Desconocido",
+    "location": "Desconocido",
+    "gender": "Male",
+    "type": "Genetic experiment",
+    "image": "https://rickandmortyapi.com/api/character/avatar/7.jpeg",
+    "created": "2017-11-04T19:59:20.523Z"
   }
 ]

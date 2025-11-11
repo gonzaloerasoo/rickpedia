@@ -16,6 +16,34 @@
       <strong>Fecha de creación:</strong>
       {{ member.created | date : "fullDate" }}
     </p>
-    <button type="button" (click)="goBack()">Volver al equipo</button>
+
+    <div class="actions" style="margin-top: 20px; display: flex; gap: 12px">
+      <button
+        mat-icon-button
+        color="accent"
+        (click)="openEditDialog(member)"
+        aria-label="Editar personaje"
+      >
+        <span class="material-icons">edit</span>
+      </button>
+
+      <button
+        mat-icon-button
+        color="warn"
+        (click)="removeFromTeam(member.id)"
+        aria-label="Eliminar personaje"
+      >
+        <span class="material-icons">delete</span>
+      </button>
+
+      <button
+        mat-icon-button
+        color="primary"
+        (click)="goBack()"
+        aria-label="Volver al equipo"
+      >
+        <span class="material-icons">arrow_back</span>
+      </button>
+    </div>
   </div>
 </div>

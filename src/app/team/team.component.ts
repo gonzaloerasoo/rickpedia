@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { RickpediaService } from '../services/rickpedia.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { TeamCreateComponent } from '../team-create/team-create.component';
 
@@ -31,10 +31,16 @@ export class TeamComponent implements OnInit {
   constructor(
     private rickpedia: RickpediaService,
     private router: Router,
+    private route: ActivatedRoute,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
+    const pageParam = this.route.snapshot.queryParamMap.get('page');
+    if (pageParam) {
+      this.currentPage = +pageParam;
+    }
+
     this.loadTeam();
 
     this.alias.valueChanges.subscribe(() => this.applyFilters());
@@ -119,7 +125,9 @@ export class TeamComponent implements OnInit {
   }
 
   goToDetail(id: number): void {
-    this.router.navigate(['/team-detail', id]);
+    this.router.navigate(['/team-detail', id], {
+      queryParams: { page: this.currentPage },
+    });
   }
 
   openCreateDialog(): void {

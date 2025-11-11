@@ -70,19 +70,28 @@
       }
     }
 
-    button {
+    .actions {
       margin-top: 30px;
-      background-color: #00e5ff;
-      color: #000;
-      font-weight: bold;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
 
-      &:hover {
-        background-color: #00bcd4;
+      button {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+
+        .material-icons {
+          font-size: 20px;
+        }
+
+        &:hover {
+          background-color: rgba(0, 229, 255, 0.1);
+        }
       }
     }
 

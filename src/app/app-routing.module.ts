@@ -1,28 +1,36 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { CharactersComponent } from './characters/characters.component';
-import { CharacterDetailComponent } from './character-detail/character-detail.component';
-import { EpisodesComponent } from './episodes/episodes.component';
-import { EpisodeDetailComponent } from './episode-detail/episode-detail.component';
-import { LocationsComponent } from './locations/locations.component';
-import { LocationDetailComponent } from './location-detail/location-detail.component';
-import { TeamComponent } from './team/team.component';
-import { TeamDetailComponent } from './team-detail/team-detail.component';
-import { TeamCreateComponent } from './team-create/team-create.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'characters', component: CharactersComponent },
-  { path: 'characters/:id', component: CharacterDetailComponent },
-  { path: 'episodes', component: EpisodesComponent },
-  { path: 'episodes/:id', component: EpisodeDetailComponent },
-  { path: 'locations', component: LocationsComponent },
-  { path: 'locations/:id', component: LocationDetailComponent },
-  { path: 'team', component: TeamComponent },
-  { path: 'team-detail/:id', component: TeamDetailComponent },
-  { path: 'team-create', component: TeamCreateComponent },
+  {
+    path: 'characters',
+    loadChildren: () =>
+      import('./features/characters/characters.module').then(
+        (m) => m.CharactersModule
+      ),
+  },
+  {
+    path: 'episodes',
+    loadChildren: () =>
+      import('./features/episodes/episodes.module').then(
+        (m) => m.EpisodesModule
+      ),
+  },
+  {
+    path: 'locations',
+    loadChildren: () =>
+      import('./features/locations/locations.module').then(
+        (m) => m.LocationsModule
+      ),
+  },
+  {
+    path: 'team',
+    loadChildren: () =>
+      import('./features/team/team.module').then((m) => m.TeamModule),
+  },
   { path: '**', component: NotFoundComponent },
 ];
 

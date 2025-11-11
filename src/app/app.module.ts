@@ -1,60 +1,24 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { CharactersComponent } from './characters/characters.component';
-import { EpisodesComponent } from './episodes/episodes.component';
-import { LocationsComponent } from './locations/locations.component';
-import { TeamComponent } from './team/team.component';
-import { EpisodeDetailComponent } from './episode-detail/episode-detail.component';
-import { LocationDetailComponent } from './location-detail/location-detail.component';
-import { TeamDetailComponent } from './team-detail/team-detail.component';
-import { CharacterDetailComponent } from './character-detail/character-detail.component';
-import { TeamCreateComponent } from './team-create/team-create.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDialogModule } from '@angular/material/dialog';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    NotFoundComponent,
-    CharactersComponent,
-    EpisodesComponent,
-    LocationsComponent,
-    TeamComponent,
-    EpisodeDetailComponent,
-    LocationDetailComponent,
-    TeamDetailComponent,
-    CharacterDetailComponent,
-    TeamCreateComponent,
-  ],
+  declarations: [AppComponent, HomeComponent, NotFoundComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
-    MatChipsModule,
-    MatDialogModule,
+    SharedModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

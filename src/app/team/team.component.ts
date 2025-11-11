@@ -50,6 +50,12 @@ export class TeamComponent implements OnInit {
   }
 
   removeFromTeam(id: number): void {
+    const confirmed = window.confirm(
+      '¿Estás seguro de que quieres eliminar este personaje del equipo?'
+    );
+
+    if (!confirmed) return;
+
     this.rickpedia.removeFromTeam(id).subscribe(() => {
       this.team = this.team.filter((member) => member.id !== id);
       if (this.currentPage > Math.ceil(this.team.length / this.pageSize)) {

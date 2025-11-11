@@ -88,18 +88,22 @@
 
       <div class="actions">
         <button
-          type="button"
+          mat-icon-button
+          color="warn"
           (click)="removeFromTeam(member.id); $event.stopPropagation()"
+          aria-label="Quitar del equipo"
         >
-          Quitar del equipo
+          <span class="material-icons">delete</span>
         </button>
 
         <button
-          type="button"
+          mat-icon-button
+          color="accent"
           (click)="openEditDialog(member); $event.stopPropagation()"
-          style="margin-left: 8px"
+          aria-label="Editar personaje"
+          style="margin-left: 4px"
         >
-          Editar
+          <span class="material-icons">edit</span>
         </button>
       </div>
     </div>

@@ -24,7 +24,8 @@
   </button>
 </div>
 
-<div class="filter-panel" *ngIf="showFilterPanel">
+@if (showFilterPanel) {
+<div class="filter-panel">
   <div class="panel-header">
     <h3>Filtrar equipo</h3>
     <button type="button" (click)="showFilterPanel = false">
@@ -34,44 +35,57 @@
 
   <div class="panel-body">
     <mat-form-field appearance="fill" color="accent" class="name-field">
-      <mat-label *ngIf="!showAliasOverlay">Alias</mat-label>
+      @if (!showAliasOverlay) {
+      <mat-label>Alias</mat-label>
+      }
       <input
         matInput
         [formControl]="alias"
         (focus)="onFocus('alias')"
         (blur)="onBlur('alias')"
       />
-      <div class="static-text" *ngIf="showAliasOverlay">Alias</div>
+      @if (showAliasOverlay) {
+      <div class="static-text">Alias</div>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill" color="accent" class="name-field">
-      <mat-label *ngIf="!showNoteOverlay">Especie</mat-label>
+      @if (!showNoteOverlay) {
+      <mat-label>Especie</mat-label>
+      }
       <input
         matInput
         [formControl]="note"
         (focus)="onFocus('note')"
         (blur)="onBlur('note')"
       />
-      <div class="static-text" *ngIf="showNoteOverlay">Especie</div>
+      @if (showNoteOverlay) {
+      <div class="static-text">Especie</div>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill" color="accent" class="name-field">
-      <mat-label *ngIf="!showPriorityOverlay">Estado</mat-label>
+      @if (!showPriorityOverlay) {
+      <mat-label>Estado</mat-label>
+      }
       <input
         matInput
         [formControl]="priority"
         (focus)="onFocus('priority')"
         (blur)="onBlur('priority')"
       />
-      <div class="static-text" *ngIf="showPriorityOverlay">Estado</div>
+      @if (showPriorityOverlay) {
+      <div class="static-text">Estado</div>
+      }
     </mat-form-field>
   </div>
 </div>
+}
 
 <div class="card-grid">
+  @for (member of filteredTeam; track member.id) {
   <div
     class="character-card"
-    *ngFor="let member of filteredTeam"
     (click)="goToDetail(member.id)"
     style="cursor: pointer"
   >
@@ -82,9 +96,11 @@
       <h3 class="name">{{ member.name }}</h3>
       <p class="meta">{{ member.species }} ({{ member.status }})</p>
 
-      <p class="year" *ngIf="member.created">
+      @if (member.created) {
+      <p class="year">
         <strong>Añadido:</strong> {{ member.created | date : "MMMM yyyy" }}
       </p>
+      }
 
       <div class="actions">
         <button
@@ -108,21 +124,23 @@
       </div>
     </div>
   </div>
+  }
 </div>
 
-<div class="pagination-controls" *ngIf="totalPages > 1">
+@if (totalPages > 1) {
+<div class="pagination-controls">
   <button type="button" (click)="prevPage()" [disabled]="currentPage === 1">
     Anterior
   </button>
-  <ng-container *ngFor="let page of pages">
-    <button
-      type="button"
-      (click)="goToPage(page)"
-      [class.active]="currentPage === page"
-    >
-      {{ page }}
-    </button>
-  </ng-container>
+  @for (page of pages; track page) {
+  <button
+    type="button"
+    (click)="goToPage(page)"
+    [class.active]="currentPage === page"
+  >
+    {{ page }}
+  </button>
+  }
   <button
     type="button"
     (click)="nextPage()"
@@ -131,3 +149,4 @@
     Siguiente
   </button>
 </div>
+}

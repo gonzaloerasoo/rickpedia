@@ -12,7 +12,8 @@
   </button>
 </div>
 
-<div class="filter-panel" *ngIf="showFilterPanel">
+@if (showFilterPanel) {
+<div class="filter-panel">
   <div class="panel-header">
     <h3>Filtros</h3>
     <button (click)="showFilterPanel = false">
@@ -22,86 +23,94 @@
 
   <div class="panel-body">
     <mat-form-field appearance="fill" color="accent" class="name-field">
-      <mat-label *ngIf="!showNameOverlay">Nombre</mat-label>
+      @if (!showNameOverlay) {
+      <mat-label>Nombre</mat-label>
+      }
       <input
         matInput
         [formControl]="nameFilter"
         (focus)="onNameFocus()"
         (blur)="onNameBlur()"
       />
-      <div class="static-text" *ngIf="showNameOverlay">Nombre</div>
+      @if (showNameOverlay) {
+      <div class="static-text">Nombre</div>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill" color="accent" class="status-field">
-      <mat-label *ngIf="!showStatusOverlay">Estado</mat-label>
+      @if (!showStatusOverlay) {
+      <mat-label>Estado</mat-label>
+      }
       <input
         matInput
         [formControl]="statusFilter"
         (focus)="onStatusFocus()"
         (blur)="onStatusBlur()"
       />
-      <div class="static-text" *ngIf="showStatusOverlay">Estado</div>
+      @if (showStatusOverlay) {
+      <div class="static-text">Estado</div>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill" color="accent" class="species-field">
-      <mat-label *ngIf="!showSpeciesOverlay">Especie</mat-label>
+      @if (!showSpeciesOverlay) {
+      <mat-label>Especie</mat-label>
+      }
       <input
         matInput
         [formControl]="speciesFilter"
         (focus)="onSpeciesFocus()"
         (blur)="onSpeciesBlur()"
       />
-      <div class="static-text" *ngIf="showSpeciesOverlay">Especie</div>
+      @if (showSpeciesOverlay) {
+      <div class="static-text">Especie</div>
+      }
     </mat-form-field>
 
     <div class="alphabet-index">
       <span>Filtrar por letra:</span>
       <div class="index-buttons">
+        @for (letter of alphabet; track letter) {
         <button
-          *ngFor="let letter of alphabet"
           (click)="selectLetter(letter)"
           [class.active]="selectedLetter === letter"
         >
           {{ letter }}
         </button>
+        }
       </div>
-      <button
-        *ngIf="selectedLetter"
-        class="clear-button"
-        (click)="clearLetter()"
-      >
+      @if (selectedLetter) {
+      <button class="clear-button" (click)="clearLetter()">
         <span class="material-icons">close</span> Quitar filtro de letra
       </button>
+      }
     </div>
 
     <div class="species-index">
       <span>Filtrar por especie:</span>
       <div class="index-buttons">
+        @for (specie of availableSpecies; track specie) {
         <button
-          *ngFor="let specie of availableSpecies"
           (click)="selectSpecies(specie)"
           [class.active]="selectedSpecies === specie"
         >
           {{ specie }}
         </button>
+        }
       </div>
-      <button
-        *ngIf="selectedSpecies"
-        class="clear-button"
-        (click)="clearSpecies()"
-      >
+      @if (selectedSpecies) {
+      <button class="clear-button" (click)="clearSpecies()">
         <span class="material-icons">close</span> Quitar filtro de especie
       </button>
+      }
     </div>
   </div>
 </div>
+}
 
 <div class="card-grid">
-  <div
-    class="character-card"
-    *ngFor="let character of paginated"
-    (click)="goToDetail(character.id)"
-  >
+  @for (character of paginated; track character.id) {
+  <div class="character-card" (click)="goToDetail(character.id)">
     <div class="card-image">
       <img [src]="character.image" [alt]="character.name" />
     </div>
@@ -111,22 +120,24 @@
       <p class="year">Año: {{ character.created | date : "yyyy" }}</p>
     </div>
   </div>
+  }
 </div>
 
 <div class="pagination-controls">
   <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
   <button (click)="goToPage(1)" [class.active]="currentPage === 1">1</button>
-  <button *ngIf="showPrevEllipsis" (click)="handlePrevEllipsis()">...</button>
-  <ng-container *ngFor="let page of visiblePageNumbers">
-    <button
-      *ngIf="page !== 1 && page !== totalPages"
-      (click)="goToPage(page)"
-      [class.active]="page === currentPage"
-    >
-      {{ page }}
-    </button>
-  </ng-container>
-  <button *ngIf="showNextEllipsis" (click)="handleNextEllipsis()">...</button>
+
+  @if (showPrevEllipsis) {
+  <button (click)="handlePrevEllipsis()">...</button>
+  } @for (page of visiblePageNumbers; track page) { @if (page !== 1 && page !==
+  totalPages) {
+  <button (click)="goToPage(page)" [class.active]="page === currentPage">
+    {{ page }}
+  </button>
+  } } @if (showNextEllipsis) {
+  <button (click)="handleNextEllipsis()">...</button>
+  }
+
   <button
     (click)="goToPage(totalPages)"
     [class.active]="currentPage === totalPages"

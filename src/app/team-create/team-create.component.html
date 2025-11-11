@@ -6,7 +6,7 @@
   <mat-dialog-content>
     <mat-form-field appearance="fill">
       <mat-label>ID</mat-label>
-      <input matInput formControlName="id" type="number" [disabled]="data" />
+      <input matInput formControlName="id" type="number" />
       <mat-error *ngIf="form.get('id')?.hasError('required')">
         ID obligatorio
       </mat-error>

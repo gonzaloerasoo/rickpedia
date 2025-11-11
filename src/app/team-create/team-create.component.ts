@@ -28,6 +28,8 @@ export class TeamCreateComponent {
     created: [new Date().toISOString()],
   });
 
+  backendError: string | null = null;
+
   constructor(
     private fb: FormBuilder,
     private rickpedia: RickpediaService,
@@ -56,7 +58,10 @@ export class TeamCreateComponent {
   }
 
   submit(): void {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     const origin = this.form.value.origin;
     const location = this.form.value.location;
@@ -71,8 +76,14 @@ export class TeamCreateComponent {
       ? this.rickpedia.updateTeamMember(Number(this.data.id), payload)
       : this.rickpedia.addToTeam(payload);
 
-    request.subscribe(() => {
-      this.dialogRef.close(true);
+    request.subscribe({
+      next: () => {
+        this.dialogRef.close(true);
+      },
+      error: (err) => {
+        this.backendError =
+          err.error?.message || 'Error al guardar en el servidor';
+      },
     });
   }
 

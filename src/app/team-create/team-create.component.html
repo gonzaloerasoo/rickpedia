@@ -1,4 +1,6 @@
-<h2 mat-dialog-title>{{ data ? "Editar personaje" : "Nuevo personaje" }}</h2>
+<h2 mat-dialog-title>
+  {{ data ? "Editar personaje" : "Nuevo personaje" }}
+</h2>
 
 <form [formGroup]="form" (ngSubmit)="submit()">
   <mat-dialog-content>
@@ -76,6 +78,10 @@
         Debe ser una URL válida de imagen
       </mat-error>
     </mat-form-field>
+
+    <div class="backend-error" *ngIf="backendError">
+      {{ backendError }}
+    </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">

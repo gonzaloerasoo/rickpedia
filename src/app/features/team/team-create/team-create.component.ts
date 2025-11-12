@@ -1,20 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { RickpediaService } from '../../../core/rickpedia.service';
+import { TeamService } from '../team.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-export interface TeamMember {
-  id: number;
-  name: string;
-  species: string;
-  status: string;
-  origin: string;
-  location: string;
-  gender: string;
-  type?: string;
-  image: string;
-  created: string;
-}
+import { TeamMember } from '../team-member.model';
 
 @Component({
   selector: 'app-team-create',
@@ -28,7 +16,7 @@ export class TeamCreateComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private rickpedia: RickpediaService,
+    private teamService: TeamService,
     private dialogRef: MatDialogRef<TeamCreateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Partial<TeamMember> | null
   ) {}
@@ -90,7 +78,7 @@ export class TeamCreateComponent implements OnInit {
 
     if (!this.data) {
       const id = Number(this.form.get('id')?.value);
-      this.rickpedia.isIdTaken(id).subscribe((taken) => {
+      this.teamService.isIdTaken(id).subscribe((taken: boolean) => {
         if (taken) {
           this.backendError = 'ID ya existe en el equipo';
           this.submitting = false;
@@ -105,15 +93,15 @@ export class TeamCreateComponent implements OnInit {
 
   private createOrUpdate(payload: TeamMember): void {
     const request = this.data
-      ? this.rickpedia.updateTeamMember(Number(this.data?.id), payload)
-      : this.rickpedia.addToTeam(payload);
+      ? this.teamService.updateTeamMember(Number(this.data?.id), payload)
+      : this.teamService.addToTeam(payload);
 
     request.subscribe({
       next: () => {
         this.submitting = false;
         this.dialogRef.close(true);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.backendError =
           err?.error?.message || 'Error al guardar en el servidor';
         this.submitting = false;
@@ -130,11 +118,11 @@ export class TeamCreateComponent implements OnInit {
     };
   }
 
-  private extractName(value: any): string {
-    return this.isNamedObject(value) ? value.name : value;
+  private extractName(value: unknown): string {
+    return this.isNamedObject(value) ? value.name : (value as string);
   }
 
-  private isNamedObject(value: any): value is { name: string } {
-    return value && typeof value === 'object' && 'name' in value;
+  private isNamedObject(value: unknown): value is { name: string } {
+    return !!value && typeof value === 'object' && 'name' in value;
   }
 }

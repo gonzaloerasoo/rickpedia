@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RickpediaService } from '../../../core/rickpedia.service';
+import { LocationsService } from '../locations.service';
+import { CharactersService } from '../../characters/characters.service';
+import { Location } from '../location.model';
+import { Character } from '../../characters/character.model';
 
 @Component({
   selector: 'app-locations-detail',
@@ -8,22 +11,25 @@ import { RickpediaService } from '../../../core/rickpedia.service';
   styleUrls: ['./locations-detail.component.scss'],
 })
 export class LocationsDetailComponent implements OnInit {
-  location: any = null;
-  residents: any[] = [];
+  location: Location | null = null;
+  residents: Character[] = [];
 
   constructor(
     private route: ActivatedRoute,
-    private rickpedia: RickpediaService
+    private locationsService: LocationsService,
+    private charactersService: CharactersService
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.rickpedia.getLocationById(id).subscribe((loc) => {
+      this.locationsService.getLocationById(id).subscribe((loc: Location) => {
         this.location = loc;
-        const ids = loc.residents.map((url: string) => url.split('/').pop());
+
+        const ids = loc.residents.map((url: string) => url.split('/').pop()!);
+
         if (ids.length > 0) {
-          this.rickpedia.getCharactersByIds(ids).subscribe((data: any) => {
+          this.charactersService.getCharactersByIds(ids).subscribe((data: Character[]) => {
             this.residents = Array.isArray(data) ? data : [data];
           });
         }

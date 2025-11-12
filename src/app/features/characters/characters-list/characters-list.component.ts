@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { RickpediaService } from '../../../core/rickpedia.service';
+import { CharactersService } from '../characters.service';
+import { TeamService } from '../../team/team.service';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Character } from '../character.model';
+import { TeamMember } from '../../team/team-member.model';
 
 @Component({
   selector: 'app-characters-list',
@@ -9,9 +12,9 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./characters-list.component.scss'],
 })
 export class CharactersListComponent implements OnInit {
-  characters: any[] = [];
-  filtered: any[] = [];
-  paginated: any[] = [];
+  characters: Character[] = [];
+  filtered: Character[] = [];
+  paginated: Character[] = [];
 
   nameFilter = new FormControl('');
   statusFilter = new FormControl('');
@@ -27,6 +30,10 @@ export class CharactersListComponent implements OnInit {
 
   currentPage = 1;
   itemsPerPage = 20;
+  totalPages = 1;
+  visiblePageNumbers: number[] = [];
+  showPrevEllipsis = false;
+  showNextEllipsis = false;
 
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   selectedLetter: string | null = null;
@@ -36,7 +43,8 @@ export class CharactersListComponent implements OnInit {
   showFilterPanel = false;
 
   constructor(
-    private rickpedia: RickpediaService,
+    private charactersService: CharactersService,
+    private teamService: TeamService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -46,19 +54,19 @@ export class CharactersListComponent implements OnInit {
 
     if (idsParam) {
       const ids = idsParam.split(',');
-      this.rickpedia.getCharactersByIds(ids).subscribe((data: any) => {
+      this.charactersService.getCharactersByIds(ids).subscribe((data: Character[]) => {
         this.characters = Array.isArray(data) ? data : [data];
         this.filtered = this.characters;
-        this.availableSpecies = [
-          ...new Set(this.characters.map((c) => c.species)),
-        ].sort();
+        this.availableSpecies = [...new Set(this.characters.map((c) => c.species))].sort();
+        this.currentPage = 1;
         this.updatePagination();
       });
     } else {
-      this.rickpedia.getAllCharacters().subscribe((data) => {
+      this.charactersService.getAllCharacters().subscribe((data: Character[]) => {
         this.characters = data;
         this.filtered = data;
         this.availableSpecies = [...new Set(data.map((c) => c.species))].sort();
+        this.currentPage = 1;
         this.updatePagination();
       });
     }
@@ -117,52 +125,30 @@ export class CharactersListComponent implements OnInit {
   }
 
   updatePagination(): void {
+    const totalItems = this.filtered.length;
+    this.totalPages = Math.max(1, Math.ceil(totalItems / this.itemsPerPage));
+
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
     this.paginated = this.filtered.slice(start, end);
-  }
 
-  get totalPages(): number {
-    return Math.ceil(this.filtered.length / this.itemsPerPage);
-  }
+    const maxVisible = 5;
+    this.visiblePageNumbers = [];
 
-  get visiblePageNumbers(): number[] {
-    const total = this.totalPages;
-    const current = this.currentPage;
-    const pages: number[] = [];
+    let startPage = Math.max(2, this.currentPage - Math.floor(maxVisible / 2));
+    let endPage = startPage + maxVisible - 1;
 
-    if (total <= 7) {
-      for (let i = 1; i <= total; i++) pages.push(i);
-      return pages;
+    if (endPage >= this.totalPages) {
+      endPage = this.totalPages - 1;
+      startPage = Math.max(2, endPage - maxVisible + 1);
     }
 
-    if (current < 5) {
-      pages.push(1, 2, 3, 4, 5);
-    } else if (current >= total - 2) {
-      for (let i = total - 4; i <= total; i++) pages.push(i);
-    } else {
-      pages.push(current, current + 1, current + 2);
+    for (let i = startPage; i <= endPage; i++) {
+      this.visiblePageNumbers.push(i);
     }
 
-    return pages;
-  }
-
-  get showPrevEllipsis(): boolean {
-    return this.totalPages > 7 && this.currentPage >= 5;
-  }
-
-  get showNextEllipsis(): boolean {
-    return this.totalPages > 7 && this.currentPage < this.totalPages - 2;
-  }
-
-  handlePrevEllipsis(): void {
-    const target = Math.max(2, this.currentPage - 3);
-    this.goToPage(target);
-  }
-
-  handleNextEllipsis(): void {
-    const target = Math.min(this.totalPages - 1, this.currentPage + 3);
-    this.goToPage(target);
+    this.showPrevEllipsis = startPage > 2;
+    this.showNextEllipsis = endPage < this.totalPages - 1;
   }
 
   goToPage(page: number): void {
@@ -178,6 +164,14 @@ export class CharactersListComponent implements OnInit {
 
   prevPage(): void {
     this.goToPage(this.currentPage - 1);
+  }
+
+  handlePrevEllipsis(): void {
+    this.goToPage(this.visiblePageNumbers[0] - 1);
+  }
+
+  handleNextEllipsis(): void {
+    this.goToPage(this.visiblePageNumbers[this.visiblePageNumbers.length - 1] + 1);
   }
 
   onNameFocus(): void {
@@ -210,15 +204,15 @@ export class CharactersListComponent implements OnInit {
     if (!this.speciesFilter.value) this.showSpeciesOverlay = true;
   }
 
-  goToDetail(id: string): void {
+  goToDetail(id: number): void {
     this.router.navigate(['/characters', id]);
   }
 
-  addToTeam(id: string): void {
-    const original = this.characters.find((c) => String(c.id) === String(id));
+  addToTeam(id: number): void {
+    const original = this.characters.find((c) => c.id === id);
     if (!original) return;
 
-    const character = {
+    const character: TeamMember = {
       id: original.id,
       name: original.name,
       species: original.species,
@@ -231,6 +225,6 @@ export class CharactersListComponent implements OnInit {
       created: original.created || new Date().toISOString(),
     };
 
-    this.rickpedia.addToTeam(character).subscribe();
+    this.teamService.addToTeam(character).subscribe();
   }
 }

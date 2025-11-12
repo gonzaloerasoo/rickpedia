@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { RickpediaService } from '../../../core/rickpedia.service';
+import { LocationsService } from '../locations.service';
+import { CharactersService } from '../../characters/characters.service';
 import { FormControl } from '@angular/forms';
+import { Location } from '../location.model';
+import { Character } from '../../characters/character.model';
 
 @Component({
   selector: 'app-locations-list',
@@ -8,8 +11,8 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./locations-list.component.scss'],
 })
 export class LocationsListComponent implements OnInit {
-  locations: any[] = [];
-  filteredLocations: any[] = [];
+  locations: Location[] = [];
+  filteredLocations: Location[] = [];
 
   locationName = new FormControl('');
   characterName = new FormControl('');
@@ -29,10 +32,13 @@ export class LocationsListComponent implements OnInit {
   showPrevEllipsis = false;
   showNextEllipsis = false;
 
-  constructor(private rickpedia: RickpediaService) {}
+  constructor(
+    private locationsService: LocationsService,
+    private charactersService: CharactersService
+  ) {}
 
   ngOnInit(): void {
-    this.rickpedia.getAllLocations().subscribe((data) => {
+    this.locationsService.getAllLocations().subscribe((data: Location[]) => {
       this.locations = data;
       this.filteredLocations = data;
       this.updatePagination();
@@ -47,7 +53,7 @@ export class LocationsListComponent implements OnInit {
     });
   }
 
-  get paginatedLocations(): any[] {
+  get paginatedLocations(): Location[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredLocations.slice(start, start + this.pageSize);
   }
@@ -71,7 +77,7 @@ export class LocationsListComponent implements OnInit {
       return;
     }
 
-    this.rickpedia.getAllCharacters().subscribe((characters: any[]) => {
+    this.charactersService.getAllCharacters().subscribe((characters: Character[]) => {
       const match = characters.find((c) => c.name.toLowerCase().includes(name));
       this.filteredLocations = match?.location?.name
         ? this.locations.filter((loc) => loc.name === match.location.name)

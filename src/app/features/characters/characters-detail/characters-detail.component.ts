@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RickpediaService } from '../../../core/rickpedia.service';
+import { CharactersService } from '../characters.service';
+import { TeamService } from '../../team/team.service';
+import { Character } from '../character.model';
+import { TeamMember } from '../../team/team-member.model';
 
 @Component({
   selector: 'app-characters-detail',
@@ -8,18 +11,19 @@ import { RickpediaService } from '../../../core/rickpedia.service';
   styleUrls: ['./characters-detail.component.scss'],
 })
 export class CharactersDetailComponent implements OnInit {
-  character: any;
+  character: Character | null = null;
   isInTeam = false;
 
   constructor(
     private route: ActivatedRoute,
-    private rickpedia: RickpediaService
+    private charactersService: CharactersService,
+    private teamService: TeamService
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.rickpedia.getCharacterById(id).subscribe((data) => {
+      this.charactersService.getCharacterById(id).subscribe((data: Character) => {
         this.character = data;
         this.checkIfInTeam();
       });
@@ -27,15 +31,17 @@ export class CharactersDetailComponent implements OnInit {
   }
 
   checkIfInTeam(): void {
-    this.rickpedia.getTeam().subscribe((team) => {
-      this.isInTeam = team.some((member) => member.id === this.character.id);
+    this.teamService.getTeam().subscribe((team: TeamMember[]) => {
+      if (this.character) {
+        this.isInTeam = team.some((member) => member.id === this.character!.id);
+      }
     });
   }
 
   addToTeam(): void {
     if (!this.character) return;
 
-    const payload = {
+    const payload: TeamMember = {
       id: this.character.id,
       name: this.character.name,
       species: this.character.species,
@@ -48,7 +54,7 @@ export class CharactersDetailComponent implements OnInit {
       created: this.character.created || new Date().toISOString(),
     };
 
-    this.rickpedia.addToTeam(payload).subscribe({
+    this.teamService.addToTeam(payload).subscribe({
       next: () => {
         this.isInTeam = true;
       },
@@ -61,7 +67,7 @@ export class CharactersDetailComponent implements OnInit {
   removeFromTeam(): void {
     if (!this.character) return;
 
-    this.rickpedia.removeFromTeam(this.character.id).subscribe({
+    this.teamService.removeFromTeam(this.character.id).subscribe({
       next: () => {
         this.isInTeam = false;
       },

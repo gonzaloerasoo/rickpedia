@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { RickpediaService } from '../../../core/rickpedia.service';
+import { TeamService } from '../team.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { TeamCreateComponent } from '../team-create/team-create.component';
+import { TeamMember } from '../team-member.model';
 
 @Component({
   selector: 'app-team-list',
@@ -11,8 +12,8 @@ import { TeamCreateComponent } from '../team-create/team-create.component';
   styleUrls: ['./team-list.component.scss'],
 })
 export class TeamListComponent implements OnInit {
-  team: any[] = [];
-  filteredTeam: any[] = [];
+  team: TeamMember[] = [];
+  filteredTeam: TeamMember[] = [];
 
   alias = new FormControl('');
   note = new FormControl('');
@@ -29,7 +30,7 @@ export class TeamListComponent implements OnInit {
   pages: number[] = [];
 
   constructor(
-    private rickpedia: RickpediaService,
+    private teamService: TeamService,
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog
@@ -49,7 +50,7 @@ export class TeamListComponent implements OnInit {
   }
 
   loadTeam(): void {
-    this.rickpedia.getTeam().subscribe((data) => {
+    this.teamService.getTeam().subscribe((data: TeamMember[]) => {
       this.team = data;
       this.applyFilters();
     });
@@ -62,7 +63,7 @@ export class TeamListComponent implements OnInit {
 
     if (!confirmed) return;
 
-    this.rickpedia.removeFromTeam(id).subscribe(() => {
+    this.teamService.removeFromTeam(id).subscribe(() => {
       this.team = this.team.filter((member) => member.id !== id);
       if (this.currentPage > Math.ceil(this.team.length / this.pageSize)) {
         this.currentPage = Math.max(1, this.currentPage - 1);
@@ -143,7 +144,7 @@ export class TeamListComponent implements OnInit {
     });
   }
 
-  openEditDialog(member: any): void {
+  openEditDialog(member: TeamMember): void {
     const dialogRef = this.dialog.open(TeamCreateComponent, {
       width: '500px',
       disableClose: true,

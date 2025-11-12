@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RickpediaService } from '../../../core/rickpedia.service';
+import { TeamService } from '../team.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TeamCreateComponent } from '../team-create/team-create.component';
+import { TeamMember } from '../team-member.model';
 
 @Component({
   selector: 'app-team-detail',
@@ -10,13 +11,13 @@ import { TeamCreateComponent } from '../team-create/team-create.component';
   styleUrls: ['./team-detail.component.scss'],
 })
 export class TeamDetailComponent implements OnInit {
-  member: any = null;
+  member: TeamMember | null = null;
   pageToReturn: number = 1;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private rickpedia: RickpediaService,
+    private teamService: TeamService,
     private dialog: MatDialog
   ) {}
 
@@ -35,8 +36,8 @@ export class TeamDetailComponent implements OnInit {
       return;
     }
 
-    this.rickpedia.getTeamMemberById(+idParam).subscribe({
-      next: (data) => {
+    this.teamService.getTeamMemberById(+idParam).subscribe({
+      next: (data: TeamMember) => {
         if (!data || !data.id) {
           this.router.navigate(['/team'], {
             queryParams: { page: this.pageToReturn },
@@ -65,14 +66,14 @@ export class TeamDetailComponent implements OnInit {
     );
     if (!confirmed) return;
 
-    this.rickpedia.removeFromTeam(id).subscribe(() => {
+    this.teamService.removeFromTeam(id).subscribe(() => {
       this.router.navigate(['/team'], {
         queryParams: { page: this.pageToReturn },
       });
     });
   }
 
-  openEditDialog(member: any): void {
+  openEditDialog(member: TeamMember): void {
     const dialogRef = this.dialog.open(TeamCreateComponent, {
       width: '500px',
       disableClose: true,
@@ -81,7 +82,7 @@ export class TeamDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((updated) => {
       if (updated) {
-        this.rickpedia.getTeamMemberById(member.id).subscribe((data) => {
+        this.teamService.getTeamMemberById(member.id).subscribe((data: TeamMember) => {
           this.member = data;
         });
       }

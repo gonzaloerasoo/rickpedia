@@ -30,8 +30,27 @@ a[mat-button] {
   margin: 0 4px;
   padding: 8px 0;
   transition: color 0.3s ease;
+  background: none !important;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
 
   &:hover {
     color: #ffffff;
+    background: none !important;
+  }
+
+  &:focus {
+    outline: none;
+    background: none !important;
+  }
+
+  ::ng-deep .mat-button-focus-overlay {
+    opacity: 0 !important;
+    background: none !important;
+  }
+
+  ::ng-deep .mat-ripple {
+    display: none !important;
   }
 }

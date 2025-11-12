@@ -123,21 +123,21 @@
   }
 </div>
 
+@if (filtered.length > 0 && totalPages > 1) {
 <div class="pagination-controls">
   <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
   <button (click)="goToPage(1)" [class.active]="currentPage === 1">1</button>
-
   @if (showPrevEllipsis) {
   <button (click)="handlePrevEllipsis()">...</button>
-  } @for (page of visiblePageNumbers; track page) { @if (page !== 1 && page !==
-  totalPages) {
+  }
+  @for (page of visiblePageNumbers; track page) {
   <button (click)="goToPage(page)" [class.active]="page === currentPage">
     {{ page }}
   </button>
-  } } @if (showNextEllipsis) {
+  }
+  @if (showNextEllipsis) {
   <button (click)="handleNextEllipsis()">...</button>
   }
-
   <button
     (click)="goToPage(totalPages)"
     [class.active]="currentPage === totalPages"
@@ -148,3 +148,10 @@
     Siguiente
   </button>
 </div>
+} @else {
+<div class="pagination-controls">
+  <button (click)="prevPage()" disabled>Anterior</button>
+  <button class="active">1</button>
+  <button (click)="nextPage()" disabled>Siguiente</button>
+</div>
+}

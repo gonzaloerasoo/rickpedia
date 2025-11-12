@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { RickpediaService } from '../../../core/rickpedia.service';
+import { EpisodesService } from '../episodes.service';
+import { CharactersService } from '../../characters/characters.service';
 import { FormControl } from '@angular/forms';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { Episode } from '../episode.model';
+import { Character } from '../../characters/character.model';
 
 @Component({
   selector: 'app-episodes-list',
@@ -10,9 +13,9 @@ import { of } from 'rxjs';
   styleUrls: ['./episodes-list.component.scss'],
 })
 export class EpisodesListComponent implements OnInit {
-  episodes: any[] = [];
-  filteredEpisodes: any[] = [];
-  charactersInEpisode: any[] = [];
+  episodes: Episode[] = [];
+  filteredEpisodes: Episode[] = [];
+  charactersInEpisode: Character[] = [];
   selectedEpisodeTitle = '';
 
   episodeName = new FormControl('');
@@ -33,10 +36,13 @@ export class EpisodesListComponent implements OnInit {
   showPrevEllipsis = false;
   showNextEllipsis = false;
 
-  constructor(private rickpedia: RickpediaService) {}
+  constructor(
+    private episodesService: EpisodesService,
+    private charactersService: CharactersService
+  ) {}
 
   ngOnInit(): void {
-    this.rickpedia.getAllEpisodes().subscribe((data) => {
+    this.episodesService.getAllEpisodes().subscribe((data: Episode[]) => {
       this.episodes = data;
       this.filteredEpisodes = data;
       this.updatePagination();
@@ -52,61 +58,77 @@ export class EpisodesListComponent implements OnInit {
     });
   }
 
-  get paginatedEpisodes(): any[] {
+  get paginatedEpisodes(): Episode[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredEpisodes.slice(start, start + this.pageSize);
   }
 
   filterEpisodes(): void {
-    const name = this.episodeName.value?.trim().toLowerCase();
-    this.filteredEpisodes = name
-      ? this.episodes.filter(
-          (ep) =>
-            ep.name.toLowerCase().includes(name) ||
-            ep.episode.toLowerCase().includes(name)
-        )
-      : this.episodes;
+    const input = this.episodeName.value?.trim().toLowerCase() || '';
+
+    this.filteredEpisodes = this.episodes.filter((ep) => {
+      const nameMatch = ep.name?.toLowerCase().includes(input);
+      const codeMatch = ep.episode?.toLowerCase().includes(input);
+      return nameMatch || codeMatch;
+    });
 
     this.currentPage = 1;
     this.updatePagination();
   }
 
   searchCharactersByEpisode(): void {
-    const name = this.episodeName.value?.trim();
-    if (!name) {
+    const raw = this.episodeName.value?.trim() || '';
+    const inputLower = raw.toLowerCase();
+    const inputUpper = raw.toUpperCase();
+
+    if (!raw) {
       this.charactersInEpisode = [];
       this.selectedEpisodeTitle = '';
       return;
     }
 
-    this.rickpedia
-      .getEpisodeByName(name)
-      .pipe(
-        map((res: any) => res?.results?.[0] || null),
-        catchError(() => of(null))
-      )
-      .subscribe((episode: any) => {
-        if (!episode) {
-          this.charactersInEpisode = [];
-          this.selectedEpisodeTitle =
-            'No se encontró ningún episodio con ese nombre.';
-          return;
-        }
+    let target: Episode | undefined;
 
-        this.selectedEpisodeTitle = episode.name;
-        const ids = episode.characters.map((url: string) =>
-          url.split('/').pop()
-        );
-        if (ids.length === 0) {
-          this.charactersInEpisode = [];
-          return;
-        }
+    if (this.filteredEpisodes.length === 1) {
+      const ep = this.filteredEpisodes[0];
+      const exactName = ep.name.toLowerCase() === inputLower;
+      const exactCode = ep.episode.toLowerCase() === inputLower;
+      if (exactName || exactCode) {
+        target = ep;
+      }
+    }
 
-        this.rickpedia.getCharactersByIds(ids).subscribe((characters: any) => {
-          this.charactersInEpisode = Array.isArray(characters)
-            ? characters
-            : [characters];
-        });
+    if (!target && /^[sS]\d{2}[eE]\d{2}$/.test(raw)) {
+      target = this.episodes.find((ep) => ep.episode.toUpperCase() === inputUpper);
+    }
+
+    if (!target) {
+      target = this.episodes.find((ep) => ep.name.toLowerCase() === inputLower);
+    }
+
+    if (!target) {
+      this.charactersInEpisode = [];
+      this.selectedEpisodeTitle = '';
+      return;
+    }
+
+    this.selectedEpisodeTitle = target.name;
+
+    const ids = target.characters
+      .map((url: string) => url.split('/').pop()!)
+      .filter(Boolean);
+
+    if (ids.length === 0) {
+      this.charactersInEpisode = [];
+      return;
+    }
+
+    this.charactersService
+      .getCharactersByIds(ids)
+      .subscribe((characters: Character[]) => {
+        this.charactersInEpisode = Array.isArray(characters)
+          ? characters
+          : [characters];
       });
   }
 
@@ -119,25 +141,29 @@ export class EpisodesListComponent implements OnInit {
       return;
     }
 
-    this.rickpedia.getAllCharacters().subscribe((characters: any[]) => {
-      const match = characters.find((c) => c.name.toLowerCase().includes(name));
-      if (!match || !match.episode) {
-        this.filteredEpisodes = [];
+    this.charactersService
+      .getAllCharacters()
+      .subscribe((characters: Character[]) => {
+        const match = characters.find((c) =>
+          c.name.toLowerCase().includes(name)
+        );
+        if (!match || !match.episode) {
+          this.filteredEpisodes = [];
+          this.currentPage = 1;
+          this.updatePagination();
+          return;
+        }
+
+        const episodeIds = match.episode.map((url: string) =>
+          url.split('/').pop()
+        );
+        this.filteredEpisodes = this.episodes.filter((ep) =>
+          episodeIds.includes(String(ep.id))
+        );
+
         this.currentPage = 1;
         this.updatePagination();
-        return;
-      }
-
-      const episodeIds = match.episode.map((url: string) =>
-        url.split('/').pop()
-      );
-      this.filteredEpisodes = this.episodes.filter((ep) =>
-        episodeIds.includes(String(ep.id))
-      );
-
-      this.currentPage = 1;
-      this.updatePagination();
-    });
+      });
   }
 
   updatePagination(): void {

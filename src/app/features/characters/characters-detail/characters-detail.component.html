@@ -11,13 +11,36 @@
     <p><strong>Género:</strong> {{ character.gender }}</p>
     <p><strong>Tipo:</strong> {{ character.type || "Desconocido" }}</p>
     <p>
-      <strong>Año de creación:</strong>
-      {{ character.created | date : "yyyy" }}
+      <strong>Fecha de creación:</strong>
+      {{ character.created | date : "fullDate" }}
     </p>
 
-    <button *ngIf="!isInTeam" (click)="addToTeam()">Añadir al equipo</button>
-    <button *ngIf="isInTeam" (click)="removeFromTeam()">
-      Quitar del equipo
-    </button>
+    <div class="actions">
+      <button
+        class="circle-button add"
+        *ngIf="!isInTeam"
+        (click)="addToTeam()"
+        aria-label="Añadir al equipo"
+      >
+        <span class="material-icons">group_add</span>
+      </button>
+
+      <button
+        class="circle-button remove"
+        *ngIf="isInTeam"
+        (click)="removeFromTeam()"
+        aria-label="Quitar del equipo"
+      >
+        <span class="material-icons">group_off</span>
+      </button>
+
+      <button
+        class="circle-button back"
+        (click)="goBack()"
+        aria-label="Volver atrás"
+      >
+        <span class="material-icons">arrow_back</span>
+      </button>
+    </div>
   </div>
 </div>

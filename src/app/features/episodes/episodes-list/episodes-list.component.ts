@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { EpisodesService } from '../episodes.service';
 import { CharactersService } from '../../characters/characters.service';
 import { FormControl } from '@angular/forms';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { Episode } from '../episode.model';
 import { Character } from '../../characters/character.model';
 
@@ -14,7 +12,6 @@ import { Character } from '../../characters/character.model';
 })
 export class EpisodesListComponent implements OnInit {
   episodes: Episode[] = [];
-  filteredEpisodes: Episode[] = [];
   charactersInEpisode: Character[] = [];
   selectedEpisodeTitle = '';
 
@@ -30,7 +27,6 @@ export class EpisodesListComponent implements OnInit {
   showFilterPanel = false;
 
   currentPage = 1;
-  pageSize = 10;
   totalPages = 1;
   visiblePageNumbers: number[] = [];
   showPrevEllipsis = false;
@@ -42,14 +38,9 @@ export class EpisodesListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.episodesService.getAllEpisodes().subscribe((data: Episode[]) => {
-      this.episodes = data;
-      this.filteredEpisodes = data;
-      this.updatePagination();
-    });
+    this.loadAllEpisodes();
 
     this.episodeName.valueChanges.subscribe(() => {
-      this.filterEpisodes();
       this.searchCharactersByEpisode();
     });
 
@@ -58,22 +49,20 @@ export class EpisodesListComponent implements OnInit {
     });
   }
 
-  get paginatedEpisodes(): Episode[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredEpisodes.slice(start, start + this.pageSize);
+  loadAllEpisodes(): void {
+    this.episodes = [];
+    this.episodesService.getAllEpisodes().subscribe((res: Episode[]) => {
+      this.episodes = res;
+      this.totalPages = Math.ceil(this.episodes.length / 10);
+      this.currentPage = 1;
+      this.updatePagination();
+    });
   }
 
-  filterEpisodes(): void {
-    const input = this.episodeName.value?.trim().toLowerCase() || '';
-
-    this.filteredEpisodes = this.episodes.filter((ep) => {
-      const nameMatch = ep.name?.toLowerCase().includes(input);
-      const codeMatch = ep.episode?.toLowerCase().includes(input);
-      return nameMatch || codeMatch;
-    });
-
-    this.currentPage = 1;
-    this.updatePagination();
+  get paginatedEpisodes(): Episode[] {
+    const start = (this.currentPage - 1) * 10;
+    const end = start + 10;
+    return this.episodes.slice(start, end);
   }
 
   searchCharactersByEpisode(): void {
@@ -89,8 +78,8 @@ export class EpisodesListComponent implements OnInit {
 
     let target: Episode | undefined;
 
-    if (this.filteredEpisodes.length === 1) {
-      const ep = this.filteredEpisodes[0];
+    if (this.episodes.length === 1) {
+      const ep = this.episodes[0];
       const exactName = ep.name.toLowerCase() === inputLower;
       const exactCode = ep.episode.toLowerCase() === inputLower;
       if (exactName || exactCode) {
@@ -99,7 +88,9 @@ export class EpisodesListComponent implements OnInit {
     }
 
     if (!target && /^[sS]\d{2}[eE]\d{2}$/.test(raw)) {
-      target = this.episodes.find((ep) => ep.episode.toUpperCase() === inputUpper);
+      target = this.episodes.find(
+        (ep) => ep.episode.toUpperCase() === inputUpper
+      );
     }
 
     if (!target) {
@@ -135,9 +126,7 @@ export class EpisodesListComponent implements OnInit {
   searchEpisodesByCharacter(): void {
     const name = this.characterName.value?.trim().toLowerCase();
     if (!name) {
-      this.filteredEpisodes = this.episodes;
-      this.currentPage = 1;
-      this.updatePagination();
+      this.loadAllEpisodes();
       return;
     }
 
@@ -148,7 +137,8 @@ export class EpisodesListComponent implements OnInit {
           c.name.toLowerCase().includes(name)
         );
         if (!match || !match.episode) {
-          this.filteredEpisodes = [];
+          this.episodes = [];
+          this.totalPages = 1;
           this.currentPage = 1;
           this.updatePagination();
           return;
@@ -157,20 +147,16 @@ export class EpisodesListComponent implements OnInit {
         const episodeIds = match.episode.map((url: string) =>
           url.split('/').pop()
         );
-        this.filteredEpisodes = this.episodes.filter((ep) =>
+        this.episodes = this.episodes.filter((ep) =>
           episodeIds.includes(String(ep.id))
         );
-
+        this.totalPages = Math.ceil(this.episodes.length / 10);
         this.currentPage = 1;
         this.updatePagination();
       });
   }
 
   updatePagination(): void {
-    this.totalPages = Math.max(
-      1,
-      Math.ceil(this.filteredEpisodes.length / this.pageSize)
-    );
     const maxVisible = 5;
     this.visiblePageNumbers = [];
 

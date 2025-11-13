@@ -3,16 +3,31 @@
   <p>{{ location.type }} — {{ location.dimension }}</p>
 </section>
 
-<div class="card-grid" *ngIf="residents.length > 0">
-  <div class="character-card" *ngFor="let character of residents">
+<div class="card-grid" *ngIf="paginatedResidents.length > 0">
+  <div class="character-card" *ngFor="let character of paginatedResidents">
     <div class="card-image">
       <img [src]="character.image" [alt]="character.name" />
     </div>
     <div class="card-content">
       <h3 class="name">{{ character.name }}</h3>
       <p class="meta">{{ character.species }} ({{ character.status }})</p>
-      <p class="origin">Origen: {{ character.origin.name }}</p>
       <p class="year">Año: {{ character.created | date : "yyyy" }}</p>
     </div>
   </div>
+</div>
+
+<div class="pagination-controls" *ngIf="totalPages > 1">
+  <button (click)="previousPage()" [disabled]="currentPage === 1">
+    Anterior
+  </button>
+  <button
+    *ngFor="let page of [].constructor(totalPages); let i = index"
+    [class.active]="currentPage === i + 1"
+    (click)="goToPage(i + 1)"
+  >
+    {{ i + 1 }}
+  </button>
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+    Siguiente
+  </button>
 </div>

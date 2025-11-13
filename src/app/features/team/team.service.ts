@@ -11,23 +11,36 @@ export class TeamService {
   constructor(private http: HttpClient) {}
 
   getTeam(): Observable<TeamMember[]> {
-    return this.http.get<TeamMember[]>(this.teamUrl).pipe(catchError(() => of([])));
+    return this.http
+      .get<TeamMember[]>(this.teamUrl)
+      .pipe(catchError(() => of([])));
   }
 
   getTeamMemberById(id: number): Observable<TeamMember> {
-    return this.http.get<TeamMember>(`${this.teamUrl}/${id}`).pipe(catchError(this.handleError));
+    return this.http
+      .get<TeamMember>(`${this.teamUrl}/${id}`)
+      .pipe(catchError(this.handleError));
   }
 
   addToTeam(member: TeamMember): Observable<TeamMember> {
-    return this.http.post<TeamMember>(this.teamUrl, member).pipe(catchError(this.handleError));
+    return this.http
+      .post<TeamMember>(this.teamUrl, member)
+      .pipe(catchError(this.handleError));
   }
 
-  updateTeamMember(id: number, changes: Partial<TeamMember>): Observable<TeamMember> {
-    return this.http.patch<TeamMember>(`${this.teamUrl}/${id}`, changes).pipe(catchError(this.handleError));
+  updateTeamMember(
+    id: number,
+    changes: Partial<TeamMember>
+  ): Observable<TeamMember> {
+    return this.http
+      .patch<TeamMember>(`${this.teamUrl}/${id}`, changes)
+      .pipe(catchError(this.handleError));
   }
 
   removeFromTeam(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.teamUrl}/${id}`).pipe(catchError(this.handleError));
+    return this.http
+      .delete<void>(`${this.teamUrl}/${id}`)
+      .pipe(catchError(this.handleError));
   }
 
   isIdTaken(id: number): Observable<boolean> {

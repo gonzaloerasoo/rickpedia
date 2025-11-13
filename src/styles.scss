@@ -1,32 +1,36 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 $custom-primary: mat.define-palette(mat.$indigo-palette);
 $custom-accent: mat.define-palette(mat.$cyan-palette, 500);
 $custom-warn: mat.define-palette(mat.$red-palette);
 
-$custom-theme: mat.define-dark-theme((
-  color: (
-    primary: $custom-primary,
-    accent: $custom-accent,
-    warn: $custom-warn,
+$custom-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $custom-primary,
+      accent: $custom-accent,
+      warn: $custom-warn,
+    ),
   )
-));
+);
 
 @include mat.all-component-themes($custom-theme);
 
-html, body {
-  height: 100%;
+html,
+body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: #000;
   color: #fff;
+  height: 100%;
 }
 
 .section-header {
   text-align: center;
   margin-bottom: 40px;
 
-  h1, h2 {
+  h1,
+  h2 {
     font-size: 2.5rem;
     color: #00e5ff;
     font-weight: bold;

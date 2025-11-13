@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CharactersService } from '../characters.service';
 import { TeamService } from '../../team/team.service';
 import { Character } from '../character.model';
@@ -13,20 +13,28 @@ import { TeamMember } from '../../team/team-member.model';
 export class CharactersDetailComponent implements OnInit {
   character: Character | null = null;
   isInTeam = false;
+  pageToReturn: number = 1;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private charactersService: CharactersService,
     private teamService: TeamService
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
+    const pageParam = this.route.snapshot.queryParamMap.get('page');
+    if (pageParam) {
+      this.pageToReturn = +pageParam;
+    }
     if (id) {
-      this.charactersService.getCharacterById(id).subscribe((data: Character) => {
-        this.character = data;
-        this.checkIfInTeam();
-      });
+      this.charactersService
+        .getCharacterById(id)
+        .subscribe((data: Character) => {
+          this.character = data;
+          this.checkIfInTeam();
+        });
     }
   }
 
@@ -40,7 +48,6 @@ export class CharactersDetailComponent implements OnInit {
 
   addToTeam(): void {
     if (!this.character) return;
-
     const payload: TeamMember = {
       id: this.character.id,
       name: this.character.name,
@@ -53,7 +60,6 @@ export class CharactersDetailComponent implements OnInit {
       image: this.character.image,
       created: this.character.created || new Date().toISOString(),
     };
-
     this.teamService.addToTeam(payload).subscribe({
       next: () => {
         this.isInTeam = true;
@@ -66,7 +72,6 @@ export class CharactersDetailComponent implements OnInit {
 
   removeFromTeam(): void {
     if (!this.character) return;
-
     this.teamService.removeFromTeam(this.character.id).subscribe({
       next: () => {
         this.isInTeam = false;
@@ -74,6 +79,19 @@ export class CharactersDetailComponent implements OnInit {
       error: () => {
         console.error('Error al eliminar personaje');
       },
+    });
+  }
+
+  goBack(): void {
+    if (!this.character) {
+      this.router.navigate(['/characters'], {
+        queryParams: { page: this.pageToReturn },
+      });
+      return;
+    }
+    this.router.navigate(['/characters'], {
+      queryParams: { page: this.pageToReturn },
+      fragment: 'character-' + this.character.id,
     });
   }
 }

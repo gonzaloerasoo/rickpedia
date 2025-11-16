@@ -4,6 +4,7 @@ import { CharactersService } from '../../characters/characters.service';
 import { FormControl } from '@angular/forms';
 import { Location } from '../location.model';
 import { Character } from '../../characters/character.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-locations-list',
@@ -32,17 +33,21 @@ export class LocationsListComponent implements OnInit {
   showPrevEllipsis = false;
   showNextEllipsis = false;
 
+  isLoading = false;
+
   constructor(
     private locationsService: LocationsService,
-    private charactersService: CharactersService
+    private charactersService: CharactersService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.locationsService.getAllLocations().subscribe((data: Location[]) => {
-      this.locations = data;
-      this.filteredLocations = data;
-      this.updatePagination();
-    });
+    const pageParam = this.route.snapshot.queryParamMap.get('page');
+    if (pageParam) {
+      this.currentPage = +pageParam;
+    }
+
+    this.loadAllLocations();
 
     this.locationName.valueChanges.subscribe(() => {
       this.filterLocationsByName();
@@ -50,6 +55,22 @@ export class LocationsListComponent implements OnInit {
 
     this.characterName.valueChanges.subscribe(() => {
       this.filterLocationsByCharacter();
+    });
+  }
+
+  loadAllLocations(): void {
+    this.isLoading = true;
+    this.locationsService.getAllLocations().subscribe({
+      next: (data: Location[]) => {
+        this.locations = data;
+        this.filteredLocations = data;
+        this.totalPages = Math.ceil(this.filteredLocations.length / this.pageSize);
+        this.updatePagination();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      },
     });
   }
 
@@ -65,26 +86,37 @@ export class LocationsListComponent implements OnInit {
       : this.locations;
 
     this.currentPage = 1;
+    this.totalPages = Math.ceil(this.filteredLocations.length / this.pageSize);
     this.updatePagination();
   }
 
   filterLocationsByCharacter(): void {
     const name = this.characterName.value?.trim().toLowerCase();
+
     if (!name) {
       this.filteredLocations = this.locations;
+      this.totalPages = Math.ceil(this.filteredLocations.length / this.pageSize);
       this.currentPage = 1;
       this.updatePagination();
       return;
     }
 
-    this.charactersService.getAllCharacters().subscribe((characters: Character[]) => {
-      const match = characters.find((c) => c.name.toLowerCase().includes(name));
-      this.filteredLocations = match?.location?.name
-        ? this.locations.filter((loc) => loc.name === match.location.name)
-        : [];
+    if (name.length < 2) {
+      return;
+    }
 
-      this.currentPage = 1;
-      this.updatePagination();
+    this.charactersService.getAllCharacters().subscribe({
+      next: (characters: Character[]) => {
+        const match = characters.find((c) => c.name.toLowerCase().includes(name));
+        this.filteredLocations = match?.location?.name
+          ? this.locations.filter((loc) => loc.name === match.location.name)
+          : [];
+
+        this.currentPage = 1;
+        this.totalPages = Math.max(1, Math.ceil(this.filteredLocations.length / this.pageSize));
+        this.updatePagination();
+      },
+      error: () => {},
     });
   }
 
@@ -138,9 +170,7 @@ export class LocationsListComponent implements OnInit {
   }
 
   handleNextEllipsis(): void {
-    this.goToPage(
-      this.visiblePageNumbers[this.visiblePageNumbers.length - 1] + 1
-    );
+    this.goToPage(this.visiblePageNumbers[this.visiblePageNumbers.length - 1] + 1);
   }
 
   onNameFocus(): void {

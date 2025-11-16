@@ -1,33 +1,58 @@
-<section class="section-header" *ngIf="location">
-  <h2>{{ location.name }}</h2>
-  <p>{{ location.type }} — {{ location.dimension }}</p>
-</section>
-
-<div class="card-grid" *ngIf="paginatedResidents.length > 0">
-  <div class="character-card" *ngFor="let character of paginatedResidents">
-    <div class="card-image">
-      <img [src]="character.image" [alt]="character.name" />
-    </div>
-    <div class="card-content">
-      <h3 class="name">{{ character.name }}</h3>
-      <p class="meta">{{ character.species }} ({{ character.status }})</p>
-      <p class="year">Año: {{ character.created | date : "yyyy" }}</p>
-    </div>
-  </div>
+<div *ngIf="isLoading" class="spinner-container">
+  <mat-spinner></mat-spinner>
 </div>
 
-<div class="pagination-controls" *ngIf="totalPages > 1">
-  <button (click)="previousPage()" [disabled]="currentPage === 1">
-    Anterior
-  </button>
-  <button
-    *ngFor="let page of [].constructor(totalPages); let i = index"
-    [class.active]="currentPage === i + 1"
-    (click)="goToPage(i + 1)"
-  >
-    {{ i + 1 }}
-  </button>
-  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
-    Siguiente
-  </button>
+<div *ngIf="!isLoading">
+  <section class="section-header" *ngIf="location">
+    <h2>{{ location.name }}</h2>
+    <p>{{ location.type }} — {{ location.dimension }}</p>
+  </section>
+
+  <div class="card-grid" *ngIf="paginatedResidents.length > 0">
+    <div class="character-card" *ngFor="let character of paginatedResidents">
+      <div class="card-image">
+        <img [src]="character.image" [alt]="character.name" />
+      </div>
+      <div class="card-content">
+        <h3 class="name">{{ character.name }}</h3>
+        <p class="meta">{{ character.species }} ({{ character.status }})</p>
+        <p class="year">Año: {{ character.created | date : 'yyyy' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagination-wrapper" *ngIf="location">
+    <div class="pagination-controls">
+      <button (click)="previousPage()" [disabled]="currentPage === 1">Anterior</button>
+
+      <button *ngIf="totalPages === 1" (click)="goToPage(1)" [class.active]="true">1</button>
+
+      <ng-container *ngIf="totalPages > 1">
+        <button (click)="goToPage(1)" [class.active]="currentPage === 1">1</button>
+        <button *ngIf="showPrevEllipsis" (click)="handlePrevEllipsis()">...</button>
+        <button
+          *ngFor="let page of visiblePageNumbers"
+          (click)="goToPage(page)"
+          [class.active]="page === currentPage"
+        >
+          {{ page }}
+        </button>
+        <button *ngIf="showNextEllipsis" (click)="handleNextEllipsis()">...</button>
+        <button
+          (click)="goToPage(totalPages)"
+          [class.active]="currentPage === totalPages"
+        >
+          {{ totalPages }}
+        </button>
+      </ng-container>
+
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+    </div>
+
+    <div class="back-button">
+      <button mat-stroked-button color="primary" (click)="goBack()" aria-label="Volver a locations">
+        <span class="material-icons">arrow_back</span> Volver a locations
+      </button>
+    </div>
+  </div>
 </div>

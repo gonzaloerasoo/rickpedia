@@ -12,8 +12,10 @@ import { TeamMember } from '../../team/team-member.model';
 })
 export class CharactersDetailComponent implements OnInit {
   character: Character | null = null;
+  isLoading = false;
   isInTeam = false;
-  pageToReturn: number = 1;
+  pageToReturn = 1;
+  confirmationMessage: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,22 +25,29 @@ export class CharactersDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     const id = this.route.snapshot.paramMap.get('id');
     const pageParam = this.route.snapshot.queryParamMap.get('page');
+
     if (pageParam) {
       this.pageToReturn = +pageParam;
     }
+
     if (id) {
-      this.charactersService
-        .getCharacterById(id)
-        .subscribe((data: Character) => {
+      this.charactersService.getCharacterById(id).subscribe({
+        next: (data: Character) => {
           this.character = data;
           this.checkIfInTeam();
-        });
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+        },
+      });
     }
   }
 
-  checkIfInTeam(): void {
+  private checkIfInTeam(): void {
     this.teamService.getTeam().subscribe((team: TeamMember[]) => {
       if (this.character) {
         this.isInTeam = team.some((member) => member.id === this.character!.id);
@@ -48,6 +57,7 @@ export class CharactersDetailComponent implements OnInit {
 
   addToTeam(): void {
     if (!this.character) return;
+
     const payload: TeamMember = {
       id: this.character.id,
       name: this.character.name,
@@ -60,24 +70,22 @@ export class CharactersDetailComponent implements OnInit {
       image: this.character.image,
       created: this.character.created || new Date().toISOString(),
     };
+
     this.teamService.addToTeam(payload).subscribe({
       next: () => {
         this.isInTeam = true;
-      },
-      error: () => {
-        console.error('Error al guardar personaje');
+        this.confirmationMessage = 'Personaje añadido al equipo';
       },
     });
   }
 
   removeFromTeam(): void {
     if (!this.character) return;
+
     this.teamService.removeFromTeam(this.character.id).subscribe({
       next: () => {
         this.isInTeam = false;
-      },
-      error: () => {
-        console.error('Error al eliminar personaje');
+        this.confirmationMessage = 'Personaje eliminado del equipo';
       },
     });
   }
@@ -89,6 +97,7 @@ export class CharactersDetailComponent implements OnInit {
       });
       return;
     }
+
     this.router.navigate(['/characters'], {
       queryParams: { page: this.pageToReturn },
       fragment: 'character-' + this.character.id,

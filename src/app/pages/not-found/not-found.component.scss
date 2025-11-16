@@ -1,37 +1,50 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: url("https://www.transparenttextures.com/patterns/stardust.png")
+      repeat,
+    radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
+  color: #fff;
+  min-height: 83.8vh;
+  padding: 20px;
+  font-family: "Roboto", "Segoe UI", sans-serif;
+}
+
 .not-found-container {
-    text-align: center;
-    padding: 80px 20px;
-    color: #fff;
-    background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat, radial-gradient(circle at top, #0d0d0d 0%, #000000 100%);
-    min-height: 100vh;
-    font-family: 'Roboto', 'Segoe UI', sans-serif;
-  
-    h1 {
-      font-size: 3.2rem;
-      margin-bottom: 10px;
-      font-weight: 700;
-      color: #00e5ff;
-      letter-spacing: 1px;
+  text-align: center;
+
+  h1 {
+    font-size: 3.2rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #00e5ff;
+    letter-spacing: 1px;
+  }
+
+  p {
+    font-size: 1.3rem;
+    color: #ccc;
+    margin-bottom: 30px;
+  }
+
+  .back-button {
+    display: inline-block;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #00e5ff 0%, #00bcd4 100%);
+    color: #000;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 229, 255, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: linear-gradient(135deg, #00bcd4 0%, #00e5ff 100%);
+      box-shadow: 0 6px 18px rgba(0, 229, 255, 0.5);
+      transform: translateY(-2px);
     }
-  
-    p {
-      font-size: 1.2rem;
-      color: #ccc;
-      margin-bottom: 30px;
-    }
-  
-    .back-button {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #00e5ff;
-      color: #000;
-      font-weight: 600;
-      border-radius: 6px;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
-  
-      &:hover {
-        background-color: #00bcd4;
-      }
-    }
-  }  
+  }
+}

@@ -1,124 +1,117 @@
-<section class="section-header">
-  <h2>Episodios</h2>
-  <p>
-    Explora las aventuras de Rick y Morty a través de una colección de episodios
-    memorables.
-  </p>
-</section>
-
-<div class="filter-toggle">
-  <button (click)="showFilterPanel = true">
-    <span class="material-icons">tune</span> Filtros
-  </button>
+<div *ngIf="isLoading" class="spinner-container">
+  <mat-spinner></mat-spinner>
 </div>
 
-@if (showFilterPanel) {
-<div class="filter-panel">
-  <div class="panel-header">
-    <h3>Filtros</h3>
-    <button (click)="showFilterPanel = false">
-      <span class="material-icons">close</span> Cerrar
+<div *ngIf="!isLoading">
+  <section class="section-header">
+    <h2>Episodios</h2>
+    <p>
+      Explora las aventuras de Rick y Morty a través de una colección de episodios
+      memorables.
+    </p>
+  </section>
+
+  <div class="filter-toggle">
+    <button (click)="showFilterPanel = true">
+      <span class="material-icons">tune</span> Filtros
     </button>
   </div>
 
-  <div class="panel-body">
-    <mat-form-field appearance="fill" color="accent" class="name-field">
-      @if (!showNameOverlay) {
-      <mat-label>Nombre o código del episodio</mat-label>
-      }
-      <input
-        matInput
-        [formControl]="episodeName"
-        (focus)="onNameFocus()"
-        (blur)="onNameBlur()"
-        (keyup.enter)="searchCharactersByEpisode()"
-        class="episode-input"
-      />
-      @if (showNameOverlay) {
-      <div class="static-text">Nombre o código del episodio</div>
-      }
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" color="accent" class="name-field">
-      @if (!showCharacterOverlay) {
-      <mat-label>Nombre de personaje</mat-label>
-      }
-      <input
-        matInput
-        [formControl]="characterName"
-        (focus)="onCharacterFocus()"
-        (blur)="onCharacterBlur()"
-        (keyup.enter)="searchEpisodesByCharacter()"
-        class="episode-input"
-      />
-      @if (showCharacterOverlay) {
-      <div class="static-text">Nombre de personaje</div>
-      }
-    </mat-form-field>
-  </div>
-</div>
-}
-
-<div class="card-grid">
-  @for (ep of paginatedEpisodes; track ep.id) {
-  <a class="character-card episode-link" [routerLink]="['/episodes', ep.id]">
-    <div class="card-content">
-      <h3 class="name">{{ ep.name }}</h3>
-      <p class="meta">{{ ep.episode }} — {{ ep.air_date }}</p>
+  <div class="filter-panel" [style.display]="showFilterPanel ? 'block' : 'none'">
+    <div class="panel-header">
+      <h3>Filtros</h3>
+      <button (click)="showFilterPanel = false">
+        <span class="material-icons">close</span> Cerrar
+      </button>
     </div>
-  </a>
-  }
-</div>
 
-<div class="pagination-controls">
-  <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
-  <button (click)="goToPage(1)" [class.active]="currentPage === 1">1</button>
+    <div class="panel-body">
+      <mat-form-field appearance="fill" color="accent" class="name-field">
+        <mat-label>Nombre o código del episodio</mat-label>
+        <input
+          matInput
+          [formControl]="episodeName"
+          (focus)="onNameFocus()"
+          (blur)="onNameBlur()"
+          class="episode-input"
+        />
+      </mat-form-field>
 
-  @if (showPrevEllipsis) {
-  <button (click)="handlePrevEllipsis()">...</button>
-  } @for (page of visiblePageNumbers; track page) {
-  <button (click)="goToPage(page)" [class.active]="page === currentPage">
-    {{ page }}
-  </button>
-  } @if (showNextEllipsis) {
-  <button (click)="handleNextEllipsis()">...</button>
-  } @if (totalPages > 1) {
-  <button
-    (click)="goToPage(totalPages)"
-    [class.active]="currentPage === totalPages"
-  >
-    {{ totalPages }}
-  </button>
-  }
-
-  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
-    Siguiente
-  </button>
-</div>
-
-@if (selectedEpisodeTitle) {
-<div class="section-header">
-  <h2>{{ selectedEpisodeTitle }}</h2>
-  @if (charactersInEpisode.length > 0) {
-  <p>Personajes que aparecen en este episodio:</p>
-  } @else {
-  <p>No se encontraron personajes o el episodio no existe.</p>
-  }
-</div>
-} @if (charactersInEpisode.length > 0) {
-<div class="card-grid">
-  @for (character of charactersInEpisode; track character.id) {
-  <div class="character-card">
-    <div class="card-image">
-      <img [src]="character.image" [alt]="character.name" />
-    </div>
-    <div class="card-content">
-      <h3 class="name">{{ character.name }}</h3>
-      <p class="meta">{{ character.species }} ({{ character.status }})</p>
-      <p class="origin">Origen: {{ character.origin.name }}</p>
-      <p class="year">Año: {{ character.created | date : "yyyy" }}</p>
+      <mat-form-field appearance="fill" color="accent" class="name-field">
+        <mat-label>Nombre de personaje</mat-label>
+        <input
+          matInput
+          [formControl]="characterName"
+          (focus)="onCharacterFocus()"
+          (blur)="onCharacterBlur()"
+          class="episode-input"
+        />
+      </mat-form-field>
     </div>
   </div>
-  }
+
+  <div class="card-grid">
+    <a
+      class="character-card episode-link"
+      *ngFor="let ep of paginatedEpisodes"
+      [routerLink]="['/episodes', ep.id]"
+      [queryParams]="{ page: currentPage }"
+    >
+      <div class="card-content">
+        <h3 class="name">{{ ep.name }}</h3>
+        <p class="meta">{{ ep.episode }} — {{ ep.air_date }}</p>
+      </div>
+    </a>
+  </div>
+
+  <div class="pagination-controls">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+
+    <button *ngIf="totalPages === 1" (click)="goToPage(1)" [class.active]="true">1</button>
+
+    <ng-container *ngIf="totalPages > 1">
+      <button (click)="goToPage(1)" [class.active]="currentPage === 1">1</button>
+      <button *ngIf="showPrevEllipsis" (click)="handlePrevEllipsis()">...</button>
+      <button
+        *ngFor="let page of visiblePageNumbers"
+        (click)="goToPage(page)"
+        [class.active]="page === currentPage"
+      >
+        {{ page }}
+      </button>
+      <button *ngIf="showNextEllipsis" (click)="handleNextEllipsis()">...</button>
+      <button
+        (click)="goToPage(totalPages)"
+        [class.active]="currentPage === totalPages"
+      >
+        {{ totalPages }}
+      </button>
+    </ng-container>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
+
+  <div *ngIf="selectedEpisodeTitle" class="section-header">
+    <h2>{{ selectedEpisodeTitle }}</h2>
+    <p *ngIf="charactersInEpisode.length > 0">
+      Personajes que aparecen en este episodio:
+    </p>
+    <p *ngIf="charactersInEpisode.length === 0">
+      No se encontraron personajes o el episodio no existe.
+    </p>
+  </div>
+
+  <div class="card-grid" *ngIf="charactersInEpisode.length > 0">
+    <div class="character-card" *ngFor="let character of charactersInEpisode">
+      <div class="card-image">
+        <img [src]="character.image" [alt]="character.name" />
+      </div>
+      <div class="card-content">
+        <h3 class="name">{{ character.name }}</h3>
+        <p class="meta">{{ character.species }} ({{ character.status }})</p>
+        <p class="origin">Origen: {{ character.origin.name }}</p>
+        <p class="year">Año: {{ character.created | date : 'yyyy' }}</p>
+      </div>
+    </div>
+  </div>
 </div>
-}

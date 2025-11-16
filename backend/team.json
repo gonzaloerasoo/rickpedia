@@ -60,39 +60,39 @@
     "created": "2017-11-04T19:09:56.428Z"
   },
   {
-    "id": 8,
-    "name": "Adjudicator Rick",
+    "id": 118,
+    "name": "Evil Morty",
     "species": "Human",
-    "status": "Dead",
-    "origin": "Desconocido",
-    "location": "Desconocido",
+    "status": "Alive",
+    "origin": "unknown",
+    "location": "Citadel of Ricks",
     "gender": "Male",
     "type": "Desconocido",
-    "image": "https://rickandmortyapi.com/api/character/avatar/8.jpeg",
-    "created": "2017-11-04T20:03:34.737Z"
+    "image": "https://rickandmortyapi.com/api/character/avatar/118.jpeg",
+    "created": "2017-12-26T16:13:41.103Z"
   },
   {
-    "id": 9,
-    "name": "Agency Director",
+    "id": 117,
+    "name": "Evil Jerry Clone",
     "species": "Human",
     "status": "Dead",
-    "origin": "Desconocido",
-    "location": "Desconocido",
+    "origin": "unknown",
+    "location": "Earth (C-137)",
     "gender": "Male",
-    "type": "Desconocido",
-    "image": "https://rickandmortyapi.com/api/character/avatar/9.jpeg",
-    "created": "2017-11-04T20:06:54.976Z"
+    "type": "Clone",
+    "image": "https://rickandmortyapi.com/api/character/avatar/117.jpeg",
+    "created": "2017-12-26T16:11:15.395Z"
   },
   {
-    "id": 7,
-    "name": "Abradolf Lincler",
+    "id": 114,
+    "name": "Ethan",
     "species": "Human",
     "status": "unknown",
-    "origin": "Desconocido",
-    "location": "Desconocido",
+    "origin": "Earth (C-137)",
+    "location": "Earth (C-137)",
     "gender": "Male",
-    "type": "Genetic experiment",
-    "image": "https://rickandmortyapi.com/api/character/avatar/7.jpeg",
-    "created": "2017-11-04T19:59:20.523Z"
+    "type": "Cronenberg",
+    "image": "https://rickandmortyapi.com/api/character/avatar/114.jpeg",
+    "created": "2017-12-26T16:01:13.904Z"
   }
 ]

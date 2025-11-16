@@ -24,10 +24,6 @@ export class CharactersListComponent implements OnInit {
   showStatusOverlay = true;
   showSpeciesOverlay = true;
 
-  nameFocused = false;
-  statusFocused = false;
-  speciesFocused = false;
-
   currentPage = 1;
   itemsPerPage = 20;
   totalPages = 1;
@@ -41,6 +37,7 @@ export class CharactersListComponent implements OnInit {
   availableSpecies: string[] = [];
 
   showFilterPanel = false;
+  isLoading = false;
 
   constructor(
     private charactersService: CharactersService,
@@ -50,26 +47,29 @@ export class CharactersListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const idsParam = this.route.snapshot.queryParamMap.get('ids');
+    this.isLoading = true;
 
-    if (idsParam) {
-      const ids = idsParam.split(',');
-      this.charactersService.getCharactersByIds(ids).subscribe((data: Character[]) => {
-        this.characters = Array.isArray(data) ? data : [data];
-        this.filtered = this.characters;
-        this.availableSpecies = [...new Set(this.characters.map((c) => c.species))].sort();
-        this.currentPage = 1;
-        this.updatePagination();
-      });
-    } else {
-      this.charactersService.getAllCharacters().subscribe((data: Character[]) => {
-        this.characters = data;
-        this.filtered = data;
-        this.availableSpecies = [...new Set(data.map((c) => c.species))].sort();
-        this.currentPage = 1;
-        this.updatePagination();
-      });
-    }
+    this.charactersService.getAllCharacters().subscribe((data: Character[]) => {
+      this.characters = data;
+      this.filtered = data;
+      this.availableSpecies = [...new Set(data.map((c) => c.species))].sort();
+
+      const pageParam = this.route.snapshot.queryParamMap.get('page');
+      this.currentPage = pageParam ? +pageParam : 1;
+
+      this.updatePagination();
+      this.isLoading = false;
+
+      const fragment = this.route.snapshot.fragment;
+      if (fragment) {
+        setTimeout(() => {
+          const el = document.getElementById(fragment);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 0);
+      }
+    });
 
     this.nameFilter.valueChanges.subscribe(() => this.applyFilters());
     this.statusFilter.valueChanges.subscribe(() => this.applyFilters());
@@ -95,9 +95,7 @@ export class CharactersListComponent implements OnInit {
     }
 
     if (this.selectedSpecies) {
-      this.filtered = this.filtered.filter(
-        (c) => c.species === this.selectedSpecies
-      );
+      this.filtered = this.filtered.filter((c) => c.species === this.selectedSpecies);
     }
 
     this.currentPage = 1;
@@ -175,37 +173,33 @@ export class CharactersListComponent implements OnInit {
   }
 
   onNameFocus(): void {
-    this.nameFocused = true;
     this.showNameOverlay = false;
   }
 
   onNameBlur(): void {
-    this.nameFocused = false;
     if (!this.nameFilter.value) this.showNameOverlay = true;
   }
 
   onStatusFocus(): void {
-    this.statusFocused = true;
     this.showStatusOverlay = false;
   }
 
   onStatusBlur(): void {
-    this.statusFocused = false;
     if (!this.statusFilter.value) this.showStatusOverlay = true;
   }
 
   onSpeciesFocus(): void {
-    this.speciesFocused = true;
     this.showSpeciesOverlay = false;
   }
 
   onSpeciesBlur(): void {
-    this.speciesFocused = false;
     if (!this.speciesFilter.value) this.showSpeciesOverlay = true;
   }
 
   goToDetail(id: number): void {
-    this.router.navigate(['/characters', id]);
+    this.router.navigate(['/characters', id], {
+      queryParams: { page: this.currentPage },
+    });
   }
 
   addToTeam(id: number): void {

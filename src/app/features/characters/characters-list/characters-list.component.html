@@ -6,152 +6,162 @@
   </p>
 </section>
 
-<div class="filter-toggle">
-  <button (click)="showFilterPanel = true">
-    <span class="material-icons">tune</span> Filtros
-  </button>
+<div *ngIf="isLoading" class="spinner-container">
+  <mat-spinner></mat-spinner>
 </div>
 
-@if (showFilterPanel) {
-<div class="filter-panel">
-  <div class="panel-header">
-    <h3>Filtros</h3>
-    <button (click)="showFilterPanel = false">
-      <span class="material-icons">close</span> Cerrar
+<div *ngIf="!isLoading">
+  <div class="filter-toggle">
+    <button (click)="showFilterPanel = true">
+      <span class="material-icons">tune</span> Filtros
     </button>
   </div>
 
-  <div class="panel-body">
-    <mat-form-field appearance="fill" color="accent" class="name-field">
-      @if (!showNameOverlay) {
-      <mat-label>Nombre</mat-label>
-      }
-      <input
-        matInput
-        [formControl]="nameFilter"
-        (focus)="onNameFocus()"
-        (blur)="onNameBlur()"
-      />
-      @if (showNameOverlay) {
-      <div class="static-text">Nombre</div>
-      }
-    </mat-form-field>
+  @if (showFilterPanel) {
+  <div class="filter-panel">
+    <div class="panel-header">
+      <h3>Filtros</h3>
+      <button (click)="showFilterPanel = false">
+        <span class="material-icons">close</span> Cerrar
+      </button>
+    </div>
 
-    <mat-form-field appearance="fill" color="accent" class="status-field">
-      @if (!showStatusOverlay) {
-      <mat-label>Estado</mat-label>
-      }
-      <input
-        matInput
-        [formControl]="statusFilter"
-        (focus)="onStatusFocus()"
-        (blur)="onStatusBlur()"
-      />
-      @if (showStatusOverlay) {
-      <div class="static-text">Estado</div>
-      }
-    </mat-form-field>
+    <div class="panel-body">
+      <mat-form-field appearance="fill" color="accent" class="name-field">
+        @if (!showNameOverlay) {
+        <mat-label>Nombre</mat-label>
+        }
+        <input
+          matInput
+          [formControl]="nameFilter"
+          (focus)="onNameFocus()"
+          (blur)="onNameBlur()"
+        />
+        @if (showNameOverlay) {
+        <div class="static-text">Nombre</div>
+        }
+      </mat-form-field>
 
-    <mat-form-field appearance="fill" color="accent" class="species-field">
-      @if (!showSpeciesOverlay) {
-      <mat-label>Especie</mat-label>
-      }
-      <input
-        matInput
-        [formControl]="speciesFilter"
-        (focus)="onSpeciesFocus()"
-        (blur)="onSpeciesBlur()"
-      />
-      @if (showSpeciesOverlay) {
-      <div class="static-text">Especie</div>
-      }
-    </mat-form-field>
+      <mat-form-field appearance="fill" color="accent" class="status-field">
+        @if (!showStatusOverlay) {
+        <mat-label>Estado</mat-label>
+        }
+        <input
+          matInput
+          [formControl]="statusFilter"
+          (focus)="onStatusFocus()"
+          (blur)="onStatusBlur()"
+        />
+        @if (showStatusOverlay) {
+        <div class="static-text">Estado</div>
+        }
+      </mat-form-field>
 
-    <div class="alphabet-index">
-      <span>Filtrar por letra:</span>
-      <div class="index-buttons">
-        @for (letter of alphabet; track letter) {
-        <button
-          (click)="selectLetter(letter)"
-          [class.active]="selectedLetter === letter"
-        >
-          {{ letter }}
+      <mat-form-field appearance="fill" color="accent" class="species-field">
+        @if (!showSpeciesOverlay) {
+        <mat-label>Especie</mat-label>
+        }
+        <input
+          matInput
+          [formControl]="speciesFilter"
+          (focus)="onSpeciesFocus()"
+          (blur)="onSpeciesBlur()"
+        />
+        @if (showSpeciesOverlay) {
+        <div class="static-text">Especie</div>
+        }
+      </mat-form-field>
+
+      <div class="alphabet-index">
+        <span>Filtrar por letra:</span>
+        <div class="index-buttons">
+          @for (letter of alphabet; track letter) {
+          <button
+            (click)="selectLetter(letter)"
+            [class.active]="selectedLetter === letter"
+          >
+            {{ letter }}
+          </button>
+          }
+        </div>
+        @if (selectedLetter) {
+        <button class="clear-button" (click)="clearLetter()">
+          <span class="material-icons">close</span> Quitar filtro de letra
         </button>
         }
       </div>
-      @if (selectedLetter) {
-      <button class="clear-button" (click)="clearLetter()">
-        <span class="material-icons">close</span> Quitar filtro de letra
-      </button>
-      }
-    </div>
 
-    <div class="species-index">
-      <span>Filtrar por especie:</span>
-      <div class="index-buttons">
-        @for (specie of availableSpecies; track specie) {
-        <button
-          (click)="selectSpecies(specie)"
-          [class.active]="selectedSpecies === specie"
-        >
-          {{ specie }}
+      <div class="species-index">
+        <span>Filtrar por especie:</span>
+        <div class="index-buttons">
+          @for (specie of availableSpecies; track specie) {
+          <button
+            (click)="selectSpecies(specie)"
+            [class.active]="selectedSpecies === specie"
+          >
+            {{ specie }}
+          </button>
+          }
+        </div>
+        @if (selectedSpecies) {
+        <button class="clear-button" (click)="clearSpecies()">
+          <span class="material-icons">close</span> Quitar filtro de especie
         </button>
         }
       </div>
-      @if (selectedSpecies) {
-      <button class="clear-button" (click)="clearSpecies()">
-        <span class="material-icons">close</span> Quitar filtro de especie
-      </button>
-      }
-    </div>
-  </div>
-</div>
-}
-
-<div class="card-grid">
-  @for (character of paginated; track character.id) {
-  <div class="character-card" (click)="goToDetail(character.id)">
-    <div class="card-image">
-      <img [src]="character.image" [alt]="character.name" />
-    </div>
-    <div class="card-content">
-      <h3 class="name">{{ character.name }}</h3>
-      <p class="meta">{{ character.species }} ({{ character.status }})</p>
-      <p class="year">Año: {{ character.created | date : "yyyy" }}</p>
     </div>
   </div>
   }
-</div>
 
-@if (filtered.length > 0 && totalPages > 1) {
-<div class="pagination-controls">
-  <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
-  <button (click)="goToPage(1)" [class.active]="currentPage === 1">1</button>
-  @if (showPrevEllipsis) {
-  <button (click)="handlePrevEllipsis()">...</button>
+  <div class="card-grid">
+    @for (character of paginated; track character.id) {
+    <div
+      class="character-card"
+      [attr.id]="'character-' + character.id"
+      (click)="goToDetail(character.id)"
+    >
+      <div class="card-image">
+        <img [src]="character.image" [alt]="character.name" />
+      </div>
+      <div class="card-content">
+        <h3 class="name">{{ character.name }}</h3>
+        <p class="meta">{{ character.species }} ({{ character.status }})</p>
+        <p class="year">Año: {{ character.created | date : "yyyy" }}</p>
+      </div>
+    </div>
+    }
+  </div>
+
+  @if (filtered.length > 0 && totalPages > 1) {
+  <div class="pagination-controls">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+    <button (click)="goToPage(1)" [class.active]="currentPage === 1">1</button>
+    @if (showPrevEllipsis) {
+    <button (click)="handlePrevEllipsis()">...</button>
+    }
+    @for (page of visiblePageNumbers; track page) {
+    <button (click)="goToPage(page)" [class.active]="page === currentPage">
+      {{ page }}
+    </button>
+    }
+    @if (showNextEllipsis) {
+    <button (click)="handleNextEllipsis()">...</button>
+    }
+    <button
+      (click)="goToPage(totalPages)"
+      [class.active]="currentPage === totalPages"
+    >
+      {{ totalPages }}
+    </button>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Siguiente
+    </button>
+  </div>
+  } @else {
+  <div class="pagination-controls">
+    <button (click)="prevPage()" disabled>Anterior</button>
+    <button class="active">1</button>
+    <button (click)="nextPage()" disabled>Siguiente</button>
+  </div>
   }
-  @for (page of visiblePageNumbers; track page) {
-  <button (click)="goToPage(page)" [class.active]="page === currentPage">
-    {{ page }}
-  </button>
-  }
-  @if (showNextEllipsis) {
-  <button (click)="handleNextEllipsis()">...</button>
-  }
-  <button
-    (click)="goToPage(totalPages)"
-    [class.active]="currentPage === totalPages"
-  >
-    {{ totalPages }}
-  </button>
-  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
-    Siguiente
-  </button>
 </div>
-} @else {
-<div class="pagination-controls">
-  <button (click)="prevPage()" disabled>Anterior</button>
-  <button class="active">1</button>
-  <button (click)="nextPage()" disabled>Siguiente</button>
-</div>
-}

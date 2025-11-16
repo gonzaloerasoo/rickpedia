@@ -4,6 +4,7 @@ import { CharactersService } from '../../characters/characters.service';
 import { FormControl } from '@angular/forms';
 import { Episode } from '../episode.model';
 import { Character } from '../../characters/character.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-episodes-list',
@@ -12,6 +13,7 @@ import { Character } from '../../characters/character.model';
 })
 export class EpisodesListComponent implements OnInit {
   episodes: Episode[] = [];
+  filteredEpisodes: Episode[] = [];
   charactersInEpisode: Character[] = [];
   selectedEpisodeTitle = '';
 
@@ -32,112 +34,105 @@ export class EpisodesListComponent implements OnInit {
   showPrevEllipsis = false;
   showNextEllipsis = false;
 
+  isLoading = false;
+
   constructor(
     private episodesService: EpisodesService,
-    private charactersService: CharactersService
+    private charactersService: CharactersService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    const pageParam = this.route.snapshot.queryParamMap.get('page');
+    if (pageParam) {
+      this.currentPage = +pageParam;
+    }
+
     this.loadAllEpisodes();
 
     this.episodeName.valueChanges.subscribe(() => {
-      this.searchCharactersByEpisode();
+      this.filterEpisodesByNameOrCode();
     });
 
     this.characterName.valueChanges.subscribe(() => {
-      this.searchEpisodesByCharacter();
+      this.filterEpisodesByCharacter();
     });
   }
 
   loadAllEpisodes(): void {
-    this.episodes = [];
-    this.episodesService.getAllEpisodes().subscribe((res: Episode[]) => {
-      this.episodes = res;
-      this.totalPages = Math.ceil(this.episodes.length / 10);
-      this.currentPage = 1;
-      this.updatePagination();
+    this.isLoading = true;
+    this.episodesService.getAllEpisodes().subscribe({
+      next: (res: Episode[]) => {
+        this.episodes = res;
+        this.filteredEpisodes = res;
+        this.totalPages = Math.ceil(this.filteredEpisodes.length / 10);
+        this.updatePagination();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      },
     });
   }
 
   get paginatedEpisodes(): Episode[] {
     const start = (this.currentPage - 1) * 10;
     const end = start + 10;
-    return this.episodes.slice(start, end);
+    return this.filteredEpisodes.slice(start, end);
   }
 
-  searchCharactersByEpisode(): void {
+  filterEpisodesByNameOrCode(): void {
     const raw = this.episodeName.value?.trim() || '';
     const inputLower = raw.toLowerCase();
     const inputUpper = raw.toUpperCase();
 
     if (!raw) {
-      this.charactersInEpisode = [];
-      this.selectedEpisodeTitle = '';
+      this.filteredEpisodes = this.episodes;
+      this.totalPages = Math.ceil(this.filteredEpisodes.length / 10);
+      this.currentPage = 1;
+      this.updatePagination();
       return;
     }
 
-    let target: Episode | undefined;
-
-    if (this.episodes.length === 1) {
-      const ep = this.episodes[0];
-      const exactName = ep.name.toLowerCase() === inputLower;
-      const exactCode = ep.episode.toLowerCase() === inputLower;
-      if (exactName || exactCode) {
-        target = ep;
-      }
-    }
-
-    if (!target && /^[sS]\d{2}[eE]\d{2}$/.test(raw)) {
-      target = this.episodes.find(
+    if (/^[sS]\d{2}[eE]\d{2}$/.test(raw)) {
+      this.filteredEpisodes = this.episodes.filter(
         (ep) => ep.episode.toUpperCase() === inputUpper
+      );
+    } else {
+      this.filteredEpisodes = this.episodes.filter(
+        (ep) =>
+          ep.name.toLowerCase().includes(inputLower) ||
+          ep.episode.toLowerCase().includes(inputLower)
       );
     }
 
-    if (!target) {
-      target = this.episodes.find((ep) => ep.name.toLowerCase() === inputLower);
-    }
-
-    if (!target) {
-      this.charactersInEpisode = [];
-      this.selectedEpisodeTitle = '';
-      return;
-    }
-
-    this.selectedEpisodeTitle = target.name;
-
-    const ids = target.characters
-      .map((url: string) => url.split('/').pop()!)
-      .filter(Boolean);
-
-    if (ids.length === 0) {
-      this.charactersInEpisode = [];
-      return;
-    }
-
-    this.charactersService
-      .getCharactersByIds(ids)
-      .subscribe((characters: Character[]) => {
-        this.charactersInEpisode = Array.isArray(characters)
-          ? characters
-          : [characters];
-      });
+    this.currentPage = 1;
+    this.totalPages = Math.max(1, Math.ceil(this.filteredEpisodes.length / 10));
+    this.updatePagination();
   }
 
-  searchEpisodesByCharacter(): void {
+  filterEpisodesByCharacter(): void {
     const name = this.characterName.value?.trim().toLowerCase();
+
     if (!name) {
-      this.loadAllEpisodes();
+      this.filteredEpisodes = this.episodes;
+      this.totalPages = Math.ceil(this.filteredEpisodes.length / 10);
+      this.currentPage = 1;
+      this.updatePagination();
       return;
     }
 
-    this.charactersService
-      .getAllCharacters()
-      .subscribe((characters: Character[]) => {
+    if (name.length < 2) {
+      return;
+    }
+
+    this.charactersService.getAllCharacters().subscribe({
+      next: (characters: Character[]) => {
         const match = characters.find((c) =>
           c.name.toLowerCase().includes(name)
         );
         if (!match || !match.episode) {
-          this.episodes = [];
+          this.filteredEpisodes = [];
           this.totalPages = 1;
           this.currentPage = 1;
           this.updatePagination();
@@ -147,13 +142,15 @@ export class EpisodesListComponent implements OnInit {
         const episodeIds = match.episode.map((url: string) =>
           url.split('/').pop()
         );
-        this.episodes = this.episodes.filter((ep) =>
+        this.filteredEpisodes = this.episodes.filter((ep) =>
           episodeIds.includes(String(ep.id))
         );
-        this.totalPages = Math.ceil(this.episodes.length / 10);
+        this.totalPages = Math.max(1, Math.ceil(this.filteredEpisodes.length / 10));
         this.currentPage = 1;
         this.updatePagination();
-      });
+      },
+      error: () => {},
+    });
   }
 
   updatePagination(): void {
@@ -202,9 +199,7 @@ export class EpisodesListComponent implements OnInit {
   }
 
   handleNextEllipsis(): void {
-    this.goToPage(
-      this.visiblePageNumbers[this.visiblePageNumbers.length - 1] + 1
-    );
+    this.goToPage(this.visiblePageNumbers[this.visiblePageNumbers.length - 1] + 1);
   }
 
   onNameFocus(): void {

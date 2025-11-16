@@ -3,150 +3,165 @@
   <p>Personajes del equipo. Filtra por alias, especie o estado.</p>
 </section>
 
-<div class="filter-toggle">
-  <button
-    type="button"
-    (click)="showFilterPanel = true"
-    mat-stroked-button
-    color="accent"
-  >
-    <span class="material-icons">tune</span> Filtrar
-  </button>
-
-  <button
-    type="button"
-    (click)="openCreateDialog()"
-    mat-stroked-button
-    color="primary"
-    style="margin-left: 12px"
-  >
-    <span class="material-icons">add</span> Añadir personaje
-  </button>
+<div *ngIf="isLoading" class="spinner-container">
+  <mat-spinner></mat-spinner>
 </div>
 
-@if (showFilterPanel) {
-<div class="filter-panel">
-  <div class="panel-header">
-    <h3>Filtrar equipo</h3>
-    <button type="button" (click)="showFilterPanel = false">
-      <span class="material-icons">close</span> Cerrar
+<div *ngIf="!isLoading">
+  <div class="filter-toggle">
+    <button
+      type="button"
+      (click)="showFilterPanel = true"
+      mat-stroked-button
+      color="accent"
+    >
+      <span class="material-icons">tune</span> Filtrar
+    </button>
+
+    <button
+      type="button"
+      (click)="openCreateDialog()"
+      mat-stroked-button
+      color="primary"
+      style="margin-left: 12px"
+    >
+      <span class="material-icons">add</span> Añadir personaje
     </button>
   </div>
 
-  <div class="panel-body">
-    <mat-form-field appearance="fill" color="accent" class="name-field">
-      @if (!showAliasOverlay) {
-      <mat-label>Alias</mat-label>
-      }
-      <input
-        matInput
-        [formControl]="alias"
-        (focus)="onFocus('alias')"
-        (blur)="onBlur('alias')"
-      />
-      @if (showAliasOverlay) {
-      <div class="static-text">Alias</div>
-      }
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" color="accent" class="name-field">
-      @if (!showNoteOverlay) {
-      <mat-label>Especie</mat-label>
-      }
-      <input
-        matInput
-        [formControl]="note"
-        (focus)="onFocus('note')"
-        (blur)="onBlur('note')"
-      />
-      @if (showNoteOverlay) {
-      <div class="static-text">Especie</div>
-      }
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" color="accent" class="name-field">
-      @if (!showPriorityOverlay) {
-      <mat-label>Estado</mat-label>
-      }
-      <input
-        matInput
-        [formControl]="priority"
-        (focus)="onFocus('priority')"
-        (blur)="onBlur('priority')"
-      />
-      @if (showPriorityOverlay) {
-      <div class="static-text">Estado</div>
-      }
-    </mat-form-field>
-  </div>
-</div>
-}
-
-<div class="card-grid">
-  @for (member of filteredTeam; track member.id) {
-  <div
-    class="character-card"
-    (click)="goToDetail(member.id)"
-    style="cursor: pointer"
-  >
-    <div class="card-image">
-      <img [src]="member.image" [alt]="member.name" />
-    </div>
-    <div class="card-content">
-      <h3 class="name">{{ member.name }}</h3>
-      <p class="meta">{{ member.species }} ({{ member.status }})</p>
-
-      @if (member.created) {
-      <p class="year">
-        <strong>Añadido:</strong> {{ member.created | date : "MMMM yyyy" }}
-      </p>
-      }
-
-      <div class="actions">
-        <button
-          mat-icon-button
-          color="warn"
-          (click)="removeFromTeam(member.id); $event.stopPropagation()"
-          aria-label="Quitar del equipo"
-        >
-          <span class="material-icons">delete</span>
-        </button>
-
-        <button
-          mat-icon-button
-          color="accent"
-          (click)="openEditDialog(member); $event.stopPropagation()"
-          aria-label="Editar personaje"
-          style="margin-left: 4px"
-        >
-          <span class="material-icons">edit</span>
+  @if (showFilterPanel) {
+    <div class="filter-panel">
+      <div class="panel-header">
+        <h3>Filtrar equipo</h3>
+        <button type="button" (click)="showFilterPanel = false">
+          <span class="material-icons">close</span> Cerrar
         </button>
       </div>
-    </div>
-  </div>
-  }
-</div>
 
-@if (totalPages > 1) {
-<div class="pagination-controls">
-  <button type="button" (click)="prevPage()" [disabled]="currentPage === 1">
-    Anterior
-  </button>
-  @for (page of pages; track page) {
-  <button
-    type="button"
-    (click)="goToPage(page)"
-    [class.active]="currentPage === page"
-  >
-    {{ page }}
-  </button>
+      <div class="panel-body">
+        <mat-form-field appearance="fill" color="accent" class="name-field">
+          @if (!showAliasOverlay) {
+            <mat-label>Alias</mat-label>
+          }
+          <input
+            matInput
+            [formControl]="alias"
+            (focus)="onFocus('alias')"
+            (blur)="onBlur('alias')"
+          />
+          @if (showAliasOverlay) {
+            <div class="static-text">Alias</div>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" color="accent" class="name-field">
+          @if (!showNoteOverlay) {
+            <mat-label>Especie</mat-label>
+          }
+          <input
+            matInput
+            [formControl]="note"
+            (focus)="onFocus('note')"
+            (blur)="onBlur('note')"
+          />
+          @if (showNoteOverlay) {
+            <div class="static-text">Especie</div>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" color="accent" class="name-field">
+          @if (!showPriorityOverlay) {
+            <mat-label>Estado</mat-label>
+          }
+          <input
+            matInput
+            [formControl]="priority"
+            (focus)="onFocus('priority')"
+            (blur)="onBlur('priority')"
+          />
+          @if (showPriorityOverlay) {
+            <div class="static-text">Estado</div>
+          }
+        </mat-form-field>
+      </div>
+    </div>
   }
-  <button
-    type="button"
-    (click)="nextPage()"
-    [disabled]="currentPage === totalPages"
-  >
-    Siguiente
-  </button>
+
+  @if (filteredTeam.length === 0) {
+    <div class="no-results">
+      <h3>No hay resultados</h3>
+      <p>Prueba con otro alias, especie o estado.</p>
+    </div>
+  }
+
+  @if (filteredTeam.length > 0) {
+    <div class="card-grid">
+      @for (member of filteredTeam; track member.id) {
+        <div
+          class="character-card"
+          (click)="goToDetail(member.id)"
+          style="cursor: pointer"
+        >
+          <div class="card-image">
+            <img [src]="member.image" [alt]="member.name" />
+          </div>
+          <div class="card-content">
+            <h3 class="name">{{ member.name }}</h3>
+            <p class="meta">{{ member.species }} ({{ member.status }})</p>
+
+            @if (member.created) {
+              <p class="year">
+                <strong>Añadido:</strong> {{ member.created | date : "MMMM yyyy" }}
+              </p>
+            }
+
+            <div class="actions">
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="removeFromTeam(member.id); $event.stopPropagation()"
+                aria-label="Quitar del equipo"
+              >
+                <span class="material-icons">delete</span>
+              </button>
+
+              <button
+                mat-icon-button
+                color="accent"
+                (click)="openEditDialog(member); $event.stopPropagation()"
+                aria-label="Editar personaje"
+                style="margin-left: 4px"
+              >
+                <span class="material-icons">edit</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (totalPages > 1) {
+    <div class="pagination-controls">
+      <button type="button" (click)="prevPage()" [disabled]="currentPage === 1">
+        Anterior
+      </button>
+      @for (page of pages; track page) {
+        <button
+          type="button"
+          (click)="goToPage(page)"
+          [class.active]="currentPage === page"
+        >
+          {{ page }}
+        </button>
+      }
+      <button
+        type="button"
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+      >
+        Siguiente
+      </button>
+    </div>
+  }
 </div>
-}

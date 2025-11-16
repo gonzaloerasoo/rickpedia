@@ -1,4 +1,8 @@
-<div class="character-detail" *ngIf="member">
+<div *ngIf="isLoading" class="spinner-container">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="!isLoading && member" class="character-detail">
   <div class="image">
     <img [src]="member.image" [alt]="member.name" />
   </div>

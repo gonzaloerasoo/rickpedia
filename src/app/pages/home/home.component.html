@@ -1,89 +1,95 @@
-<div class="hero">
-  <h1>RickPedia</h1>
+<div *ngIf="isLoading" class="spinner-container">
+  <mat-spinner></mat-spinner>
 </div>
 
-<div class="card-grid">
-  <mat-card class="feature-card">
-    <div class="card-image">
-      <img
-        src="https://rickandmortyapi.com/api/character/avatar/1.jpeg"
-        alt="Rick"
-      />
-    </div>
-    <mat-card-title>Personajes</mat-card-title>
-    <mat-card-content>
-      <p>
-        Conoce a Rick y los personajes clave. Descubre sus historias y
-        habilidades.
-      </p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" routerLink="/characters">
-        Ver más
-      </button>
-    </mat-card-actions>
-  </mat-card>
+<div *ngIf="!isLoading">
+  <div class="hero">
+    <h1>RickPedia</h1>
+  </div>
 
-  <mat-card class="feature-card">
-    <div class="card-image">
-      <img
-        src="https://rickandmortyapi.com/api/character/avatar/2.jpeg"
-        alt="Morty"
-      />
-    </div>
-    <mat-card-title>Episodios</mat-card-title>
-    <mat-card-content>
-      <p>
-        Explora todas las temporadas. Encuentra tus episodios favoritos al
-        instante.
-      </p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" routerLink="/episodes">
-        Ver más
-      </button>
-    </mat-card-actions>
-  </mat-card>
+  <div class="card-grid">
+    <mat-card class="feature-card">
+      <div class="card-image">
+        <img
+          src="https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+          alt="Rick"
+        />
+      </div>
+      <mat-card-title>Personajes</mat-card-title>
+      <mat-card-content>
+        <p>
+          Conoce a Rick y los personajes clave. Descubre sus historias y
+          habilidades.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" routerLink="/characters">
+          Ver más
+        </button>
+      </mat-card-actions>
+    </mat-card>
 
-  <mat-card class="feature-card">
-    <div class="card-image">
-      <img
-        src="https://rickandmortyapi.com/api/character/avatar/4.jpeg"
-        alt="Beth"
-      />
-    </div>
-    <mat-card-title>Localizaciones</mat-card-title>
-    <mat-card-content>
-      <p>
-        Descubre planetas, dimensiones y lugares extraños visitados por Rick y
-        Morty.
-      </p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" routerLink="/locations">
-        Ver más
-      </button>
-    </mat-card-actions>
-  </mat-card>
+    <mat-card class="feature-card">
+      <div class="card-image">
+        <img
+          src="https://rickandmortyapi.com/api/character/avatar/2.jpeg"
+          alt="Morty"
+        />
+      </div>
+      <mat-card-title>Episodios</mat-card-title>
+      <mat-card-content>
+        <p>
+          Explora todas las temporadas. Encuentra tus episodios favoritos al
+          instante.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" routerLink="/episodes">
+          Ver más
+        </button>
+      </mat-card-actions>
+    </mat-card>
 
-  <mat-card class="feature-card">
-    <div class="card-image">
-      <img
-        src="https://rickandmortyapi.com/api/character/avatar/3.jpeg"
-        alt="Summer"
-      />
-    </div>
-    <mat-card-title>Equipo</mat-card-title>
-    <mat-card-content>
-      <p>
-        Gestiona tu equipo de personajes. Filtra y mantén tu selección
-        actualizada.
-      </p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" routerLink="/team">
-        Ver más
-      </button>
-    </mat-card-actions>
-  </mat-card>
+    <mat-card class="feature-card">
+      <div class="card-image">
+        <img
+          src="https://rickandmortyapi.com/api/character/avatar/4.jpeg"
+          alt="Beth"
+        />
+      </div>
+      <mat-card-title>Localizaciones</mat-card-title>
+      <mat-card-content>
+        <p>
+          Descubre planetas, dimensiones y lugares extraños visitados por Rick y
+          Morty.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" routerLink="/locations">
+          Ver más
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="feature-card">
+      <div class="card-image">
+        <img
+          src="https://rickandmortyapi.com/api/character/avatar/3.jpeg"
+          alt="Summer"
+        />
+      </div>
+      <mat-card-title>Equipo</mat-card-title>
+      <mat-card-content>
+        <p>
+          Gestiona tu equipo de personajes. Filtra y mantén tu selección
+          actualizada.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" routerLink="/team">
+          Ver más
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
 </div>

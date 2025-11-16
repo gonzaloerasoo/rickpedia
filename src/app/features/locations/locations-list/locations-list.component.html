@@ -1,94 +1,97 @@
-<section class="section-header">
-  <h2>Localizaciones</h2>
-  <p>Explora los mundos y dimensiones del universo de Rick y Morty.</p>
-</section>
-
-<div class="filter-toggle">
-  <button (click)="showFilterPanel = true">
-    <span class="material-icons">tune</span> Filtros
-  </button>
+<div *ngIf="isLoading" class="spinner-container">
+  <mat-spinner></mat-spinner>
 </div>
 
-@if (showFilterPanel) {
-<div class="filter-panel">
-  <div class="panel-header">
-    <h3>Filtros</h3>
-    <button (click)="showFilterPanel = false">
-      <span class="material-icons">close</span> Cerrar
+<div *ngIf="!isLoading">
+  <section class="section-header">
+    <h2>Localizaciones</h2>
+    <p>Explora los mundos y dimensiones del universo de Rick y Morty.</p>
+  </section>
+
+  <div class="filter-toggle">
+    <button (click)="showFilterPanel = true">
+      <span class="material-icons">tune</span> Filtros
     </button>
   </div>
 
-  <div class="panel-body">
-    <mat-form-field appearance="fill" color="accent" class="name-field">
-      @if (!showNameOverlay) {
-      <mat-label>Nombre de la localización</mat-label>
-      }
-      <input
-        matInput
-        [formControl]="locationName"
-        (focus)="onNameFocus()"
-        (blur)="onNameBlur()"
-      />
-      @if (showNameOverlay) {
-      <div class="static-text">Nombre de la localización</div>
-      }
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" color="accent" class="name-field">
-      @if (!showCharacterOverlay) {
-      <mat-label>Nombre de personaje</mat-label>
-      }
-      <input
-        matInput
-        [formControl]="characterName"
-        (focus)="onCharacterFocus()"
-        (blur)="onCharacterBlur()"
-      />
-      @if (showCharacterOverlay) {
-      <div class="static-text">Nombre de personaje</div>
-      }
-    </mat-form-field>
-  </div>
-</div>
-}
-
-<div class="card-grid">
-  @for (loc of paginatedLocations; track loc.id) {
-  <a class="character-card episode-link" [routerLink]="['/locations', loc.id]">
-    <div class="card-content">
-      <h3 class="name">{{ loc.name }}</h3>
-      <p class="meta">
-        {{ loc.type || "Sin tipo" }} <span class="separator">–</span>
-        {{ loc.dimension || "Sin dimensión" }}
-      </p>
+  <div *ngIf="showFilterPanel" class="filter-panel">
+    <div class="panel-header">
+      <h3>Filtros</h3>
+      <button (click)="showFilterPanel = false">
+        <span class="material-icons">close</span> Cerrar
+      </button>
     </div>
-  </a>
-  }
-</div>
 
-<div class="pagination-controls">
-  <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+    <div class="panel-body">
+      <mat-form-field appearance="fill" color="accent" class="name-field">
+        <mat-label *ngIf="!showNameOverlay">Nombre de la localización</mat-label>
+        <input
+          matInput
+          [formControl]="locationName"
+          (focus)="onNameFocus()"
+          (blur)="onNameBlur()"
+        />
+        <div *ngIf="showNameOverlay" class="static-text">
+          Nombre de la localización
+        </div>
+      </mat-form-field>
 
-  <button (click)="goToPage(1)" [class.active]="currentPage === 1">1</button>
+      <mat-form-field appearance="fill" color="accent" class="name-field">
+        <mat-label *ngIf="!showCharacterOverlay">Nombre de personaje</mat-label>
+        <input
+          matInput
+          [formControl]="characterName"
+          (focus)="onCharacterFocus()"
+          (blur)="onCharacterBlur()"
+        />
+        <div *ngIf="showCharacterOverlay" class="static-text">
+          Nombre de personaje
+        </div>
+      </mat-form-field>
+    </div>
+  </div>
 
-  @if (showPrevEllipsis) {
-  <button (click)="handlePrevEllipsis()">...</button>
-  } @for (page of visiblePageNumbers; track page) {
-  <button (click)="goToPage(page)" [class.active]="page === currentPage">
-    {{ page }}
-  </button>
-  } @if (showNextEllipsis) {
-  <button (click)="handleNextEllipsis()">...</button>
-  } @if (totalPages > 1) {
-  <button
-    (click)="goToPage(totalPages)"
-    [class.active]="currentPage === totalPages"
-  >
-    {{ totalPages }}
-  </button>
-  }
+  <div class="card-grid">
+    <a
+      class="character-card episode-link"
+      *ngFor="let loc of paginatedLocations"
+      [routerLink]="['/locations', loc.id]"
+      [queryParams]="{ page: currentPage }"
+    >
+      <div class="card-content">
+        <h3 class="name">{{ loc.name }}</h3>
+        <p class="meta">
+          {{ loc.type || 'Sin tipo' }} <span class="separator">–</span>
+          {{ loc.dimension || 'Sin dimensión' }}
+        </p>
+      </div>
+    </a>
+  </div>
 
-  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
-    Siguiente
-  </button>
+  <div class="pagination-controls">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+
+    <button *ngIf="totalPages === 1" (click)="goToPage(1)" [class.active]="true">1</button>
+
+    <ng-container *ngIf="totalPages > 1">
+      <button (click)="goToPage(1)" [class.active]="currentPage === 1">1</button>
+      <button *ngIf="showPrevEllipsis" (click)="handlePrevEllipsis()">...</button>
+      <button
+        *ngFor="let page of visiblePageNumbers"
+        (click)="goToPage(page)"
+        [class.active]="page === currentPage"
+      >
+        {{ page }}
+      </button>
+      <button *ngIf="showNextEllipsis" (click)="handleNextEllipsis()">...</button>
+      <button
+        (click)="goToPage(totalPages)"
+        [class.active]="currentPage === totalPages"
+      >
+        {{ totalPages }}
+      </button>
+    </ng-container>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
 </div>

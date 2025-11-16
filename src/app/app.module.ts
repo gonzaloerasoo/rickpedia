@@ -5,18 +5,20 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
 import { SharedModule } from './shared/shared.module';
-
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
 import { HomeComponent } from './pages/home/home.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    NotFoundComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -27,7 +29,7 @@ import { HomeComponent } from './pages/home/home.component';
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
-    MatProgressSpinnerModule,
+    MatProgressSpinnerModule
   ],
   bootstrap: [AppComponent],
 })

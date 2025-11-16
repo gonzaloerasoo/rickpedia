@@ -1,7 +1,12 @@
-<div class="character-detail" *ngIf="character">
+<div *ngIf="isLoading" class="spinner-container">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="character-detail" *ngIf="character && !isLoading">
   <div class="image">
     <img [src]="character.image" [alt]="character.name" />
   </div>
+
   <div class="info">
     <h2>{{ character.name }}</h2>
     <p><strong>Estado:</strong> {{ character.status }}</p>
@@ -17,7 +22,9 @@
 
     <div class="actions">
       <button
-        class="circle-button add"
+        mat-icon-button
+        color="accent"
+        [disableRipple]="true"
         *ngIf="!isInTeam"
         (click)="addToTeam()"
         aria-label="Añadir al equipo"
@@ -26,7 +33,9 @@
       </button>
 
       <button
-        class="circle-button remove"
+        mat-icon-button
+        color="warn"
+        [disableRipple]="true"
         *ngIf="isInTeam"
         (click)="removeFromTeam()"
         aria-label="Quitar del equipo"
@@ -35,12 +44,18 @@
       </button>
 
       <button
-        class="circle-button back"
+        mat-icon-button
+        color="primary"
+        [disableRipple]="true"
         (click)="goBack()"
         aria-label="Volver atrás"
       >
         <span class="material-icons">arrow_back</span>
       </button>
+    </div>
+
+    <div *ngIf="confirmationMessage" class="confirmation">
+      {{ confirmationMessage }}
     </div>
   </div>
 </div>

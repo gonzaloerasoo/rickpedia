@@ -13,6 +13,7 @@ import { TeamMember } from '../team-member.model';
 export class TeamDetailComponent implements OnInit {
   member: TeamMember | null = null;
   pageToReturn: number = 1;
+  isLoading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,6 +37,7 @@ export class TeamDetailComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
     this.teamService.getTeamMemberById(+idParam).subscribe({
       next: (data: TeamMember) => {
         if (!data || !data.id) {
@@ -45,8 +47,10 @@ export class TeamDetailComponent implements OnInit {
         } else {
           this.member = data;
         }
+        this.isLoading = false;
       },
       error: () => {
+        this.isLoading = false;
         this.router.navigate(['/team'], {
           queryParams: { page: this.pageToReturn },
         });
@@ -82,8 +86,10 @@ export class TeamDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((updated) => {
       if (updated) {
+        this.isLoading = true;
         this.teamService.getTeamMemberById(member.id).subscribe((data: TeamMember) => {
           this.member = data;
+          this.isLoading = false;
         });
       }
     });

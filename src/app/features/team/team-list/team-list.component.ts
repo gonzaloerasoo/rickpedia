@@ -29,6 +29,8 @@ export class TeamListComponent implements OnInit {
   totalPages = 1;
   pages: number[] = [];
 
+  isLoading: boolean = false;
+
   constructor(
     private teamService: TeamService,
     private router: Router,
@@ -50,8 +52,10 @@ export class TeamListComponent implements OnInit {
   }
 
   loadTeam(): void {
+    this.isLoading = true;
     this.teamService.getTeam().subscribe((data: TeamMember[]) => {
       this.team = data;
+      this.isLoading = false;
       this.applyFilters();
     });
   }
@@ -63,11 +67,13 @@ export class TeamListComponent implements OnInit {
 
     if (!confirmed) return;
 
+    this.isLoading = true;
     this.teamService.removeFromTeam(id).subscribe(() => {
       this.team = this.team.filter((member) => member.id !== id);
       if (this.currentPage > Math.ceil(this.team.length / this.pageSize)) {
         this.currentPage = Math.max(1, this.currentPage - 1);
       }
+      this.isLoading = false;
       this.applyFilters();
     });
   }
